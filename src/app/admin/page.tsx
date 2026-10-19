@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: `Admin · ${APP_NAME}` };
 
 async function Students() {
   const user = await requireAdmin();
-  const students = await listStudents(createSupabaseAdminClient());
+  const students = await listStudents(createSupabaseAdminClient(), user.id);
 
   return (
     <>
@@ -29,11 +29,20 @@ async function Students() {
               <li key={student.id}>
                 <Link
                   href={`/admin/students/${student.id}`}
-                  className="flex flex-col gap-4 rounded-3xl border-2 border-line bg-surface p-5 transition hover:border-brand/50"
+                  className={`flex flex-col gap-4 rounded-3xl border-2 bg-surface p-5 transition hover:border-brand/50 ${
+                    student.isSelf ? "border-dashed border-brand/40" : "border-line"
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xl font-bold">{student.name}</p>
+                      <p className="text-xl font-bold">
+                        {student.name}
+                        {student.isSelf && (
+                          <span className="ml-2 rounded-full bg-brand-soft px-2 py-0.5 align-middle text-xs font-bold text-brand-dark">
+                            Tu, in vista studente
+                          </span>
+                        )}
+                      </p>
                       <p className="text-sm text-ink-soft">{student.email}</p>
                     </div>
                     <span

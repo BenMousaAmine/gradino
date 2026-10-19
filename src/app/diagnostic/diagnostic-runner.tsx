@@ -110,7 +110,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
           <li>💾 Puoi interrompere quando vuoi: riprendi da dove eri rimasto.</li>
         </ul>
         {errorBanner}
-        <Button onClick={begin} disabled={pending} className="w-full">
+        <Button onClick={begin} loading={pending} className="w-full">
           Inizia
         </Button>
       </Card>
@@ -181,7 +181,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
             Fai una pausa di {view.config.pauseMinutes} minuti: alzati, bevi un bicchiere d’acqua, muoviti un po’.
           </p>
           <PauseTimer minutes={view.config.pauseMinutes} />
-          <Button onClick={() => resume(step.nextPart)} disabled={pending} className="w-full">
+          <Button onClick={() => resume(step.nextPart)} loading={pending} className="w-full">
             Sono pronto, riprendo
           </Button>
         </Card>
@@ -197,7 +197,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
         <p className="text-4xl">🎉</p>
         <h2 className="text-2xl font-extrabold">Hai finito il test!</h2>
         <p className="text-ink-soft">Bravo per l’impegno. Adesso vediamo insieme la tua mappa di partenza.</p>
-        <Button onClick={finish} disabled={pending} className="w-full">
+        <Button onClick={finish} loading={pending} className="w-full">
           Scopri la tua mappa
         </Button>
       </Card>

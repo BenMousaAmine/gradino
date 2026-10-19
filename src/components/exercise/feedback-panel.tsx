@@ -54,7 +54,7 @@ export function FeedbackPanel({
   const correct = feedback.score === 1;
   const partial = feedback.score > 0 && feedback.score < 1;
   const skipped = feedback.diagnosis?.tag === "skipped";
-  const headline = correct ? "Giusto!" : partial ? "Quasi!" : skipped ? "Nessun problema, ecco come si fa." : "Non ancora.";
+  const headline = correct ? (feedback.attempt === 2 ? "Giusto, al secondo tentativo!" : "Giusto!") : partial ? "Quasi!" : skipped ? "Nessun problema, ecco come si fa." : "Non ancora.";
   const tone = correct
     ? "bg-good-soft text-good"
     : partial
@@ -94,7 +94,7 @@ export function FeedbackPanel({
         </details>
       )}
 
-      <Button onClick={next} disabled={pending} className="w-full" autoFocus>
+      <Button onClick={next} loading={pending} className="w-full" autoFocus>
         Avanti
       </Button>
     </div>

@@ -6,7 +6,7 @@ import { StatTile } from "@/components/admin/stat-tile";
 import { AppHeader } from "@/components/app-header";
 import { Gradini } from "@/components/gradini";
 import { MathText } from "@/components/math-text";
-import { formatDay, shortDay } from "@/lib/admin/format";
+import { formatDateTime, formatDay, shortDay } from "@/lib/admin/format";
 import { requireAdmin, studentOverview } from "@/lib/admin/queries";
 import { APP_NAME } from "@/lib/app";
 import { LEVEL_LABELS } from "@/lib/study/plan";
@@ -38,6 +38,14 @@ function Section({ title, subtitle, children }: { title: string; subtitle?: stri
     </section>
   );
 }
+
+const NOTE_SOURCES: Record<string, string> = { typed: "scritto", voice: "dettato", mixed: "scritto e dettato" };
+
+const OUTCOMES = {
+  first: { text: "Giusta al primo tentativo", style: "bg-good-soft text-good" },
+  second: { text: "Giusta al secondo tentativo", style: "bg-warn-soft text-warn" },
+  unsolved: { text: "Non risolta", style: "bg-bad-soft text-bad" },
+} as const;
 
 function delta(current: number | null, previous: number | null) {
   return current === null || previous === null ? null : current - previous;
@@ -166,6 +174,29 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
                 <dt className="text-ink-soft">Ora in cui studia di più</dt>
                 <dd className="text-lg font-semibold">{habits.hours[peakHour] > 0 ? `${peakHour}:00–${peakHour + 1}:00` : "—"}</dd>
               </div>
+              <div>
+                <dt className="text-ink-soft">Secondi prima di iniziare a rispondere (mediana)</dt>
+                <dd className="text-lg font-semibold">{habits.thinkSeconds === null ? "—" : `${habits.thinkSeconds} s`}</dd>
+              </div>
+              <div>
+                <dt className="text-ink-soft">Giuste al secondo tentativo, dopo l’aiuto</dt>
+                <dd className="text-lg font-semibold">
+                  {habits.recoveredRate === null ? "—" : `${habits.recoveredRate}% (su ${habits.retried})`}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-ink-soft">Fermo più di 30 s a metà esercizio</dt>
+                <dd className="text-lg font-semibold">
+                  {habits.idleCount} volte ({habits.idleMinutes} min)
+                </dd>
+              </div>
+              <div>
+                <dt className="text-ink-soft">Tempo medio per raccontare il ragionamento</dt>
+                <dd className="text-lg font-semibold">
+                  {habits.noteSeconds === null ? "—" : `${habits.noteSeconds} s`}
+                  {habits.voiceNoteRate !== null && habits.voiceNoteRate > 0 ? ` · ${habits.voiceNoteRate}% dettati` : ""}
+                </dd>
+              </div>
             </dl>
           </Section>
 
@@ -187,6 +218,37 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
             )}
           </Section>
         </div>
+
+        <Section title="Ragionamenti" subtitle="Come ha pensato i problemi e gli esercizi avanzati sbagliati, con le sue parole">
+          {data.notes.length === 0 ? (
+            <p className="text-ink-soft">Ancora nessun ragionamento raccontato.</p>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {data.notes.map((note) => (
+                <li key={note.id} className="flex flex-col gap-2 rounded-2xl bg-canvas p-4">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <Link href={`/admin/students/${id}/day/${note.day}`} className="tabular-nums text-ink-soft hover:text-ink">
+                      {formatDateTime(note.at)}
+                    </Link>
+                    <span className="font-semibold">{note.skill}</span>
+                    <span className="text-ink-soft">
+                      · {LEVEL_LABELS[note.level]} · {note.purpose}
+                    </span>
+                    <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-bold ${OUTCOMES[note.outcome].style}`}>
+                      {OUTCOMES[note.outcome].text}
+                    </span>
+                  </div>
+                  <MathText text={note.prompt} className="block text-sm text-ink-soft" />
+                  <blockquote className="border-l-4 border-brand pl-3 whitespace-pre-wrap text-ink">{note.note}</blockquote>
+                  <p className="text-xs text-ink-soft">
+                    {note.source ? NOTE_SOURCES[note.source] ?? note.source : ""}
+                    {note.seconds !== null ? ` · ${note.seconds} s` : ""}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Section>
 
         <Section title="Percorso" subtitle="Gradini di ogni abilità">
           <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">

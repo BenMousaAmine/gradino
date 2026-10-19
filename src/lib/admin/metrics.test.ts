@@ -14,6 +14,11 @@ function answer(partial: Partial<AnswerRow>): AnswerRow {
     createdAt: "2026-10-20T10:00:00Z",
     sessionId: null,
     stats: null,
+    attempts: 1,
+    finalScore: partial.score ?? 1,
+    retryMs: 0,
+    noteMs: null,
+    noteSource: null,
     ...partial,
   };
 }
@@ -38,6 +43,12 @@ describe("daily series", () => {
     expect(series[2]).toEqual({ day: "2026-10-20", minutes: 10, answers: 3, correct: 2, accuracy: 67 });
     expect(series[1]).toEqual({ day: "2026-10-19", minutes: 1, answers: 0, correct: 0, accuracy: null });
     expect(series[0].minutes).toBe(0);
+  });
+
+  it("adds second attempts and notes, and leaves out time spent outside the app", () => {
+    const stats = { firstInputMs: 5_000, inputs: 3, corrections: 0, unitChanges: 0, idleCount: 0, idleMs: 0, awayCount: 1, awayMs: 60_000 };
+    const series = dailySeries(["2026-10-20"], [answer({ timeMs: 120_000, stats, attempts: 2, retryMs: 60_000, noteMs: 60_000 })], []);
+    expect(series[0].minutes).toBe(3);
   });
 
   it("summarizes a period", () => {
@@ -109,5 +120,37 @@ describe("lessons and habits", () => {
     );
     expect(result).toMatchObject({ awayCount: 1, awayMinutes: 2, pauses: 1, avgPauseMinutes: 10, timeUps: 1, feedbackSeconds: 11, solutionOpenedRate: 50 });
     expect(result.hours[17]).toBe(1);
+  });
+
+  it("measures second attempts, thinking time, long stops and notes", () => {
+    const stats = (firstInputMs: number, idleMs: number) => ({
+      firstInputMs,
+      inputs: 2,
+      corrections: 0,
+      unitChanges: 0,
+      idleCount: idleMs > 0 ? 1 : 0,
+      idleMs,
+      awayCount: 0,
+      awayMs: 0,
+    });
+    const result = habits(
+      [],
+      [
+        answer({ score: 0, attempts: 2, finalScore: 1, stats: stats(4_000, 0), noteMs: 30_000, noteSource: "voice" }),
+        answer({ score: 0, attempts: 2, finalScore: 0, stats: stats(10_000, 120_000), noteMs: 50_000, noteSource: "typed" }),
+        answer({ stats: stats(6_000, 0) }),
+        answer({ score: 0, errorTag: "skipped", stats: stats(1_000, 0) }),
+      ],
+    );
+    expect(result).toMatchObject({
+      retried: 2,
+      recoveredRate: 50,
+      thinkSeconds: 6,
+      idleCount: 1,
+      idleMinutes: 2,
+      notes: 2,
+      noteSeconds: 40,
+      voiceNoteRate: 50,
+    });
   });
 });

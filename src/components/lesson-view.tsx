@@ -195,7 +195,7 @@ export function LessonView({
               {allCorrect ? (
                 <>
                   <p className="text-lg font-semibold text-good">Perfetto, hai capito il metodo!</p>
-                  <Button onClick={complete} disabled={pending} className="w-full">
+                  <Button onClick={complete} loading={pending} className="w-full">
                     {completeLabel}
                   </Button>
                 </>
@@ -210,7 +210,7 @@ export function LessonView({
                   >
                     Riprova
                   </Button>
-                  <Button onClick={complete} disabled={pending}>
+                  <Button onClick={complete} loading={pending}>
                     Continua
                   </Button>
                 </div>

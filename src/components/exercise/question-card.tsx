@@ -18,14 +18,12 @@ export function QuestionCard({
   onSubmit,
   skipLabel = "Non lo so, vado avanti",
   initialResponse,
-  allowSkip = true,
 }: {
   item: { id: string; content: ItemContent };
   pending: boolean;
   onSubmit: (response: ItemResponse, timeMs: number, stats: AnswerStats) => void;
   skipLabel?: string;
   initialResponse?: ItemResponse;
-  allowSkip?: boolean;
 }) {
   const startedAt = useRef<number | null>(null);
   const lastInteraction = useRef<number | null>(null);
@@ -99,11 +97,9 @@ export function QuestionCard({
         <OrderQuestion itemId={item.id} content={content} pending={pending} onSubmit={submit} onInteract={interact} initial={initialOrder} />
       )}
 
-      {allowSkip && (
-        <Button variant="ghost" onClick={() => submit({ type: "skip" })} disabled={pending} className="self-center">
-          {skipLabel}
-        </Button>
-      )}
+      <Button variant="ghost" onClick={() => submit({ type: "skip" })} disabled={pending} className="self-center">
+        {skipLabel}
+      </Button>
     </div>
   );
 }

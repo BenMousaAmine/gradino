@@ -31,17 +31,32 @@ export async function requireAdmin() {
   return user;
 }
 
+const statsSchema = z.object({
+  firstInputMs: z.number().nullable(),
+  inputs: z.number(),
+  corrections: z.number(),
+  unitChanges: z.number(),
+  idleCount: z.number().default(0),
+  idleMs: z.number().default(0),
+  awayCount: z.number().default(0),
+  awayMs: z.number().default(0),
+});
+
+const diagnosisSchema = z.object({ tag: z.string(), message: z.string().nullable() }).nullable().optional();
+
 const detailsSchema = z
   .object({
-    diagnosis: z.object({ tag: z.string(), message: z.string().nullable() }).nullable().optional(),
-    stats: z
+    diagnosis: diagnosisSchema,
+    stats: statsSchema.nullable().optional(),
+    retry: z
       .object({
-        firstInputMs: z.number().nullable(),
-        inputs: z.number(),
-        corrections: z.number(),
-        unitChanges: z.number(),
+        response: z.unknown(),
+        score: z.number(),
+        diagnosis: diagnosisSchema,
+        timeMs: z.number(),
+        stats: statsSchema.nullable().optional(),
+        hintMs: z.number(),
       })
-      .nullable()
       .optional(),
   })
   .passthrough();
@@ -59,10 +74,15 @@ type AnswerDbRow = {
   time_ms: number;
   created_at: string;
   session_id: string | null;
+  attempts: number;
+  final_score: number | null;
+  note_ms: number | null;
+  note_source: string | null;
 };
 
 function toAnswer(row: AnswerDbRow): AnswerRow {
   const details = detailsSchema.safeParse(row.details);
+  const retry = details.success ? details.data.retry : undefined;
   return {
     id: row.id,
     skillId: row.skill_id,
@@ -75,6 +95,11 @@ function toAnswer(row: AnswerDbRow): AnswerRow {
     createdAt: row.created_at,
     sessionId: row.session_id,
     stats: details.success ? (details.data.stats ?? null) : null,
+    attempts: row.attempts,
+    finalScore: row.final_score ?? row.score,
+    retryMs: retry ? Math.max(0, retry.timeMs - (retry.stats?.awayMs ?? 0)) + retry.hintMs : 0,
+    noteMs: row.note_ms,
+    noteSource: row.note_source,
   };
 }
 
@@ -89,7 +114,8 @@ function toEvent(row: { type: string; skill_id: string | null; session_id: strin
   };
 }
 
-const ANSWER_COLUMNS = "id, skill_id, level, purpose, score, error_tag, details, time_ms, created_at, session_id";
+const ANSWER_COLUMNS =
+  "id, skill_id, level, purpose, score, error_tag, details, time_ms, created_at, session_id, attempts, final_score, note_ms, note_source";
 
 async function emails(admin: Admin): Promise<Map<string, string>> {
   const { data, error } = await admin.auth.admin.listUsers({ page: 1, perPage: 500 });
@@ -116,9 +142,10 @@ export type StudentSummary = {
   accuracyWeek: number | null;
   sessionsWeek: number;
   diagnosticDone: boolean;
+  isSelf: boolean;
 };
 
-export async function listStudents(admin: Admin): Promise<StudentSummary[]> {
+export async function listStudents(admin: Admin, selfId: string): Promise<StudentSummary[]> {
   const today = dayInRome();
   const since = startOfDayInRome(addDays(today, -6));
   const [profiles, mail] = await Promise.all([
@@ -126,7 +153,9 @@ export async function listStudents(admin: Admin): Promise<StudentSummary[]> {
     emails(admin),
   ]);
   if (profiles.error) throw new Error(profiles.error.message);
-  const students = profiles.data.filter((profile) => profile.role !== "admin");
+  const students = profiles.data
+    .filter((profile) => profile.role !== "admin" || profile.id === selfId)
+    .sort((a, b) => Number(b.id === selfId) - Number(a.id === selfId));
   const ids = students.map((student) => student.id);
   if (ids.length === 0) return [];
 
@@ -167,6 +196,7 @@ export async function listStudents(admin: Admin): Promise<StudentSummary[]> {
       accuracyWeek: week.accuracy,
       sessionsWeek: (sessions.data ?? []).filter((row) => row.user_id === student.id && row.status === "completed").length,
       diagnosticDone: (attempts.data ?? []).some((row) => row.user_id === student.id && row.status === "completed"),
+      isSelf: student.id === selfId,
     };
   });
 }
@@ -181,6 +211,20 @@ async function studentProfile(admin: Admin, studentId: string) {
 
 export type ProgressRow = { skillId: string; title: string; area: string; status: SkillStatus | "not_started"; level: Level; steps: number; nextReviewOn: string | null };
 
+export type NoteRow = {
+  id: string;
+  at: string;
+  day: string;
+  skill: string;
+  level: Level;
+  purpose: string;
+  prompt: string;
+  note: string;
+  source: string | null;
+  seconds: number | null;
+  outcome: "first" | "second" | "unsolved";
+};
+
 export type SessionRow = { id: string; day: string; status: string; block: number; blockTitle: string; answers: number; correct: number };
 
 export async function studentOverview(admin: Admin, studentId: string) {
@@ -189,15 +233,22 @@ export async function studentOverview(admin: Admin, studentId: string) {
   const days = lastDays(today, 30);
   const since = startOfDayInRome(days[0]);
 
-  const [answersResult, eventsResult, sessionsResult, progressResult, templatesResult, titles] = await Promise.all([
+  const [answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles] = await Promise.all([
     admin.from("practice_answers").select(ANSWER_COLUMNS).eq("user_id", studentId).gte("created_at", since).order("created_at", { ascending: true }).limit(5000),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", since).limit(10000),
     admin.from("study_sessions").select("id, day, status, block").eq("user_id", studentId).gte("day", days[0]).order("day", { ascending: false }),
     admin.from("skill_progress").select("skill_id, status, level, next_review_on").eq("user_id", studentId),
     admin.from("item_templates").select("skill_id").eq("status", "published"),
+    admin
+      .from("practice_answers")
+      .select("id, skill_id, level, purpose, score, final_score, attempts, note, note_source, note_ms, content, created_at")
+      .eq("user_id", studentId)
+      .not("note", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(20),
     skillTitles(admin),
   ]);
-  for (const result of [answersResult, eventsResult, sessionsResult, progressResult, templatesResult]) if (result.error) throw new Error(result.error.message);
+  for (const result of [answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult]) if (result.error) throw new Error(result.error.message);
 
   const answers = (answersResult.data ?? []).map(toAnswer);
   const events = (eventsResult.data ?? []).map(toEvent);
@@ -238,6 +289,27 @@ export async function studentOverview(admin: Admin, studentId: string) {
     };
   });
 
+  const notes: NoteRow[] = (notesResult.data ?? []).flatMap((row) => {
+    const content = itemContentSchema.safeParse(row.content);
+    if (!content.success || !row.note) return [];
+    const finalScore = row.final_score ?? row.score;
+    return [
+      {
+        id: row.id,
+        at: row.created_at,
+        day: dayInRome(new Date(row.created_at)),
+        skill: titleOf(row.skill_id),
+        level: levelSchema.parse(row.level),
+        purpose: PURPOSE_LABELS[row.purpose] ?? row.purpose,
+        prompt: content.data.prompt,
+        note: row.note,
+        source: row.note_source,
+        seconds: row.note_ms === null ? null : Math.round(row.note_ms / 1000),
+        outcome: row.score === 1 ? "first" : finalScore === 1 && row.attempts === 2 ? "second" : "unsolved",
+      },
+    ];
+  });
+
   const view = await loadAssessment(admin, DIAGNOSTIC_ID);
   const attempt = await loadLatestAttempt(admin, studentId, DIAGNOSTIC_ID, "completed");
   const diagnostic =
@@ -268,6 +340,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
     errors: errorGroups(answers).slice(0, 10).map((group) => ({ ...group, skills: group.skillIds.map(titleOf) })),
     lessons: lessonStats(events).map((row) => ({ ...row, title: titleOf(row.skillId) })),
     habits: habits(events, answers),
+    notes,
     progress,
     sessions,
     diagnostic,
@@ -286,14 +359,33 @@ export type TimelineEntry =
       given: string[];
       correct: string[];
       score: number;
+      finalScore: number;
       message: string | null;
       seconds: number;
       firstInputSeconds: number | null;
       corrections: number;
+      idleSeconds: number;
+      awaySeconds: number;
       feedbackSeconds: number | null;
       solutionOpen: boolean | null;
+      retry: AttemptView | null;
+      note: { text: string; source: string | null; seconds: number | null } | null;
     }
   | { kind: "event"; at: string; label: string };
+
+export type AttemptView = {
+  given: string[];
+  score: number;
+  message: string | null;
+  seconds: number;
+  hintSeconds: number;
+  firstInputSeconds: number | null;
+  corrections: number;
+  idleSeconds: number;
+  awaySeconds: number;
+};
+
+const toSeconds = (ms: number) => Math.round(ms / 1000);
 
 const PURPOSE_LABELS: Record<string, string> = {
   practice: "Pratica",
@@ -343,7 +435,7 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
   const from = startOfDayInRome(day);
   const to = startOfDayInRome(addDays(day, 1));
   const [practice, diagnostic, events, templates, titles] = await Promise.all([
-    admin.from("practice_answers").select(`${ANSWER_COLUMNS}, source, source_id, seed, content, answer`).eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
+    admin.from("practice_answers").select(`${ANSWER_COLUMNS}, source, source_id, seed, content, answer, note`).eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("responses").select("item_id, score, error_tag, details, time_ms, created_at, answer, items(skill_id, level, content, item_keys(key))").eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("item_templates").select("id, generator, params"),
@@ -378,6 +470,9 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
       if (key.success) correct = describeAnswer(content.data, key.data);
     }
     const feedback = feedbackByAnswer.get(row.id);
+    const details = detailsSchema.safeParse(row.details);
+    const retry = details.success ? details.data.retry : undefined;
+    const retryResponse = retry ? itemResponseSchema.safeParse(retry.response) : null;
     timeline.push({
       kind: "answer",
       at: row.created_at,
@@ -389,12 +484,30 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
       given: describeResponse(content.data, response.data),
       correct,
       score: row.score,
+      finalScore: answer.finalScore,
       message: answer.message,
       seconds: Math.round(row.time_ms / 1000),
       firstInputSeconds: answer.stats?.firstInputMs != null ? Math.round(answer.stats.firstInputMs / 1000) : null,
       corrections: answer.stats?.corrections ?? 0,
+      idleSeconds: toSeconds(answer.stats?.idleMs ?? 0),
+      awaySeconds: toSeconds(answer.stats?.awayMs ?? 0),
       feedbackSeconds: feedback && typeof feedback.ms === "number" ? Math.round(feedback.ms / 1000) : null,
       solutionOpen: feedback ? feedback.solutionOpen === true : null,
+      retry:
+        retry && retryResponse?.success
+          ? {
+              given: describeResponse(content.data, retryResponse.data),
+              score: retry.score,
+              message: retry.diagnosis?.message ?? null,
+              seconds: toSeconds(retry.timeMs),
+              hintSeconds: toSeconds(retry.hintMs),
+              firstInputSeconds: retry.stats?.firstInputMs != null ? toSeconds(retry.stats.firstInputMs) : null,
+              corrections: retry.stats?.corrections ?? 0,
+              idleSeconds: toSeconds(retry.stats?.idleMs ?? 0),
+              awaySeconds: toSeconds(retry.stats?.awayMs ?? 0),
+            }
+          : null,
+      note: row.note ? { text: row.note, source: row.note_source, seconds: row.note_ms === null ? null : toSeconds(row.note_ms) } : null,
     });
   }
 
@@ -416,12 +529,17 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
       given: describeResponse(content.data, response.data),
       correct: key.success ? describeAnswer(content.data, key.data) : [],
       score: row.score,
+      finalScore: row.score,
       message: details.success ? (details.data.diagnosis?.message ?? null) : null,
       seconds: Math.round(row.time_ms / 1000),
       firstInputSeconds: stats?.firstInputMs != null ? Math.round(stats.firstInputMs / 1000) : null,
       corrections: stats?.corrections ?? 0,
+      idleSeconds: toSeconds(stats?.idleMs ?? 0),
+      awaySeconds: toSeconds(stats?.awayMs ?? 0),
       feedbackSeconds: null,
       solutionOpen: null,
+      retry: null,
+      note: null,
     });
   }
 
@@ -441,6 +559,7 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
     summary: {
       answers: answers.length,
       correct: answers.filter((entry) => entry.kind === "answer" && entry.score === 1).length,
+      recovered: answers.filter((entry) => entry.kind === "answer" && entry.score < 1 && entry.retry?.score === 1).length,
       minutes,
     },
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Spinner } from "@/components/ui";
 import { signIn, type LoginState } from "./actions";
 
 const initialState: LoginState = { error: null, email: "" };
@@ -76,8 +77,9 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-1.5 flex h-[58px] items-center justify-center gap-2.5 rounded-2xl bg-brand font-display text-[19px] font-extrabold text-white shadow-[0_6px_0_var(--color-brand-dark)] transition-[transform,box-shadow,filter] duration-75 hover:brightness-105 active:translate-y-1 active:shadow-[0_2px_0_var(--color-brand-dark)] disabled:opacity-60 lg:mt-1 lg:h-[62px] lg:rounded-[18px] lg:text-xl"
+        className="mt-1.5 flex h-[58px] items-center justify-center gap-2.5 rounded-2xl bg-brand font-display text-[19px] font-extrabold text-white shadow-[0_6px_0_var(--color-brand-dark)] transition-[transform,box-shadow,filter] duration-75 hover:brightness-105 active:translate-y-1 active:shadow-[0_2px_0_var(--color-brand-dark)] disabled:cursor-wait lg:mt-1 lg:h-[62px] lg:rounded-[18px] lg:text-xl"
       >
+        {pending && <Spinner className="size-5" />}
         {pending ? "Accesso in corso…" : "Entra"}
         {!pending && (
           <svg {...iconProps} strokeWidth="2.5" className="size-5 lg:size-[22px]">

@@ -24,6 +24,9 @@ export type PublicExercise = {
 
 export type AnswerFeedback = {
   answerId: string;
+  attempt: 1 | 2;
+  canRetry: boolean;
+  needsNote: boolean;
   score: number;
   diagnosis: Diagnosis | null;
   correctAnswer: string[];

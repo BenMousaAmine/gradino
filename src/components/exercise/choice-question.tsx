@@ -66,7 +66,7 @@ export function ChoiceQuestion({
           </button>
         );
       })}
-      <Button onClick={submit} disabled={pending || selected.length === 0} className="mt-2 w-full">
+      <Button onClick={submit} disabled={selected.length === 0} loading={pending} className="mt-2 w-full">
         Conferma
       </Button>
     </div>

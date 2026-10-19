@@ -2,17 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { FeedbackPanel } from "@/components/exercise/feedback-panel";
-import { QuestionCard } from "@/components/exercise/question-card";
+import { ExerciseFlow } from "@/components/exercise/exercise-flow";
 import { LessonView } from "@/components/lesson-view";
-import { MathText } from "@/components/math-text";
 import { PauseTimer } from "@/components/pause-timer";
 import { Button, buttonClass, Card } from "@/components/ui";
-import type { ItemResponse } from "@/lib/items/schemas";
-import type { AnswerStats } from "@/lib/tracking/schema";
-import { advanceSessionBlock, finishLesson, nextSessionStep, submitStudyAnswer } from "@/lib/study/actions";
+import { advanceSessionBlock, finishLesson, nextSessionStep } from "@/lib/study/actions";
 import { LEVEL_LABELS, SESSION_BLOCKS } from "@/lib/study/plan";
-import type { AnswerFeedback, PublicExercise, SessionView } from "@/lib/study/types";
+import type { PublicExercise, SessionView } from "@/lib/study/types";
 import { track } from "@/lib/tracking/client";
 
 const ERROR_MESSAGE = "Qualcosa non ha funzionato. Controlla la connessione e riprova.";
@@ -33,7 +29,7 @@ const METHOD = [
   "Controlla e rispondi",
 ];
 
-type Phase = { kind: "step" } | { kind: "feedback"; feedback: AnswerFeedback } | { kind: "pause" };
+type Phase = { kind: "step" } | { kind: "pause" };
 
 function useNow(start: number) {
   const [now, setNow] = useState(start);
@@ -126,19 +122,6 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
       setPhase({ kind: "step" });
     });
 
-  const answer = (exercise: PublicExercise, response: ItemResponse, timeMs: number, stats: AnswerStats) =>
-    run(async () => {
-      const feedback = await submitStudyAnswer({
-        sessionId: view.sessionId,
-        ref: exercise.ref,
-        purpose: exercise.purpose,
-        response,
-        timeMs,
-        stats,
-      });
-      setPhase({ kind: "feedback", feedback });
-    });
-
   const completeLesson = (skillId: string) =>
     run(async () => {
       await finishLesson({ skillId });
@@ -225,7 +208,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
             Pausa di {view.block.pauseMinutes} minuti: alzati, bevi un bicchiere d’acqua, muoviti un po’.
           </p>
           <PauseTimer minutes={view.block.pauseMinutes} />
-          <Button onClick={() => run(advance)} disabled={pending} className="w-full">
+          <Button onClick={() => run(advance)} loading={pending} className="w-full">
             Riprendo: {nextBlock?.title}
           </Button>
         </Card>
@@ -279,30 +262,16 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
             <span className="rounded-full bg-brand-soft px-2.5 py-1 text-xs font-bold text-brand-dark">{purposeLabel}</span>
           )}
         </div>
-        {phase.kind === "feedback" ? (
-          <>
-            <QuestionPreview exercise={exercise} />
-            <FeedbackPanel feedback={phase.feedback} onNext={proceed} pending={pending} sessionId={view.sessionId} />
-          </>
-        ) : (
-          <QuestionCard
-            key={exerciseKey}
-            item={{ id: exerciseKey, content: exercise.content }}
-            pending={pending}
-            skipLabel="Non lo so: fammi vedere come si fa"
-            onSubmit={(response, timeMs, stats) => answer(exercise, response, timeMs, stats)}
-          />
-        )}
+        <ExerciseFlow
+          key={`${exerciseKey}:${view.serverTime}`}
+          exercise={exercise}
+          sessionId={view.sessionId}
+          pending={pending}
+          run={run}
+          onNext={proceed}
+        />
       </Card>
       {errorBanner}
-    </div>
-  );
-}
-
-function QuestionPreview({ exercise }: { exercise: PublicExercise }) {
-  return (
-    <div className="rounded-2xl bg-canvas px-4 py-3">
-      <MathText text={exercise.content.prompt} />
     </div>
   );
 }

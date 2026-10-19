@@ -2,16 +2,13 @@
 
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { FeedbackPanel } from "@/components/exercise/feedback-panel";
-import { QuestionCard } from "@/components/exercise/question-card";
+import { ExerciseFlow } from "@/components/exercise/exercise-flow";
 import { Gradini } from "@/components/gradini";
 import { LessonView } from "@/components/lesson-view";
-import { MathText } from "@/components/math-text";
 import { Card } from "@/components/ui";
-import type { ItemResponse, Level } from "@/lib/items/schemas";
+import type { Level } from "@/lib/items/schemas";
 import type { Lesson } from "@/lib/lessons/schema";
-import type { AnswerStats } from "@/lib/tracking/schema";
-import { finishLesson, nextSkillExercise, submitStudyAnswer } from "@/lib/study/actions";
+import { finishLesson, nextSkillExercise } from "@/lib/study/actions";
 import { LEVELS, type SkillStatus } from "@/lib/study/mastery";
 import { LEVEL_LABELS } from "@/lib/study/plan";
 import type { AnswerFeedback, PathEntry, PublicExercise } from "@/lib/study/types";
@@ -37,7 +34,7 @@ export function SkillView({
 }) {
   const [tab, setTab] = useState<"lesson" | "practice">(lesson && !lessonDone ? "lesson" : "practice");
   const [exercise, setExercise] = useState(firstExercise);
-  const [feedback, setFeedback] = useState<AnswerFeedback | null>(null);
+  const [round, setRound] = useState(0);
   const [progress, setProgress] = useState({ status: entry.status, level: entry.level, steps: entry.steps });
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -53,27 +50,17 @@ export function SkillView({
     });
   };
 
-  const answer = (current: PublicExercise, response: ItemResponse, timeMs: number, stats: AnswerStats) =>
-    run(async () => {
-      const result = await submitStudyAnswer({
-        sessionId: null,
-        ref: current.ref,
-        purpose: current.purpose,
-        response,
-        timeMs,
-        stats,
-      });
-      if (result.event?.type === "level_up") {
-        setProgress({ status: "learning", level: result.event.to, steps: LEVELS.indexOf(result.event.to) });
-      }
-      if (result.event?.type === "completed") setProgress({ status: "review", level: "advanced", steps: 3 });
-      setFeedback(result);
-    });
+  const answered = (result: AnswerFeedback) => {
+    if (result.event?.type === "level_up") {
+      setProgress({ status: "learning", level: result.event.to, steps: LEVELS.indexOf(result.event.to) });
+    }
+    if (result.event?.type === "completed") setProgress({ status: "review", level: "advanced", steps: 3 });
+  };
 
   const next = () =>
     run(async () => {
       setExercise(await nextSkillExercise({ skillId: entry.id }));
-      setFeedback(null);
+      setRound((value) => value + 1);
     });
 
   const exerciseKey =
@@ -130,22 +117,15 @@ export function SkillView({
           <p className="text-sm text-ink-soft" data-exercise-ref={JSON.stringify(exercise.ref)}>
             {LEVEL_LABELS[exercise.level]}
           </p>
-          {feedback ? (
-            <>
-              <div className="rounded-2xl bg-canvas px-4 py-3">
-                <MathText text={exercise.content.prompt} />
-              </div>
-              <FeedbackPanel feedback={feedback} onNext={next} pending={pending} />
-            </>
-          ) : (
-            <QuestionCard
-              key={exerciseKey}
-              item={{ id: exerciseKey, content: exercise.content }}
-              pending={pending}
-              skipLabel="Non lo so: fammi vedere come si fa"
-              onSubmit={(response, timeMs, stats) => answer(exercise, response, timeMs, stats)}
-            />
-          )}
+          <ExerciseFlow
+            key={`${exerciseKey}:${round}`}
+            exercise={exercise}
+            sessionId={null}
+            pending={pending}
+            run={run}
+            onAnswered={answered}
+            onNext={next}
+          />
         </Card>
       ) : (
         <Card>Per questa abilità non ci sono ancora esercizi.</Card>

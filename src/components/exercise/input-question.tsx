@@ -223,7 +223,7 @@ export function InputQuestion({
         disabled={pending}
       />
 
-      <Button onClick={submit} disabled={pending} className="w-full">
+      <Button onClick={submit} loading={pending} className="w-full">
         Conferma
       </Button>
     </div>

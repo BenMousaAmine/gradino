@@ -1,7 +1,16 @@
 import { GENERIC_TAGS } from "@/lib/items/grade";
 import { addDays, dayInRome } from "@/lib/study/dates";
 
-export type AnswerStatsRow = { firstInputMs: number | null; inputs: number; corrections: number; unitChanges: number };
+export type AnswerStatsRow = {
+  firstInputMs: number | null;
+  inputs: number;
+  corrections: number;
+  unitChanges: number;
+  idleCount: number;
+  idleMs: number;
+  awayCount: number;
+  awayMs: number;
+};
 
 export type AnswerRow = {
   id: string;
@@ -15,6 +24,11 @@ export type AnswerRow = {
   createdAt: string;
   sessionId: string | null;
   stats: AnswerStatsRow | null;
+  attempts: number;
+  finalScore: number;
+  retryMs: number;
+  noteMs: number | null;
+  noteSource: string | null;
 };
 
 export type EventRow = {
@@ -30,14 +44,18 @@ export type DayPoint = { day: string; minutes: number; answers: number; correct:
 const ANSWER_CAP = 5 * 60_000;
 const FEEDBACK_CAP = 3 * 60_000;
 const LESSON_CAP = 10 * 60_000;
+const NOTE_CAP = 10 * 60_000;
 
 const numberOf = (value: unknown) => (typeof value === "number" && Number.isFinite(value) ? value : 0);
 const dayOf = (iso: string) => dayInRome(new Date(iso));
+const workMs = (answer: AnswerRow) => Math.max(0, answer.timeMs - (answer.stats?.awayMs ?? 0));
 
 export function activeMs(answers: readonly AnswerRow[], events: readonly EventRow[]): Map<string, number> {
   const byDay = new Map<string, number>();
   const add = (day: string, ms: number) => byDay.set(day, (byDay.get(day) ?? 0) + ms);
-  for (const answer of answers) add(dayOf(answer.createdAt), Math.min(answer.timeMs, ANSWER_CAP));
+  for (const answer of answers) {
+    add(dayOf(answer.createdAt), Math.min(workMs(answer), ANSWER_CAP) + Math.min(answer.retryMs, ANSWER_CAP) + Math.min(answer.noteMs ?? 0, NOTE_CAP));
+  }
   for (const event of events) {
     if (event.type === "feedback_closed") add(dayOf(event.createdAt), Math.min(numberOf(event.payload.ms), FEEDBACK_CAP));
     if (event.type === "lesson_step") add(dayOf(event.createdAt), Math.min(numberOf(event.payload.ms), LESSON_CAP));
@@ -107,7 +125,7 @@ export function weakSkills(answers: readonly AnswerRow[], minAnswers = 3): WeakS
     .map(([skillId, rowsOfSkill]) => {
       const total = rowsOfSkill.length;
       const accuracy = rowsOfSkill.filter((row) => row.score === 1).length / total;
-      const avgMs = rowsOfSkill.reduce((sum, row) => sum + Math.min(row.timeMs, ANSWER_CAP), 0) / total;
+      const avgMs = rowsOfSkill.reduce((sum, row) => sum + Math.min(workMs(row), ANSWER_CAP), 0) / total;
       const skipRate = rowsOfSkill.filter((row) => row.errorTag === GENERIC_TAGS.skipped).length / total;
       const corrections = rowsOfSkill.reduce((sum, row) => sum + (row.stats?.corrections ?? 0), 0) / total;
       return { skillId, total, accuracy, avgMs, skipRate, corrections };
@@ -203,6 +221,14 @@ export type Habits = {
   feedbackSeconds: number | null;
   solutionOpenedRate: number | null;
   hours: number[];
+  retried: number;
+  recoveredRate: number | null;
+  thinkSeconds: number | null;
+  idleCount: number;
+  idleMinutes: number;
+  notes: number;
+  noteSeconds: number | null;
+  voiceNoteRate: number | null;
 };
 
 export function habits(events: readonly EventRow[], answers: readonly AnswerRow[]): Habits {
@@ -215,6 +241,11 @@ export function habits(events: readonly EventRow[], answers: readonly AnswerRow[
     const hour = Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", hourCycle: "h23" }).format(new Date(answer.createdAt)));
     hours[hour] += 1;
   }
+  const retried = answers.filter((answer) => answer.attempts === 2);
+  const firstInputs = answers.flatMap((answer) =>
+    answer.errorTag !== GENERIC_TAGS.skipped && answer.stats?.firstInputMs != null ? [answer.stats.firstInputMs] : [],
+  );
+  const notes = answers.filter((answer) => answer.noteMs !== null);
   return {
     awayCount: away.length,
     awayMinutes: Math.round(away.reduce((sum, event) => sum + numberOf(event.payload.ms), 0) / 60_000),
@@ -228,5 +259,13 @@ export function habits(events: readonly EventRow[], answers: readonly AnswerRow[
     solutionOpenedRate:
       wrongFeedback.length > 0 ? Math.round((wrongFeedback.filter((event) => event.payload.solutionOpen === true).length / wrongFeedback.length) * 100) : null,
     hours,
+    retried: retried.length,
+    recoveredRate: retried.length > 0 ? Math.round((retried.filter((answer) => answer.finalScore === 1).length / retried.length) * 100) : null,
+    thinkSeconds: firstInputs.length > 0 ? Math.round(median(firstInputs) / 1000) : null,
+    idleCount: answers.reduce((sum, answer) => sum + (answer.stats?.idleCount ?? 0), 0),
+    idleMinutes: Math.round(answers.reduce((sum, answer) => sum + (answer.stats?.idleMs ?? 0), 0) / 60_000),
+    notes: notes.length,
+    noteSeconds: notes.length > 0 ? Math.round(notes.reduce((sum, answer) => sum + Math.min(answer.noteMs ?? 0, NOTE_CAP), 0) / notes.length / 1000) : null,
+    voiceNoteRate: notes.length > 0 ? Math.round((notes.filter((answer) => answer.noteSource !== "typed").length / notes.length) * 100) : null,
   };
 }

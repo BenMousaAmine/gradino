@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { itemResponseSchema } from "@/lib/items/schemas";
 import { answerStatsSchema } from "@/lib/tracking/schema";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { gradeAndStore, templateExercise } from "./exercises";
+import { gradeAndStore, gradeSecondAttempt, saveNote, templateExercise } from "./exercises";
 import { applyAnswer, loadStudyContext, markLessonDone } from "./progress";
 import { advanceBlock, getOrCreateSession, sessionView } from "./session";
 import { exerciseRefSchema, purposeSchema, type AnswerFeedback, type PublicExercise, type SessionView } from "./types";
@@ -41,6 +41,38 @@ export async function submitStudyAnswer(input: z.input<typeof answerSchema>): Pr
   const { resolved, feedback } = await gradeAndStore({ admin, userId: user.id, ref, purpose, sessionId, response, timeMs, stats });
   const event = await applyAnswer(admin, user.id, resolved.skillId, resolved.level, purpose);
   return { ...feedback, event };
+}
+
+const secondAttemptSchema = z.object({
+  answerId: z.uuid(),
+  response: itemResponseSchema,
+  timeMs: z.number().int().min(0).max(3_600_000),
+  stats: answerStatsSchema.nullable().default(null),
+  hintMs: z.number().int().min(0).max(3_600_000),
+});
+
+export async function submitSecondAttempt(input: z.input<typeof secondAttemptSchema>): Promise<AnswerFeedback> {
+  const parsed = secondAttemptSchema.parse(input);
+  const user = await getCurrentUser();
+  const feedback = await gradeSecondAttempt({ admin: createSupabaseAdminClient(), userId: user.id, ...parsed });
+  return { ...feedback, event: null };
+}
+
+const noteSchema = z.object({
+  answerId: z.uuid(),
+  note: z
+    .string()
+    .trim()
+    .max(4000)
+    .refine((value) => value.split(/\s+/).filter((word) => word.length > 1).length >= 3, "too short"),
+  source: z.enum(["typed", "voice", "mixed"]),
+  ms: z.number().int().min(0).max(3_600_000),
+});
+
+export async function submitNote(input: z.input<typeof noteSchema>): Promise<void> {
+  const parsed = noteSchema.parse(input);
+  const user = await getCurrentUser();
+  await saveNote({ admin: createSupabaseAdminClient(), userId: user.id, ...parsed });
 }
 
 export async function nextSessionStep(): Promise<SessionView> {

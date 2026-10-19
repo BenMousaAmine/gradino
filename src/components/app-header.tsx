@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { SubmitButton } from "@/components/submit-button";
 import { APP_NAME } from "@/lib/app";
 import { signOut, switchMode } from "@/lib/auth/actions";
 import { getCurrentUser } from "@/lib/auth/session";
@@ -14,23 +15,19 @@ async function HeaderActions({ name }: { name: string }) {
       <span className={`text-sm font-medium text-brand-soft ${isAdmin ? "hidden sm:inline" : ""}`}>{name}</span>
       {isAdmin && (
         <form action={switchMode.bind(null, studentMode ? "admin" : "student")}>
-          <button
-            type="submit"
+          <SubmitButton
             className={`rounded-full px-3.5 py-1.5 text-sm font-bold whitespace-nowrap ${
               studentMode ? "bg-lime text-ink hover:brightness-105" : "bg-white text-brand-deep hover:bg-brand-soft"
             }`}
           >
             {studentMode ? "Torna admin" : "Vista studente"}
-          </button>
+          </SubmitButton>
         </form>
       )}
       <form action={signOut}>
-        <button
-          type="submit"
-          className="rounded-full bg-white/14 px-3.5 py-1.5 text-sm font-bold text-white hover:bg-white/22"
-        >
+        <SubmitButton className="rounded-full bg-white/14 px-3.5 py-1.5 text-sm font-bold text-white hover:bg-white/22">
           Esci
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

@@ -99,7 +99,8 @@ export function OrderQuestion({
 
       <Button
         onClick={() => onSubmit({ type: "order", order: chosen })}
-        disabled={pending || remaining.length > 0}
+        disabled={remaining.length > 0}
+        loading={pending}
         className="w-full"
       >
         Conferma
