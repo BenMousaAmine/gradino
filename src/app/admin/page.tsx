@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AppHeader } from "@/components/app-header";
+import { buttonClass } from "@/components/ui";
 import { formatDateTime } from "@/lib/admin/format";
 import { listStudents, requireAdmin } from "@/lib/admin/queries";
 import { APP_NAME } from "@/lib/app";
@@ -17,9 +18,14 @@ async function Students() {
     <>
       <AppHeader name={user.displayName} />
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-extrabold tracking-tight">Pannello admin</h1>
-          <p className="text-ink-soft">I tuoi studenti e cosa hanno fatto negli ultimi 7 giorni.</p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-3xl font-extrabold tracking-tight">Pannello admin</h1>
+            <p className="text-ink-soft">I tuoi studenti e cosa hanno fatto negli ultimi 7 giorni.</p>
+          </div>
+          <Link href="/admin/students/new" className={buttonClass("secondary")}>
+            + Nuovo studente
+          </Link>
         </div>
         {students.length === 0 ? (
           <p className="rounded-3xl border-2 border-line bg-surface p-5 text-ink-soft">Non ci sono ancora studenti.</p>
