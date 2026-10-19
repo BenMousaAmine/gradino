@@ -62,14 +62,16 @@ export function InputQuestion({
   pending,
   onSubmit,
   onInteract,
+  initial,
 }: {
   content: InputContent;
   pending: boolean;
   onSubmit: (response: ItemResponse) => void;
   onInteract?: (kind: InteractionKind) => void;
+  initial?: Record<string, FieldResponse>;
 }) {
   const [slots] = useState(() => slotsFor(content.fields));
-  const [values, setValues] = useState(() => initialValues(content.fields));
+  const [values, setValues] = useState(() => ({ ...initialValues(content.fields), ...initial }));
   const [activeIndex, setActiveIndex] = useState(0);
   const [remaining, setRemaining] = useState(content.timeLimitSec ?? null);
   const submitted = useRef(false);

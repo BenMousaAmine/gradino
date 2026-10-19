@@ -237,14 +237,14 @@ isOneToOne: true
                   ]
                 },"practice_answers": {
                   Row: {
-                    "answer": NonNullable<Json>,"content": NonNullable<Json>,"created_at": string,"details": NonNullable<Json>,"error_tag": string | null,"id": string,"level": string,"purpose": string,"score": number,"seed": number | null,"session_id": string | null,"skill_id": string,"source": string,"source_id": string,"time_ms": number,"user_id": string
+                    "answer": NonNullable<Json>,"attempts": number,"content": NonNullable<Json>,"created_at": string,"details": NonNullable<Json>,"error_tag": string | null,"final_score": number | null,"id": string,"level": string,"note": string | null,"note_ms": number | null,"note_source": string | null,"purpose": string,"score": number,"seed": number | null,"session_id": string | null,"skill_id": string,"source": string,"source_id": string,"time_ms": number,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "answer": NonNullable<Json>,"content": NonNullable<Json>,"created_at"?: string,"details"?: NonNullable<Json>,"error_tag"?: string | null,"id"?: string,"level": string,"purpose": string,"score": number,"seed"?: number | null,"session_id"?: string | null,"skill_id": string,"source": string,"source_id": string,"time_ms": number,"user_id": string
+                    "answer": NonNullable<Json>,"attempts"?: number,"content": NonNullable<Json>,"created_at"?: string,"details"?: NonNullable<Json>,"error_tag"?: string | null,"final_score"?: number | null,"id"?: string,"level": string,"note"?: string | null,"note_ms"?: number | null,"note_source"?: string | null,"purpose": string,"score": number,"seed"?: number | null,"session_id"?: string | null,"skill_id": string,"source": string,"source_id": string,"time_ms": number,"user_id": string
                   }
                   Update: {
-                    "answer"?: NonNullable<Json>,"content"?: NonNullable<Json>,"created_at"?: string,"details"?: NonNullable<Json>,"error_tag"?: string | null,"id"?: string,"level"?: string,"purpose"?: string,"score"?: number,"seed"?: number | null,"session_id"?: string | null,"skill_id"?: string,"source"?: string,"source_id"?: string,"time_ms"?: number,"user_id"?: string
+                    "answer"?: NonNullable<Json>,"attempts"?: number,"content"?: NonNullable<Json>,"created_at"?: string,"details"?: NonNullable<Json>,"error_tag"?: string | null,"final_score"?: number | null,"id"?: string,"level"?: string,"note"?: string | null,"note_ms"?: number | null,"note_source"?: string | null,"purpose"?: string,"score"?: number,"seed"?: number | null,"session_id"?: string | null,"skill_id"?: string,"source"?: string,"source_id"?: string,"time_ms"?: number,"user_id"?: string
                   }
                   Relationships: [
                     {

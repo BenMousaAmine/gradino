@@ -13,14 +13,16 @@ export function ChoiceQuestion({
   pending,
   onSubmit,
   onInteract,
+  initial = [],
 }: {
   content: ChoiceContent;
   pending: boolean;
   onSubmit: (response: ItemResponse) => void;
   onInteract?: (kind: InteractionKind) => void;
+  initial?: string[];
 }) {
   const multiple = content.type === "multi_choice";
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(initial);
 
   const toggle = (id: string) => {
     const changing = multiple ? selected.includes(id) : selected.length > 0 && selected[0] !== id;

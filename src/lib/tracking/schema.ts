@@ -7,6 +7,10 @@ export const answerStatsSchema = z.object({
   inputs: z.number().int().min(0).max(10_000),
   corrections: z.number().int().min(0).max(10_000),
   unitChanges: z.number().int().min(0).max(1_000),
+  idleCount: z.number().int().min(0).max(1_000).default(0),
+  idleMs: z.number().int().min(0).max(3_600_000).default(0),
+  awayCount: z.number().int().min(0).max(1_000).default(0),
+  awayMs: z.number().int().min(0).max(3_600_000).default(0),
 });
 export type AnswerStats = z.infer<typeof answerStatsSchema>;
 

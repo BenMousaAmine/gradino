@@ -36,15 +36,17 @@ export function OrderQuestion({
   pending,
   onSubmit,
   onInteract,
+  initial = [],
 }: {
   itemId: string;
   content: OrderContent;
   pending: boolean;
   onSubmit: (response: ItemResponse) => void;
   onInteract?: (kind: InteractionKind) => void;
+  initial?: string[];
 }) {
   const shuffled = useMemo(() => shuffle(content.steps, itemId), [content.steps, itemId]);
-  const [chosen, setChosen] = useState<string[]>([]);
+  const [chosen, setChosen] = useState<string[]>(initial);
   const byId = new Map(content.steps.map((step) => [step.id, step]));
   const remaining = shuffled.filter((step) => !chosen.includes(step.id));
 

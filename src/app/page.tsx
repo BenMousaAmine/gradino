@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
 import { AppHeader } from "@/components/app-header";
 import { Gradini } from "@/components/gradini";
@@ -106,6 +107,7 @@ function DiagnosticCard({ status, answered }: { status: "none" | "in_progress"; 
 
 async function Home() {
   const user = await getCurrentUser();
+  if (user.mode === "admin") redirect("/admin");
   const supabase = await createSupabaseServerClient();
   const attempt = await loadLatestAttempt(supabase, user.id, DIAGNOSTIC_ID);
   const admin = createSupabaseAdminClient();
