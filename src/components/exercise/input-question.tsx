@@ -5,6 +5,7 @@ import { applyKey, Keypad, keyFromKeyboard, type KeypadKey } from "@/components/
 import { MathText } from "@/components/math-text";
 import { Button } from "@/components/ui";
 import type { Field, FieldResponse, ItemContent, ItemResponse } from "@/lib/items/schemas";
+import type { InteractionKind } from "@/lib/tracking/schema";
 
 type InputContent = Extract<ItemContent, { type: "input" }>;
 type SlotPart = "value" | "numerator" | "denominator";
@@ -46,8 +47,8 @@ function SlotBox({ text, active, onSelect, label }: { text: string; active: bool
       type="button"
       onClick={onSelect}
       aria-label={label}
-      className={`flex h-14 min-w-20 items-center justify-center rounded-xl border-2 px-3 text-2xl font-semibold tabular-nums transition ${
-        active ? "border-brand bg-brand-soft" : "border-line bg-surface"
+      className={`flex h-14 min-w-20 items-center justify-center rounded-2xl border-2 px-3 font-display text-2xl font-extrabold tabular-nums transition ${
+        active ? "border-brand bg-brand-soft ring-4 ring-brand/18" : "border-line bg-surface"
       }`}
     >
       {text === "" ? <span className="text-ink-soft/40">?</span> : text}
@@ -60,10 +61,12 @@ export function InputQuestion({
   content,
   pending,
   onSubmit,
+  onInteract,
 }: {
   content: InputContent;
   pending: boolean;
   onSubmit: (response: ItemResponse) => void;
+  onInteract?: (kind: InteractionKind) => void;
 }) {
   const [slots] = useState(() => slotsFor(content.fields));
   const [values, setValues] = useState(() => initialValues(content.fields));
@@ -104,6 +107,7 @@ export function InputQuestion({
         else submitRef.current();
         return;
       }
+      onInteract?.(key === "backspace" ? "correction" : "input");
       const slot = slots[activeIndex];
       setValues((previous) => {
         const current = previous[slot.fieldId];
@@ -111,7 +115,7 @@ export function InputQuestion({
         return { ...previous, [slot.fieldId]: writeSlot(current, slot.part, text) };
       });
     },
-    [activeIndex, slots],
+    [activeIndex, slots, onInteract],
   );
 
   useEffect(() => {
@@ -126,6 +130,7 @@ export function InputQuestion({
   }, [press]);
 
   const setUnit = (fieldId: string, unit: string) => {
+    onInteract?.("unit");
     setValues((previous) => {
       const current = previous[fieldId];
       if (current.kind !== "number") return previous;
@@ -145,8 +150,8 @@ export function InputQuestion({
     <div className="flex flex-col gap-5">
       {remaining !== null && (
         <div
-          className={`self-start rounded-full px-3 py-1 text-sm font-semibold tabular-nums ${
-            remaining <= 10 ? "bg-bad-soft text-bad" : "bg-brand-soft text-brand"
+          className={`self-start rounded-full px-3 py-1 text-sm font-bold tabular-nums ${
+            remaining <= 10 ? "bg-bad-soft text-bad" : "bg-brand-soft text-brand-dark"
           }`}
         >
           {remaining} secondi
@@ -195,7 +200,7 @@ export function InputQuestion({
                       key={unit}
                       type="button"
                       onClick={() => setUnit(field.id, unit)}
-                      className={`h-10 min-w-14 rounded-lg border-2 px-3 text-base font-semibold transition ${
+                      className={`h-10 min-w-14 rounded-xl border-2 px-3 text-base font-bold transition ${
                         value.unit === unit ? "border-brand bg-brand text-white" : "border-line bg-surface text-ink"
                       }`}
                     >

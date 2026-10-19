@@ -23,7 +23,27 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "areas": {
+            "activity_events": {
+                  Row: {
+                    "client_at": string | null,"created_at": string,"id": number,"payload": NonNullable<Json>,"session_id": string | null,"skill_id": string | null,"type": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "client_at"?: string | null,"created_at"?: string,"id"?: never,"payload"?: NonNullable<Json>,"session_id"?: string | null,"skill_id"?: string | null,"type": string,"user_id": string
+                  }
+                  Update: {
+                    "client_at"?: string | null,"created_at"?: string,"id"?: never,"payload"?: NonNullable<Json>,"session_id"?: string | null,"skill_id"?: string | null,"type"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "activity_events_session_id_fkey"
+      columns: ["session_id"]
+isOneToOne: false
+      referencedRelation: "study_sessions"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"areas": {
                   Row: {
                     "id": string,"position": number,"subject_id": string,"title": string
                   }
@@ -137,14 +157,14 @@ isOneToOne: false
                   ]
                 },"item_keys": {
                   Row: {
-                    "item_id": string,"key": NonNullable<Json>
+                    "item_id": string,"key": NonNullable<Json>,"solution": NonNullable<Json>
                   }
                   ComputedFields: never
                   Insert: {
-                    "item_id": string,"key": NonNullable<Json>
+                    "item_id": string,"key": NonNullable<Json>,"solution"?: NonNullable<Json>
                   }
                   Update: {
-                    "item_id"?: string,"key"?: NonNullable<Json>
+                    "item_id"?: string,"key"?: NonNullable<Json>,"solution"?: NonNullable<Json>
                   }
                   Relationships: [
                     {
@@ -155,20 +175,86 @@ isOneToOne: true
       referencedColumns: ["id"]
     }
                   ]
-                },"items": {
+                },"item_templates": {
                   Row: {
-                    "content": NonNullable<Json>,"created_at": string,"id": string,"level": string,"skill_id": string,"status": string,"type": string,"updated_at": string
+                    "generator": string,"id": string,"level": string,"params": NonNullable<Json>,"skill_id": string,"status": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "content": NonNullable<Json>,"created_at"?: string,"id": string,"level": string,"skill_id": string,"status"?: string,"type": string,"updated_at"?: string
+                    "generator": string,"id": string,"level": string,"params"?: NonNullable<Json>,"skill_id": string,"status"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "content"?: NonNullable<Json>,"created_at"?: string,"id"?: string,"level"?: string,"skill_id"?: string,"status"?: string,"type"?: string,"updated_at"?: string
+                    "generator"?: string,"id"?: string,"level"?: string,"params"?: NonNullable<Json>,"skill_id"?: string,"status"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "item_templates_skill_id_fkey"
+      columns: ["skill_id"]
+isOneToOne: false
+      referencedRelation: "skills"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"items": {
+                  Row: {
+                    "content": NonNullable<Json>,"created_at": string,"id": string,"kind": string,"level": string,"skill_id": string,"status": string,"type": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "content": NonNullable<Json>,"created_at"?: string,"id": string,"kind"?: string,"level": string,"skill_id": string,"status"?: string,"type": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "content"?: NonNullable<Json>,"created_at"?: string,"id"?: string,"kind"?: string,"level"?: string,"skill_id"?: string,"status"?: string,"type"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
       foreignKeyName: "items_skill_id_fkey"
+      columns: ["skill_id"]
+isOneToOne: false
+      referencedRelation: "skills"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"lessons": {
+                  Row: {
+                    "content": NonNullable<Json>,"skill_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "content": NonNullable<Json>,"skill_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "content"?: NonNullable<Json>,"skill_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "lessons_skill_id_fkey"
+      columns: ["skill_id"]
+isOneToOne: true
+      referencedRelation: "skills"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"practice_answers": {
+                  Row: {
+                    "answer": NonNullable<Json>,"content": NonNullable<Json>,"created_at": string,"details": NonNullable<Json>,"error_tag": string | null,"id": string,"level": string,"purpose": string,"score": number,"seed": number | null,"session_id": string | null,"skill_id": string,"source": string,"source_id": string,"time_ms": number,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "answer": NonNullable<Json>,"content": NonNullable<Json>,"created_at"?: string,"details"?: NonNullable<Json>,"error_tag"?: string | null,"id"?: string,"level": string,"purpose": string,"score": number,"seed"?: number | null,"session_id"?: string | null,"skill_id": string,"source": string,"source_id": string,"time_ms": number,"user_id": string
+                  }
+                  Update: {
+                    "answer"?: NonNullable<Json>,"content"?: NonNullable<Json>,"created_at"?: string,"details"?: NonNullable<Json>,"error_tag"?: string | null,"id"?: string,"level"?: string,"purpose"?: string,"score"?: number,"seed"?: number | null,"session_id"?: string | null,"skill_id"?: string,"source"?: string,"source_id"?: string,"time_ms"?: number,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "practice_answers_session_id_fkey"
+      columns: ["session_id"]
+isOneToOne: false
+      referencedRelation: "study_sessions"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "practice_answers_skill_id_fkey"
       columns: ["skill_id"]
 isOneToOne: false
       referencedRelation: "skills"
@@ -241,6 +327,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"skill_progress": {
+                  Row: {
+                    "lesson_done_at": string | null,"level": string,"next_review_on": string | null,"review_step": number,"skill_id": string,"status": string,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "lesson_done_at"?: string | null,"level"?: string,"next_review_on"?: string | null,"review_step"?: number,"skill_id": string,"status"?: string,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "lesson_done_at"?: string | null,"level"?: string,"next_review_on"?: string | null,"review_step"?: number,"skill_id"?: string,"status"?: string,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "skill_progress_skill_id_fkey"
+      columns: ["skill_id"]
+isOneToOne: false
+      referencedRelation: "skills"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"skills": {
                   Row: {
                     "area_id": string,"id": string,"position": number,"school_year": number | null,"title": string
@@ -260,6 +366,20 @@ isOneToOne: false
       referencedRelation: "areas"
       referencedColumns: ["id"]
     }
+                  ]
+                },"study_sessions": {
+                  Row: {
+                    "block": number,"block_started_at": string,"completed_at": string | null,"created_at": string,"day": string,"id": string,"status": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "block"?: number,"block_started_at"?: string,"completed_at"?: string | null,"created_at"?: string,"day": string,"id"?: string,"status"?: string,"user_id": string
+                  }
+                  Update: {
+                    "block"?: number,"block_started_at"?: string,"completed_at"?: string | null,"created_at"?: string,"day"?: string,"id"?: string,"status"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
                   ]
                 },"subjects": {
                   Row: {

@@ -72,6 +72,7 @@ async function main() {
         skill_id: item.skillId,
         type: item.content.type,
         level: item.level,
+        kind: item.kind,
         content: item.content,
         status: item.status,
         updated_at: now,
@@ -79,7 +80,38 @@ async function main() {
     ),
   );
 
-  check("item_keys", await supabase.from("item_keys").upsert(pack.items.map((item) => ({ item_id: item.id, key: item.key }))));
+  check(
+    "item_keys",
+    await supabase
+      .from("item_keys")
+      .upsert(pack.items.map((item) => ({ item_id: item.id, key: item.key, solution: item.solution }))),
+  );
+
+  if (pack.lessons.length > 0) {
+    check(
+      "lessons",
+      await supabase.from("lessons").upsert(
+        pack.lessons.map(({ skillId, ...lesson }) => ({ skill_id: skillId, content: lesson, updated_at: now })),
+      ),
+    );
+  }
+
+  if (pack.templates.length > 0) {
+    check(
+      "item_templates",
+      await supabase.from("item_templates").upsert(
+        pack.templates.map((template) => ({
+          id: template.id,
+          skill_id: template.skillId,
+          level: template.level,
+          generator: template.generator,
+          params: template.params,
+          status: template.status,
+          updated_at: now,
+        })),
+      ),
+    );
+  }
 
   for (const assessment of pack.assessments) {
     check(
@@ -127,7 +159,8 @@ async function main() {
 
   console.log(
     `Imported ${files.length} files: ${pack.subjects.length} subjects, ${pack.areas.length} areas, ` +
-      `${pack.skills.length} skills, ${pack.items.length} items, ${pack.assessments.length} assessments.`,
+      `${pack.skills.length} skills, ${pack.items.length} items, ${pack.lessons.length} lessons, ` +
+      `${pack.templates.length} templates, ${pack.assessments.length} assessments.`,
   );
 }
 

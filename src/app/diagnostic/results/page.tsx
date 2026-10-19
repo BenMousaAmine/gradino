@@ -58,7 +58,7 @@ async function Results() {
       <AppHeader name={user.displayName} />
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold">La tua mappa di partenza</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">La tua mappa di partenza</h1>
           <p className="text-ink-soft">
             {greens > 0
               ? `Hai già ${greens} ${greens === 1 ? "area verde" : "aree verdi"} su ${evaluated}. Da qui partiamo!`
@@ -70,11 +70,11 @@ async function Results() {
           {results.map((result) => {
             const style = COLOR_STYLES[result.color ?? "skipped"];
             return (
-              <div key={result.sectionId} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4">
+              <div key={result.sectionId} className="flex items-center gap-3 rounded-3xl border-2 border-line bg-surface p-4">
                 <span className={`h-4 w-4 shrink-0 rounded-full ${style.dot}`} />
                 <div className="flex flex-col">
                   <span className="font-semibold">{sectionById.get(result.sectionId)?.title}</span>
-                  <span className={`mt-1 self-start rounded-full px-2 py-0.5 text-xs font-semibold ${style.badge}`}>
+                  <span className={`mt-1 self-start rounded-full px-2.5 py-1 text-xs font-bold ${style.badge}`}>
                     {style.label}
                   </span>
                 </div>
@@ -84,7 +84,7 @@ async function Results() {
         </div>
 
         <Card className="flex flex-col gap-4">
-          <h2 className="text-xl font-bold">Da dove partiamo</h2>
+          <h2 className="text-xl font-extrabold">Da dove partiamo</h2>
           {plan.length === 0 ? (
             <p className="text-ink-soft">Le basi ci sono tutte: possiamo partire subito con il programma di terza.</p>
           ) : (
@@ -107,7 +107,7 @@ async function Results() {
           )}
         </Card>
 
-        <details className="rounded-2xl border border-line bg-surface p-5">
+        <details className="rounded-2xl border-2 border-line bg-surface p-5">
           <summary className="cursor-pointer font-semibold">Dettagli per il genitore o il tutor</summary>
           <div className="mt-4 flex flex-col gap-6">
             {results.map((result) => {
@@ -146,7 +146,7 @@ async function Results() {
                     <p className="text-sm text-bad">Sezione chiusa in anticipo: 2 errori nelle domande base.</p>
                   )}
                   {problems.map((problem) => (
-                    <div key={problem.item.id} className="rounded-xl bg-canvas p-3 text-sm">
+                    <div key={problem.item.id} className="rounded-2xl bg-canvas p-3 text-sm">
                       <MathText text={problem.item.content.prompt} className="block font-medium" />
                       <p className="mt-1 text-ink-soft">
                         {problem.skipped
@@ -177,7 +177,7 @@ export default function ResultsPage() {
     <Suspense
       fallback={
         <main className="mx-auto w-full max-w-xl px-4 py-6">
-          <div className="h-96 animate-pulse rounded-2xl bg-line/60" />
+          <div className="h-96 animate-pulse rounded-3xl bg-line/60" />
         </main>
       }
     >

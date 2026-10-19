@@ -1,0 +1,391 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.meas.length-mass",
+      "title": "Equivalenze di lunghezza e massa",
+      "understand": {
+        "paragraphs": [
+          "Il sistema metrico è decimale: ogni unità vale 10 volte quella successiva.",
+          "Lunghezze: km, hm, dam, m, dm, cm, mm. Masse: kg, hg, dag, g, dg, cg, mg."
+        ]
+      },
+      "recipe": [
+        "Scrivi la scala delle unità e conta i passaggi tra le due.",
+        "Verso un'unità più piccola: moltiplica per 10 a ogni passaggio (il numero diventa più grande).",
+        "Verso un'unità più grande: dividi per 10 a ogni passaggio.",
+        "Con unità diverse nello stesso calcolo, prima porta tutto alla stessa unità."
+      ],
+      "example": {
+        "prompt": "3,5 m = … cm",
+        "steps": [
+          "Da m a cm ci sono 2 passaggi: × 100",
+          "$3{,}5 \\times 100 = 350$"
+        ],
+        "answer": "350 cm"
+      },
+      "complete": {
+        "prompt": "2400 g = … kg",
+        "given": [
+          "Da g a kg ci sono 3 passaggi verso l'unità più grande."
+        ],
+        "blanks": [
+          {
+            "label": "Divido per",
+            "key": {
+              "kind": "number",
+              "value": 1000
+            }
+          },
+          {
+            "label": "$2400 : 1000 =$",
+            "key": {
+              "kind": "number",
+              "value": 2.4
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Controlla la direzione: verso unità più piccole il numero cresce.",
+        "Conta bene i passaggi: da km a m sono 3, cioè × 1000."
+      ]
+    },
+    {
+      "skillId": "math.meas.area-units",
+      "title": "Equivalenze di superficie",
+      "understand": {
+        "paragraphs": [
+          "Per le superfici ogni passaggio vale × 100, non × 10.",
+          "Il motivo: 1 dm² è un quadrato di 10 cm per 10 cm, quindi contiene 10 × 10 = 100 cm²."
+        ],
+        "visual": {
+          "type": "decimal-grid",
+          "filled": 100,
+          "label": "1 dm² = 100 cm²"
+        }
+      },
+      "recipe": [
+        "Scala: km², hm², dam², m², dm², cm², mm².",
+        "Verso un'unità più piccola: × 100 a ogni passaggio.",
+        "Verso un'unità più grande: : 100 a ogni passaggio."
+      ],
+      "example": {
+        "prompt": "4 m² = … cm²",
+        "steps": [
+          "Da m² a cm² ci sono 2 passaggi: $\\times 100 \\times 100 = \\times 10\\,000$",
+          "$4 \\times 10\\,000 = 40\\,000$"
+        ],
+        "answer": "40 000 cm²"
+      },
+      "complete": {
+        "prompt": "350 dm² = … m²",
+        "given": [
+          "Da dm² a m² c'è 1 passaggio verso l'unità più grande."
+        ],
+        "blanks": [
+          {
+            "label": "Divido per",
+            "key": {
+              "kind": "number",
+              "value": 100
+            }
+          },
+          {
+            "label": "$350 : 100 =$",
+            "key": {
+              "kind": "number",
+              "value": 3.5
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Per le superfici non si moltiplica per 10: 1 m² = 100 dm², non 10."
+      ]
+    },
+    {
+      "skillId": "math.meas.volume-capacity",
+      "title": "Volume e capacità",
+      "understand": {
+        "paragraphs": [
+          "Per i volumi ogni passaggio vale × 1000: 1 dm³ è un cubo che contiene 10 × 10 × 10 = 1000 cm³.",
+          "Volume e capacità sono collegati: 1 dm³ contiene esattamente 1 litro, e 1 cm³ è 1 millilitro."
+        ]
+      },
+      "recipe": [
+        "Scala dei volumi: m³, dm³, cm³, mm³ (× 1000 a ogni passaggio).",
+        "Scala delle capacità: hL, daL, L, dL, cL, mL (× 10 a ogni passaggio).",
+        "Il ponte: 1 dm³ = 1 L, 1 cm³ = 1 mL, 1 m³ = 1000 L."
+      ],
+      "example": {
+        "prompt": "0,5 m³ = … L",
+        "steps": [
+          "1 m³ = 1000 dm³ = 1000 L",
+          "$0{,}5 \\times 1000 = 500$"
+        ],
+        "answer": "500 L"
+      },
+      "complete": {
+        "prompt": "750 cm³ = … L",
+        "given": [
+          "1 L = 1 dm³ = 1000 cm³"
+        ],
+        "blanks": [
+          {
+            "label": "$750 : 1000 =$",
+            "key": {
+              "kind": "number",
+              "value": 0.75
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Per i volumi non si moltiplica per 10 o per 100, ma per 1000.",
+        "500 cm³ sono mezzo litro, non 500 litri."
+      ]
+    },
+    {
+      "skillId": "math.meas.time",
+      "title": "Misure di tempo",
+      "understand": {
+        "paragraphs": [
+          "Il tempo non è decimale: un'ora ha 60 minuti e un minuto ha 60 secondi.",
+          "Per questo 1,5 ore non sono 1 ora e 50 minuti, ma 1 ora e 30 minuti."
+        ]
+      },
+      "recipe": [
+        "Ore → minuti: moltiplica per 60.",
+        "Ore con la virgola: la parte decimale va moltiplicata per 60 (0,5 h = 30 min, 0,25 h = 15 min).",
+        "Durata tra due orari: conta fino all'ora piena, poi aggiungi il resto."
+      ],
+      "example": {
+        "prompt": "Dalle 9:40 alle 11:15 quanti minuti passano?",
+        "steps": [
+          "Dalle 9:40 alle 10:00: 20 min",
+          "Dalle 10:00 alle 11:15: 75 min",
+          "In tutto: 95 min"
+        ],
+        "answer": "95 minuti"
+      },
+      "complete": {
+        "prompt": "2 h 25 min = … min",
+        "given": [],
+        "blanks": [
+          {
+            "label": "$2 \\times 60 =$",
+            "key": {
+              "kind": "number",
+              "value": 120
+            }
+          },
+          {
+            "label": "$120 + 25 =$",
+            "key": {
+              "kind": "number",
+              "value": 145
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "1,5 h = 90 min, non 150.",
+        "Non sottrarre gli orari come numeri con la virgola."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "math.gen.length-mass.1",
+      "skillId": "math.meas.length-mass",
+      "level": "base",
+      "generator": "length-mass",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.length-mass.2",
+      "skillId": "math.meas.length-mass",
+      "level": "medium",
+      "generator": "length-mass",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.length-mass.3",
+      "skillId": "math.meas.length-mass",
+      "level": "advanced",
+      "generator": "length-mass",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.area-units.1",
+      "skillId": "math.meas.area-units",
+      "level": "base",
+      "generator": "area-units",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.area-units.2",
+      "skillId": "math.meas.area-units",
+      "level": "medium",
+      "generator": "area-units",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.area-units.3",
+      "skillId": "math.meas.area-units",
+      "level": "advanced",
+      "generator": "area-units",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.volume-capacity.1",
+      "skillId": "math.meas.volume-capacity",
+      "level": "base",
+      "generator": "volume-capacity",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.volume-capacity.2",
+      "skillId": "math.meas.volume-capacity",
+      "level": "medium",
+      "generator": "volume-capacity",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.volume-capacity.3",
+      "skillId": "math.meas.volume-capacity",
+      "level": "advanced",
+      "generator": "volume-capacity",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.time-measures.1",
+      "skillId": "math.meas.time",
+      "level": "base",
+      "generator": "time-measures",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.time-measures.2",
+      "skillId": "math.meas.time",
+      "level": "medium",
+      "generator": "time-measures",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.time-measures.3",
+      "skillId": "math.meas.time",
+      "level": "advanced",
+      "generator": "time-measures",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "math.problem.meas.1",
+      "skillId": "math.meas.volume-capacity",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Una bottiglia contiene 1,5 L. Quanti bicchieri da 250 mL si riempiono con 3 bottiglie?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "bicchieri"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 18,
+            "knownErrors": [
+              {
+                "value": 6,
+                "tag": "stops_early",
+                "message": "6 bicchieri sono una sola bottiglia: le bottiglie sono 3."
+              },
+              {
+                "value": 0.018,
+                "tag": "unit_conversion",
+                "message": "Prima porta tutto in mL: 1 L = 1000 mL."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Acqua in tutto: $1{,}5 \\times 3 = 4{,}5$ L = 4500 mL",
+        "Bicchieri: $4500 : 250 = 18$"
+      ]
+    },
+    {
+      "id": "math.problem.meas.2",
+      "skillId": "math.meas.time",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un treno parte alle 8:50 e arriva alle 11:15. Quanti minuti dura il viaggio?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "min"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 145,
+            "knownErrors": [
+              {
+                "value": 265,
+                "tag": "time_decimal",
+                "message": "Non si sottraggono gli orari come numeri: un'ora ha 60 minuti."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Dalle 8:50 alle 9:00: 10 min",
+        "Dalle 9:00 alle 11:15: 135 min",
+        "In tutto: 145 min"
+      ]
+    }
+  ]
+}

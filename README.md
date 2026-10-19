@@ -45,7 +45,24 @@ Prima di caricare, ogni file viene controllato:
 
 Se qualcosa non torna, il caricamento si ferma e dice cosa correggere.
 
-Tipi di esercizio: `input` (numeri, frazioni, unità di misura, anche più campi), `choice`, `multi_choice`, `order`.
+Cosa può contenere un file:
+- `items`: esercizi fissi e problemi (`kind: "problem"`, con `solution` passo per passo). Tipi: `input` (numeri, frazioni, unità di misura, anche più campi), `choice`, `multi_choice`, `order`.
+- `templates`: esercizi infiniti creati da un generatore (`src/lib/generators/`), uno per gradino (base, medio, avanzato).
+- `lessons`: lezioni in 4 passi (Capire, Ricetta, Esempio, Prova tu).
+- `assessments`: test come quello iniziale.
+
+## Studio quotidiano
+
+- `/today`: sessione di 2 ore in 5 blocchi (riscaldamento, argomento nuovo, pratica, problemi, verifica), con pause.
+- `/skill/[id]`: lezione ed esercizi di una singola abilità.
+- Ogni abilità ha 3 gradini: si sale con 9 risposte giuste su 10 (o 5 di fila), poi un ripasso il giorno dopo la conferma. I ripassi successivi arrivano dopo 3, 7, 15 e 30 giorni.
+
+## Pannello admin
+
+- `/admin`: elenco studenti (solo per gli account creati con `--admin`).
+- Scheda studente: andamento degli ultimi 30 giorni, punti deboli, errori ricorrenti, come studia (uscite dall'app, pause, lettura delle correzioni), percorso, lezioni, test iniziale.
+- Diario del giorno: ogni esercizio con la risposta data, la risposta giusta, i tempi e le correzioni, più gli eventi di sessione e di lezione.
+- I dati arrivano da `practice_answers`, `responses` e `activity_events` (eventi inviati dall'app a `/api/events`).
 
 ## Pubblicazione (Supabase + Vercel)
 

@@ -1,0 +1,470 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.ps.one-step",
+      "title": "Problemi a un passaggio",
+      "understand": {
+        "paragraphs": [
+          "Nei problemi la parte difficile non è il calcolo, ma capire quale operazione serve.",
+          "Le parole aiutano: \"in tutto\" spesso è addizione o moltiplicazione, \"restano\" è sottrazione, \"in parti uguali\" è divisione. Ma ragiona sempre sulla situazione."
+        ]
+      },
+      "recipe": [
+        "Leggi due volte e sottolinea i dati e la domanda.",
+        "Chiediti: il risultato sarà più grande o più piccolo dei dati?",
+        "Scegli l'operazione e calcola.",
+        "Rispondi con una frase e con l'unità di misura."
+      ],
+      "example": {
+        "prompt": "48 caramelle vengono divise tra 6 bambini. Quante ne ha ognuno?",
+        "steps": [
+          "Dati: 48 caramelle, 6 bambini. Domanda: quante a testa",
+          "In parti uguali vuol dire divisione: $48 : 6 = 8$"
+        ],
+        "answer": "8 caramelle a testa"
+      },
+      "complete": {
+        "prompt": "Ogni scatola contiene 12 matite. Quante matite ci sono in 7 scatole?",
+        "given": [
+          "Sono 7 scatole da 12: è una moltiplicazione."
+        ],
+        "blanks": [
+          {
+            "label": "$12 \\times 7 =$",
+            "key": {
+              "kind": "number",
+              "value": 84
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non scegliere l'operazione guardando solo i numeri: immagina la scena."
+      ]
+    },
+    {
+      "skillId": "math.ps.multi-step",
+      "title": "Problemi a più passaggi",
+      "understand": {
+        "paragraphs": [
+          "Nei problemi lunghi la risposta arriva dopo più calcoli: ogni risultato serve per il passaggio dopo.",
+          "L'errore più comune è fermarsi a metà e rispondere con un risultato intermedio."
+        ]
+      },
+      "recipe": [
+        "Scrivi i dati e la domanda finale.",
+        "Fai il piano a ritroso: per rispondere mi serve…, per trovarlo mi serve…",
+        "Esegui i calcoli uno alla volta, scrivendo cosa trovi.",
+        "Prima di rispondere controlla: ho risposto proprio alla domanda?"
+      ],
+      "example": {
+        "prompt": "Compri 4 quaderni da 3 € e paghi con 20 €. Quanto ricevi di resto?",
+        "steps": [
+          "Spesa: $4 \\times 3 = 12$ €",
+          "Resto: $20 - 12 = 8$ €"
+        ],
+        "answer": "8 € di resto"
+      },
+      "complete": {
+        "prompt": "Un rettangolo ha il perimetro di 30 cm e la base di 9 cm. Calcola l'area.",
+        "given": [
+          "Semiperimetro: $30 : 2 = 15$ cm"
+        ],
+        "blanks": [
+          {
+            "label": "Altezza: $15 - 9 =$",
+            "key": {
+              "kind": "number",
+              "value": 6
+            }
+          },
+          {
+            "label": "Area: $9 \\times 6 =$",
+            "key": {
+              "kind": "number",
+              "value": 54
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non fermarti al primo risultato: rileggi la domanda."
+      ]
+    },
+    {
+      "skillId": "math.ps.segments",
+      "title": "Problemi con i segmenti",
+      "understand": {
+        "paragraphs": [
+          "Quando conosci la somma (o la differenza) di due numeri e un legame tra loro, aiuta disegnarli come segmenti.",
+          "Così vedi le parti uguali e capisci cosa dividere."
+        ]
+      },
+      "recipe": [
+        "Disegna un segmento per ogni numero.",
+        "Somma e differenza: togli la differenza dalla somma e dividi per 2. Trovi il più piccolo.",
+        "Uno è k volte l'altro: con la somma ci sono k + 1 parti uguali; con la differenza ce ne sono k − 1.",
+        "Trova una parte e poi i due numeri. Controlla che tornino."
+      ],
+      "example": {
+        "prompt": "La somma di due numeri è 48 e uno è il triplo dell'altro.",
+        "steps": [
+          "Il piccolo è 1 parte, il grande 3 parti: in tutto 4 parti",
+          "Una parte: $48 : 4 = 12$",
+          "Il grande: $12 \\times 3 = 36$"
+        ],
+        "answer": "12 e 36"
+      },
+      "complete": {
+        "prompt": "La somma di due numeri è 50 e la loro differenza è 10.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Tolgo la differenza: $50 - 10 =$",
+            "key": {
+              "kind": "number",
+              "value": 40
+            }
+          },
+          {
+            "label": "Più piccolo: $40 : 2 =$",
+            "key": {
+              "kind": "number",
+              "value": 20
+            }
+          },
+          {
+            "label": "Più grande: $20 + 10 =$",
+            "key": {
+              "kind": "number",
+              "value": 30
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Se uno è il triplo dell'altro, le parti sono 4, non 3."
+      ]
+    },
+    {
+      "skillId": "math.ps.planning",
+      "title": "Pianificare la soluzione",
+      "understand": {
+        "paragraphs": [
+          "Prima di calcolare, chi risolve bene i problemi fa il piano: scrive i passaggi che servono, in ordine.",
+          "Così non si perde a metà e non dimentica pezzi."
+        ]
+      },
+      "recipe": [
+        "Parti dalla domanda: cosa devo trovare?",
+        "Chiediti: per trovarlo, cosa mi serve? E per avere quello?",
+        "Scrivi i passaggi dal primo all'ultimo.",
+        "Solo adesso fai i calcoli, seguendo il piano."
+      ],
+      "example": {
+        "prompt": "Un giardino ha area 120 m² e base 15 m. La rete costa 4 € al metro. Quanto si spende?",
+        "steps": [
+          "Per il costo serve il perimetro",
+          "Per il perimetro serve l'altezza: area : base",
+          "Piano: altezza → perimetro → costo → risposta"
+        ],
+        "answer": "Altezza, perimetro, costo"
+      },
+      "complete": {
+        "prompt": "Una felpa costa 40 € ed è scontata del 25%. Quanto si paga?",
+        "given": [
+          "Piano: sconto → prezzo finale"
+        ],
+        "blanks": [
+          {
+            "label": "Sconto: $40 : 100 \\times 25 =$",
+            "key": {
+              "kind": "number",
+              "value": 10
+            }
+          },
+          {
+            "label": "Prezzo finale: $40 - 10 =$",
+            "key": {
+              "kind": "number",
+              "value": 30
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non partire subito con i numeri: prima il piano."
+      ]
+    },
+    {
+      "skillId": "math.ps.missing-data",
+      "title": "Dati mancanti e inutili",
+      "understand": {
+        "paragraphs": [
+          "Non tutti i problemi si possono risolvere: a volte manca un dato. Altre volte ci sono dati che non servono, messi apposta per confondere.",
+          "Saperli riconoscere è un'abilità importante, anche all'INVALSI."
+        ]
+      },
+      "recipe": [
+        "Scrivi il piano dei calcoli.",
+        "Per ogni passaggio controlla di avere i numeri che servono.",
+        "Se manca un numero, il problema non si può risolvere: di' quale dato manca.",
+        "Se un dato non entra in nessun calcolo, è inutile."
+      ],
+      "example": {
+        "prompt": "Marco compra 3 quaderni. Quanto spende?",
+        "steps": [
+          "Piano: spesa = numero di quaderni × prezzo",
+          "Il prezzo non c'è"
+        ],
+        "answer": "Manca il prezzo di un quaderno"
+      },
+      "complete": {
+        "prompt": "Una classe di 25 alunni va in gita. Il biglietto costa 12 € e il viaggio dura 3 ore. Quanto spende la classe?",
+        "given": [
+          "Piano: alunni × prezzo del biglietto. La durata non serve."
+        ],
+        "blanks": [
+          {
+            "label": "$25 \\times 12 =$",
+            "key": {
+              "kind": "number",
+              "value": 300
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non inventare un calcolo con i numeri che ci sono: prima controlla se bastano."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "math.gen.one-step-problems.1",
+      "skillId": "math.ps.one-step",
+      "level": "base",
+      "generator": "one-step-problems",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.one-step-problems.2",
+      "skillId": "math.ps.one-step",
+      "level": "medium",
+      "generator": "one-step-problems",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.one-step-problems.3",
+      "skillId": "math.ps.one-step",
+      "level": "advanced",
+      "generator": "one-step-problems",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.multi-step-problems.1",
+      "skillId": "math.ps.multi-step",
+      "level": "base",
+      "generator": "multi-step-problems",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.multi-step-problems.2",
+      "skillId": "math.ps.multi-step",
+      "level": "medium",
+      "generator": "multi-step-problems",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.multi-step-problems.3",
+      "skillId": "math.ps.multi-step",
+      "level": "advanced",
+      "generator": "multi-step-problems",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.segment-problems.1",
+      "skillId": "math.ps.segments",
+      "level": "base",
+      "generator": "segment-problems",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.segment-problems.2",
+      "skillId": "math.ps.segments",
+      "level": "medium",
+      "generator": "segment-problems",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.segment-problems.3",
+      "skillId": "math.ps.segments",
+      "level": "advanced",
+      "generator": "segment-problems",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.planning-problems.1",
+      "skillId": "math.ps.planning",
+      "level": "base",
+      "generator": "planning-problems",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.planning-problems.2",
+      "skillId": "math.ps.planning",
+      "level": "medium",
+      "generator": "planning-problems",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.planning-problems.3",
+      "skillId": "math.ps.planning",
+      "level": "advanced",
+      "generator": "planning-problems",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.missing-data-problems.1",
+      "skillId": "math.ps.missing-data",
+      "level": "base",
+      "generator": "missing-data-problems",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.missing-data-problems.2",
+      "skillId": "math.ps.missing-data",
+      "level": "medium",
+      "generator": "missing-data-problems",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.missing-data-problems.3",
+      "skillId": "math.ps.missing-data",
+      "level": "advanced",
+      "generator": "missing-data-problems",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "math.problem.ps.1",
+      "skillId": "math.ps.multi-step",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Quattro amici comprano due pizze da 7,50 € l'una e quattro bibite da 1,50 € l'una. Dividono la spesa in parti uguali. Quanto paga ciascuno?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "€"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 5.25,
+            "knownErrors": [
+              {
+                "value": 21,
+                "tag": "stops_early",
+                "message": "21 € è il totale: va diviso tra i 4 amici."
+              },
+              {
+                "value": 3.75,
+                "tag": "missing_data",
+                "message": "Non dimenticare le bibite."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Pizze: $7{,}50 \\times 2 = 15$ €",
+        "Bibite: $1{,}50 \\times 4 = 6$ €",
+        "Totale: $15 + 6 = 21$ €",
+        "A testa: $21 : 4 = 5{,}25$ €"
+      ]
+    },
+    {
+      "id": "math.problem.ps.2",
+      "skillId": "math.ps.segments",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Sara ha 3 anni più di Luca. Insieme hanno 27 anni. Quanti anni ha Sara?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "anni"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 15,
+            "knownErrors": [
+              {
+                "value": 12,
+                "tag": "answers_wrong_question",
+                "message": "12 sono gli anni di Luca: la domanda chiede quelli di Sara."
+              },
+              {
+                "value": 13.5,
+                "tag": "segments_method",
+                "message": "Prima togli la differenza, poi dividi per 2."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Tolgo la differenza: $27 - 3 = 24$",
+        "Luca: $24 : 2 = 12$ anni",
+        "Sara: $12 + 3 = 15$ anni"
+      ]
+    }
+  ]
+}

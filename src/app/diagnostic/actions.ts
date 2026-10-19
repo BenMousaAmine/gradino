@@ -14,6 +14,7 @@ import {
 } from "@/lib/diagnostic/engine";
 import { gradeItem } from "@/lib/items/grade";
 import { itemKeySchema, itemResponseSchema } from "@/lib/items/schemas";
+import { answerStatsSchema } from "@/lib/tracking/schema";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 const UNIQUE_VIOLATION = "23505";
@@ -60,10 +61,11 @@ const submitSchema = z.object({
   itemId: z.string().min(1).max(80),
   response: itemResponseSchema,
   timeMs: z.number().int().min(0).max(3_600_000),
+  stats: answerStatsSchema.nullable().default(null),
 });
 
 export async function submitAnswer(input: z.input<typeof submitSchema>): Promise<{ score: number }> {
-  const { attemptId, itemId, response, timeMs } = submitSchema.parse(input);
+  const { attemptId, itemId, response, timeMs, stats } = submitSchema.parse(input);
   const { user, admin, attempt } = await ownedAttempt(attemptId);
 
   const membership = await admin
@@ -95,7 +97,7 @@ export async function submitAnswer(input: z.input<typeof submitSchema>): Promise
     answer: response,
     score: grade.score,
     error_tag: grade.diagnosis?.tag ?? null,
-    details: { diagnosis: grade.diagnosis, fields: grade.fields },
+    details: { diagnosis: grade.diagnosis, fields: grade.fields, stats },
     time_ms: timeMs,
   });
   if (insert.error && insert.error.code !== UNIQUE_VIOLATION) throw new Error(insert.error.message);

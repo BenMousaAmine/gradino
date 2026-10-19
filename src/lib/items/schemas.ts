@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { figureSchema } from "./figure";
 
 export const levelSchema = z.enum(["base", "medium", "advanced"]);
 export type Level = z.infer<typeof levelSchema>;
@@ -26,16 +27,19 @@ const fractionFieldSchema = z.object({
 export const fieldSchema = z.discriminatedUnion("kind", [numberFieldSchema, fractionFieldSchema]);
 export type Field = z.infer<typeof fieldSchema>;
 
+const figure = figureSchema.optional();
+
 export const itemContentSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("input"),
     prompt: textSchema,
+    figure,
     fields: z.array(fieldSchema).min(1),
     timeLimitSec: z.number().int().positive().optional(),
   }),
-  z.object({ type: z.literal("choice"), prompt: textSchema, options: z.array(optionSchema).min(2) }),
-  z.object({ type: z.literal("multi_choice"), prompt: textSchema, options: z.array(optionSchema).min(2) }),
-  z.object({ type: z.literal("order"), prompt: textSchema, steps: z.array(optionSchema).min(2) }),
+  z.object({ type: z.literal("choice"), prompt: textSchema, figure, options: z.array(optionSchema).min(2) }),
+  z.object({ type: z.literal("multi_choice"), prompt: textSchema, figure, options: z.array(optionSchema).min(2) }),
+  z.object({ type: z.literal("order"), prompt: textSchema, figure, steps: z.array(optionSchema).min(2) }),
 ]);
 export type ItemContent = z.infer<typeof itemContentSchema>;
 export type ItemType = ItemContent["type"];

@@ -34,7 +34,7 @@ function Loading() {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-xl px-4 py-6">
-        <div className="h-64 animate-pulse rounded-2xl bg-line/60" />
+        <div className="h-64 animate-pulse rounded-3xl bg-line/60" />
       </main>
     </>
   );

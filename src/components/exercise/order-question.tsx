@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { MathText } from "@/components/math-text";
 import { Button } from "@/components/ui";
 import type { ItemContent, ItemResponse, Option } from "@/lib/items/schemas";
+import type { InteractionKind } from "@/lib/tracking/schema";
 
 type OrderContent = Extract<ItemContent, { type: "order" }>;
 
@@ -34,11 +35,13 @@ export function OrderQuestion({
   content,
   pending,
   onSubmit,
+  onInteract,
 }: {
   itemId: string;
   content: OrderContent;
   pending: boolean;
   onSubmit: (response: ItemResponse) => void;
+  onInteract?: (kind: InteractionKind) => void;
 }) {
   const shuffled = useMemo(() => shuffle(content.steps, itemId), [content.steps, itemId]);
   const [chosen, setChosen] = useState<string[]>([]);
@@ -50,7 +53,7 @@ export function OrderQuestion({
       <div className="flex flex-col gap-2">
         <p className="text-sm font-semibold text-ink-soft">Il tuo ordine</p>
         {chosen.length === 0 && (
-          <p className="rounded-xl border-2 border-dashed border-line px-4 py-5 text-center text-ink-soft">
+          <p className="rounded-2xl border-2 border-dashed border-line px-4 py-5 text-center text-ink-soft">
             Tocca i passi qui sotto nell’ordine giusto
           </p>
         )}
@@ -58,10 +61,13 @@ export function OrderQuestion({
           <button
             key={id}
             type="button"
-            onClick={() => setChosen((previous) => previous.filter((value) => value !== id))}
-            className="flex min-h-14 items-center gap-3 rounded-xl border-2 border-brand bg-brand-soft px-4 py-3 text-left text-lg"
+            onClick={() => {
+              onInteract?.("correction");
+              setChosen((previous) => previous.filter((value) => value !== id));
+            }}
+            className="flex min-h-14 items-center gap-3 rounded-2xl border-2 border-brand bg-brand-soft px-4 py-3 text-left text-lg shadow-[0_3px_0_var(--color-brand)] transition-[transform,box-shadow] duration-75 active:translate-y-[3px] active:shadow-none"
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-base font-bold text-white">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand font-display text-base font-extrabold text-white">
               {index + 1}
             </span>
             <MathText text={byId.get(id)?.text ?? ""} />
@@ -77,8 +83,11 @@ export function OrderQuestion({
               key={step.id}
               data-step-id={step.id}
               type="button"
-              onClick={() => setChosen((previous) => [...previous, step.id])}
-              className="flex min-h-14 items-center rounded-xl border-2 border-line bg-surface px-4 py-3 text-left text-lg"
+              onClick={() => {
+                onInteract?.("input");
+                setChosen((previous) => [...previous, step.id]);
+              }}
+              className="flex min-h-14 items-center rounded-2xl border-2 border-line bg-surface px-4 py-3 text-left text-lg shadow-[0_3px_0_var(--color-line)] transition-[transform,box-shadow] duration-75 active:translate-y-[3px] active:shadow-none"
             >
               <MathText text={step.text} />
             </button>

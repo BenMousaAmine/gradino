@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MathText } from "@/components/math-text";
 import { Button } from "@/components/ui";
 import type { ItemContent, ItemResponse } from "@/lib/items/schemas";
+import type { InteractionKind } from "@/lib/tracking/schema";
 
 type ChoiceContent = Extract<ItemContent, { type: "choice" | "multi_choice" }>;
 
@@ -11,15 +12,19 @@ export function ChoiceQuestion({
   content,
   pending,
   onSubmit,
+  onInteract,
 }: {
   content: ChoiceContent;
   pending: boolean;
   onSubmit: (response: ItemResponse) => void;
+  onInteract?: (kind: InteractionKind) => void;
 }) {
   const multiple = content.type === "multi_choice";
   const [selected, setSelected] = useState<string[]>([]);
 
   const toggle = (id: string) => {
+    const changing = multiple ? selected.includes(id) : selected.length > 0 && selected[0] !== id;
+    onInteract?.(changing ? "correction" : "input");
     if (!multiple) {
       setSelected([id]);
       return;
@@ -42,8 +47,10 @@ export function ChoiceQuestion({
             onClick={() => toggle(option.id)}
             aria-pressed={active}
             data-option-id={option.id}
-            className={`flex min-h-14 items-center gap-3 rounded-xl border-2 px-4 py-3 text-left text-lg transition ${
-              active ? "border-brand bg-brand-soft" : "border-line bg-surface"
+            className={`flex min-h-14 items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left text-lg transition-[transform,box-shadow] duration-75 active:translate-y-[3px] active:shadow-none ${
+              active
+                ? "border-brand bg-brand-soft shadow-[0_3px_0_var(--color-brand)]"
+                : "border-line bg-surface shadow-[0_3px_0_var(--color-line)]"
             }`}
           >
             <span

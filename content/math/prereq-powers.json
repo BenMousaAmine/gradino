@@ -1,0 +1,403 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.pow.basics",
+      "title": "Le potenze",
+      "understand": {
+        "paragraphs": [
+          "Una potenza è una moltiplicazione ripetuta: $2^3 = 2 \\times 2 \\times 2 = 8$.",
+          "Il numero in basso è la base, quello piccolo in alto è l'esponente: dice quante volte moltiplicare la base per se stessa."
+        ]
+      },
+      "recipe": [
+        "Scrivi la base tante volte quanto dice l'esponente.",
+        "Moltiplica.",
+        "Casi speciali: ogni numero (diverso da 0) alla 0 fa 1; alla 1 resta uguale.",
+        "Con una frazione: eleva sia il numeratore sia il denominatore."
+      ],
+      "example": {
+        "prompt": "Calcola $3^4$",
+        "steps": [
+          "$3^4 = 3 \\times 3 \\times 3 \\times 3$",
+          "$= 9 \\times 9 = 81$"
+        ],
+        "answer": "81"
+      },
+      "complete": {
+        "prompt": "Calcola $2^5$.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "$2 \\times 2 \\times 2 \\times 2 \\times 2 =$",
+            "key": {
+              "kind": "number",
+              "value": 32
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "$2^3$ non è $2 \\times 3$: fa 8, non 6.",
+        "$5^0 = 1$, non 0."
+      ]
+    },
+    {
+      "skillId": "math.pow.properties",
+      "title": "Proprietà delle potenze",
+      "understand": {
+        "paragraphs": [
+          "Con le potenze che hanno la stessa base ci sono delle scorciatoie: non serve calcolarle, basta lavorare sugli esponenti.",
+          "Pensa: $2^3 \\times 2^2$ sono tre 2 moltiplicati per altri due 2, cioè cinque 2: $2^5$."
+        ]
+      },
+      "recipe": [
+        "Prodotto con la stessa base: tieni la base e somma gli esponenti. $a^m \\times a^n = a^{m+n}$",
+        "Quoziente con la stessa base: tieni la base e sottrai gli esponenti. $a^m : a^n = a^{m-n}$",
+        "Potenza di potenza: moltiplica gli esponenti. $(a^m)^n = a^{m \\times n}$",
+        "Stesso esponente: moltiplica le basi. $a^n \\times b^n = (a \\times b)^n$"
+      ],
+      "example": {
+        "prompt": "Scrivi come un'unica potenza: $5^4 \\times 5^3 : 5^2$",
+        "steps": [
+          "Prodotto: $5^{4+3} = 5^7$",
+          "Quoziente: $5^{7-2} = 5^5$"
+        ],
+        "answer": "$5^5$"
+      },
+      "complete": {
+        "prompt": "Scrivi come un'unica potenza $(3^2)^4$.",
+        "given": [
+          "Potenza di potenza: si moltiplicano gli esponenti."
+        ],
+        "blanks": [
+          {
+            "label": "L'esponente finale è",
+            "key": {
+              "kind": "number",
+              "value": 8
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Nel prodotto gli esponenti si sommano, non si moltiplicano: $2^3 \\times 2^2 = 2^5$, non $2^6$.",
+        "La base non cambia: $3^2 \\times 3^4 = 3^6$, non $9^6$."
+      ]
+    },
+    {
+      "skillId": "math.pow.square-root",
+      "title": "La radice quadrata",
+      "understand": {
+        "paragraphs": [
+          "La radice quadrata è l'operazione inversa del quadrato: $\\sqrt{49} = 7$ perché $7 \\times 7 = 49$.",
+          "Pensa a un quadrato di area 49 cm²: il suo lato misura 7 cm."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "square",
+            "side": "7 cm"
+          }
+        }
+      },
+      "recipe": [
+        "Cerca il numero che moltiplicato per se stesso dà il numero sotto radice.",
+        "Impara a memoria i quadrati da 1 a 15: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225.",
+        "La radice di un prodotto è il prodotto delle radici: $\\sqrt{4 \\times 9} = 2 \\times 3$.",
+        "Con una somma sotto radice, prima calcola la somma: $\\sqrt{9 + 16} = \\sqrt{25} = 5$."
+      ],
+      "example": {
+        "prompt": "Calcola $\\sqrt{144}$",
+        "steps": [
+          "Cerco un numero che moltiplicato per se stesso dà 144",
+          "$12 \\times 12 = 144$"
+        ],
+        "answer": "12"
+      },
+      "complete": {
+        "prompt": "Calcola $\\sqrt{36 + 64}$.",
+        "given": [
+          "Prima la somma sotto radice."
+        ],
+        "blanks": [
+          {
+            "label": "$36 + 64 =$",
+            "key": {
+              "kind": "number",
+              "value": 100
+            }
+          },
+          {
+            "label": "$\\sqrt{100} =$",
+            "key": {
+              "kind": "number",
+              "value": 10
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "La radice non è la metà: $\\sqrt{16} = 4$, non 8.",
+        "$\\sqrt{9 + 16}$ non è $3 + 4$: fa 5."
+      ]
+    },
+    {
+      "skillId": "math.pow.root-estimate",
+      "title": "Stimare una radice quadrata",
+      "understand": {
+        "paragraphs": [
+          "Quasi tutti i numeri non sono quadrati perfetti: $\\sqrt{50}$ non è un numero intero.",
+          "Però si può dire tra quali interi si trova: 50 sta tra 49 e 64, quindi $\\sqrt{50}$ sta tra 7 e 8."
+        ]
+      },
+      "recipe": [
+        "Cerca il quadrato perfetto subito sotto il numero.",
+        "Cerca il quadrato perfetto subito sopra.",
+        "La radice sta tra le radici di questi due quadrati.",
+        "Se il numero è molto vicino a uno dei due quadrati, la radice è vicina a quell'intero."
+      ],
+      "example": {
+        "prompt": "Tra quali interi si trova $\\sqrt{90}$?",
+        "steps": [
+          "$9^2 = 81$ e $10^2 = 100$",
+          "90 sta tra 81 e 100"
+        ],
+        "answer": "Tra 9 e 10"
+      },
+      "complete": {
+        "prompt": "Tra quali interi si trova $\\sqrt{30}$?",
+        "given": [
+          "$5^2 = 25$ e $6^2 = 36$"
+        ],
+        "blanks": [
+          {
+            "label": "L'intero più piccolo è",
+            "key": {
+              "kind": "number",
+              "value": 5
+            }
+          },
+          {
+            "label": "L'intero più grande è",
+            "key": {
+              "kind": "number",
+              "value": 6
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non dividere per 2: $\\sqrt{50}$ non sta tra 25 e 26."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "math.gen.power-basics.1",
+      "skillId": "math.pow.basics",
+      "level": "base",
+      "generator": "power-basics",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.power-basics.2",
+      "skillId": "math.pow.basics",
+      "level": "medium",
+      "generator": "power-basics",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.power-basics.3",
+      "skillId": "math.pow.basics",
+      "level": "advanced",
+      "generator": "power-basics",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.power-properties.1",
+      "skillId": "math.pow.properties",
+      "level": "base",
+      "generator": "power-properties",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.power-properties.2",
+      "skillId": "math.pow.properties",
+      "level": "medium",
+      "generator": "power-properties",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.power-properties.3",
+      "skillId": "math.pow.properties",
+      "level": "advanced",
+      "generator": "power-properties",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.square-root.1",
+      "skillId": "math.pow.square-root",
+      "level": "base",
+      "generator": "square-root",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.square-root.2",
+      "skillId": "math.pow.square-root",
+      "level": "medium",
+      "generator": "square-root",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.square-root.3",
+      "skillId": "math.pow.square-root",
+      "level": "advanced",
+      "generator": "square-root",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.root-estimate.1",
+      "skillId": "math.pow.root-estimate",
+      "level": "base",
+      "generator": "root-estimate",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.root-estimate.2",
+      "skillId": "math.pow.root-estimate",
+      "level": "medium",
+      "generator": "root-estimate",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.root-estimate.3",
+      "skillId": "math.pow.root-estimate",
+      "level": "advanced",
+      "generator": "root-estimate",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "math.problem.pow.1",
+      "skillId": "math.pow.square-root",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un quadrato ha l'area di 169 cm². Quanto misura il lato?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "Lato",
+            "units": [
+              "cm",
+              "cm²",
+              "cm³"
+            ]
+          }
+        ],
+        "figure": {
+          "shape": "square",
+          "side": "?"
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 13,
+            "knownErrors": [
+              {
+                "value": 84.5,
+                "tag": "root_as_half",
+                "message": "La radice non è la metà: cerca il numero che moltiplicato per se stesso dà 169."
+              },
+              {
+                "value": 42.25,
+                "tag": "square_from_perimeter",
+                "message": "169 è l'area, non il perimetro: il lato si trova con la radice."
+              }
+            ],
+            "unit": "cm"
+          }
+        }
+      },
+      "solution": [
+        "Area = lato × lato, quindi lato $= \\sqrt{169}$",
+        "$13 \\times 13 = 169$",
+        "Risposta: il lato misura 13 cm."
+      ]
+    },
+    {
+      "id": "math.problem.pow.2",
+      "skillId": "math.pow.basics",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un batterio si divide in due ogni ora. Partendo da 1 batterio, quanti batteri ci sono dopo 5 ore?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "batteri"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 32,
+            "knownErrors": [
+              {
+                "value": 10,
+                "tag": "power_as_product",
+                "message": "Non è $2 \\times 5$: il numero raddoppia ogni ora, cioè $2^5$."
+              },
+              {
+                "value": 25,
+                "tag": "power_base_exponent",
+                "message": "La base è 2 e l'esponente 5: $2^5$, non $5^2$."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Ogni ora il numero raddoppia: si moltiplica per 2 cinque volte",
+        "$2^5 = 2 \\times 2 \\times 2 \\times 2 \\times 2 = 32$",
+        "Risposta: dopo 5 ore ci sono 32 batteri."
+      ]
+    }
+  ]
+}

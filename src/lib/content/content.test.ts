@@ -37,6 +37,8 @@ describe("validatePack", () => {
     areas: [{ id: "math.calc", subjectId: "math", title: "Calcolo" }],
     skills: [{ id: "math.calc.sum", areaId: "math.calc", title: "Somme", schoolYear: 1, prerequisites: [] }],
     items: [],
+    lessons: [],
+    templates: [],
     assessments: [],
   };
 
@@ -49,6 +51,8 @@ describe("validatePack", () => {
           skillId: "math.calc.sum",
           level: "base",
           status: "published",
+          kind: "exercise",
+          solution: [],
           content: { type: "choice", prompt: "?", options: [{ id: "a", text: "1" }, { id: "b", text: "2" }] },
           key: { type: "choice", correct: "z", knownErrors: [] },
         },
@@ -66,6 +70,8 @@ describe("validatePack", () => {
           skillId: "math.calc.sum",
           level: "base",
           status: "published",
+          kind: "exercise",
+          solution: [],
           content: { type: "input", prompt: "?", fields: [{ kind: "number", id: "answer", label: "" }] },
           key: {
             type: "input",

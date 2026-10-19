@@ -1,23 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --color-canvas: #f5f6fa;
+  --color-canvas: #fff8ee;
   --color-surface: #ffffff;
-  --color-ink: #1b1f2a;
-  --color-ink-soft: #5b6475;
-  --color-line: #dfe3ec;
-  --color-brand: #3b5bdb;
-  --color-brand-soft: #e8edff;
-  --color-good: #2b8a3e;
-  --color-good-soft: #e3f5e8;
-  --color-warn: #a86b00;
-  --color-warn-soft: #fff1cc;
-  --color-bad: #c92a2a;
-  --color-bad-soft: #fde7e7;
-  --color-step-1: #f03e3e;
-  --color-step-2: #f59f00;
-  --color-step-3: #37b24d;
-  --font-sans: var(--font-geist-sans);
+  --color-ink: #1a1442;
+  --color-ink-soft: #5a5478;
+  --color-line: #e4def5;
+  --color-brand: #5b3df5;
+  --color-brand-deep: #4a2fe0;
+  --color-brand-dark: #2e1a9e;
+  --color-brand-soft: #efeaff;
+  --color-good: #3d6b00;
+  --color-good-soft: #f2fbd0;
+  --color-warn: #8a5a00;
+  --color-warn-soft: #fff4cc;
+  --color-bad: #c2361b;
+  --color-bad-soft: #ffede6;
+  --color-lime: #c6f432;
+  --color-sky: #4cc9f0;
+  --color-coral: #ff8a65;
+  --color-sun: #ffd23f;
+  --color-step-1: #ff8a65;
+  --color-step-2: #ffd23f;
+  --color-step-3: #c6f432;
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-bricolage);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -29,6 +36,18 @@ body {
   background: var(--color-canvas);
   color: var(--color-ink);
   -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
 }
 
 .katex {

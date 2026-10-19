@@ -1,0 +1,855 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.geo.angles",
+      "title": "Angoli dei poligoni",
+      "understand": {
+        "paragraphs": [
+          "La somma degli angoli interni di un triangolo è sempre 180°.",
+          "Per un quadrilatero è 360°, e per un poligono di n lati è (n − 2) × 180°: lo puoi dividere in n − 2 triangoli."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "triangle-angles",
+            "a": "50°",
+            "b": "70°",
+            "c": "?"
+          }
+        }
+      },
+      "recipe": [
+        "Triangolo: angolo mancante = 180° − gli altri due.",
+        "Triangolo isoscele: i due angoli alla base sono uguali.",
+        "Triangolo rettangolo: i due angoli acuti insieme fanno 90°.",
+        "Quadrilatero: angolo mancante = 360° − gli altri tre."
+      ],
+      "example": {
+        "prompt": "Un triangolo ha angoli di 50° e 70°. Quanto misura il terzo?",
+        "steps": [
+          "$50 + 70 = 120$°",
+          "$180 - 120 = 60$°"
+        ],
+        "answer": "60°"
+      },
+      "complete": {
+        "prompt": "In un triangolo isoscele l'angolo al vertice misura 40°. Quanto misura ciascun angolo alla base?",
+        "given": [],
+        "blanks": [
+          {
+            "label": "$180 - 40 =$",
+            "key": {
+              "kind": "number",
+              "value": 140
+            }
+          },
+          {
+            "label": "$140 : 2 =$",
+            "key": {
+              "kind": "number",
+              "value": 70
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Per il triangolo la somma è 180°, non 360°."
+      ]
+    },
+    {
+      "skillId": "math.geo.rectangle-square",
+      "title": "Perimetro e area di rettangolo e quadrato",
+      "understand": {
+        "paragraphs": [
+          "Il perimetro è il contorno: la somma di tutti i lati. Si misura in cm.",
+          "L'area è la superficie interna: quanti quadratini da 1 cm² ci stanno dentro. Si misura in cm²."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "rectangle",
+            "base": "8 cm",
+            "height": "5 cm"
+          }
+        }
+      },
+      "recipe": [
+        "Rettangolo: perimetro = 2 × (base + altezza); area = base × altezza.",
+        "Quadrato: perimetro = 4 × lato; area = lato × lato.",
+        "Dal perimetro del quadrato trovi il lato dividendo per 4; dall'area, con la radice quadrata.",
+        "Scrivi sempre l'unità giusta: cm per il perimetro, cm² per l'area."
+      ],
+      "example": {
+        "prompt": "Un rettangolo ha i lati di 8 cm e 5 cm. Perimetro e area?",
+        "steps": [
+          "Perimetro: $2 \\times (8 + 5) = 26$ cm",
+          "Area: $8 \\times 5 = 40$ cm²"
+        ],
+        "answer": "26 cm e 40 cm²"
+      },
+      "complete": {
+        "prompt": "Un quadrato ha il perimetro di 28 cm. Calcola l'area.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Lato: $28 : 4 =$",
+            "key": {
+              "kind": "number",
+              "value": 7
+            }
+          },
+          {
+            "label": "Area: $7 \\times 7 =$",
+            "key": {
+              "kind": "number",
+              "value": 49
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non confondere perimetro e area.",
+        "L'area si misura in cm², il perimetro in cm."
+      ]
+    },
+    {
+      "skillId": "math.geo.triangle-area",
+      "title": "Area del triangolo",
+      "understand": {
+        "paragraphs": [
+          "Ogni triangolo è la metà di un rettangolo con la stessa base e la stessa altezza.",
+          "Per questo l'area del triangolo è base × altezza diviso 2."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "triangle",
+            "base": "10 cm",
+            "height": "6 cm"
+          }
+        }
+      },
+      "recipe": [
+        "Area = base × altezza : 2.",
+        "L'altezza è il segmento perpendicolare alla base che arriva al vertice opposto.",
+        "Nel triangolo rettangolo i due cateti fanno da base e altezza.",
+        "Formule inverse: altezza = 2 × area : base; base = 2 × area : altezza."
+      ],
+      "example": {
+        "prompt": "Base 10 cm, altezza 6 cm. Area?",
+        "steps": [
+          "$10 \\times 6 = 60$",
+          "$60 : 2 = 30$ cm²"
+        ],
+        "answer": "30 cm²"
+      },
+      "complete": {
+        "prompt": "Un triangolo ha area 24 cm² e base 8 cm. Trova l'altezza.",
+        "given": [
+          "Altezza = 2 × area : base"
+        ],
+        "blanks": [
+          {
+            "label": "$2 \\times 24 =$",
+            "key": {
+              "kind": "number",
+              "value": 48
+            }
+          },
+          {
+            "label": "$48 : 8 =$",
+            "key": {
+              "kind": "number",
+              "value": 6
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non dimenticare di dividere per 2."
+      ]
+    },
+    {
+      "skillId": "math.geo.quadrilateral-area",
+      "title": "Area di trapezio e rombo",
+      "understand": {
+        "paragraphs": [
+          "Il rombo si può dividere in triangoli: per questo la sua area è diagonale × diagonale : 2.",
+          "Due trapezi uguali, uno capovolto, formano un parallelogramma: da qui la formula (base maggiore + base minore) × altezza : 2."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "trapezoid",
+            "bottom": "12 cm",
+            "top": "8 cm",
+            "height": "5 cm"
+          }
+        }
+      },
+      "recipe": [
+        "Rombo: area $= d_1 \\times d_2 : 2$.",
+        "Trapezio: area $= (B + b) \\times h : 2$.",
+        "Parallelogramma: area = base × altezza.",
+        "Formula inversa del trapezio: $h = 2 \\times A : (B + b)$."
+      ],
+      "example": {
+        "prompt": "Trapezio con basi 12 cm e 8 cm, altezza 5 cm. Area?",
+        "steps": [
+          "$12 + 8 = 20$",
+          "$20 \\times 5 = 100$",
+          "$100 : 2 = 50$ cm²"
+        ],
+        "answer": "50 cm²"
+      },
+      "complete": {
+        "prompt": "Un rombo ha le diagonali di 12 cm e 7 cm. Calcola l'area.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "$12 \\times 7 =$",
+            "key": {
+              "kind": "number",
+              "value": 84
+            }
+          },
+          {
+            "label": "$84 : 2 =$",
+            "key": {
+              "kind": "number",
+              "value": 42
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Nel trapezio le basi si sommano, non si moltiplicano.",
+        "Rombo e trapezio: non dimenticare il diviso 2."
+      ]
+    },
+    {
+      "skillId": "math.geo.inverse-formulas",
+      "title": "Formule inverse",
+      "understand": {
+        "paragraphs": [
+          "Le formule inverse servono quando conosci il risultato e ti manca un dato: per esempio l'area e la base, ma non l'altezza.",
+          "Si fa l'operazione contraria: se l'area è una moltiplicazione, il dato mancante si trova dividendo."
+        ]
+      },
+      "recipe": [
+        "Scrivi la formula diretta (es. area = base × altezza).",
+        "Ricava il dato che ti manca con l'operazione contraria (altezza = area : base).",
+        "Sostituisci i numeri e calcola.",
+        "Se nella formula c'è un quadrato (area del quadrato), si usa la radice quadrata."
+      ],
+      "example": {
+        "prompt": "Un rettangolo ha area 48 cm² e base 8 cm. Perimetro?",
+        "steps": [
+          "Altezza: $48 : 8 = 6$ cm",
+          "Perimetro: $2 \\times (8 + 6) = 28$ cm"
+        ],
+        "answer": "28 cm"
+      },
+      "complete": {
+        "prompt": "Un quadrato ha l'area di 81 cm². Calcola il perimetro.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Lato: $\\sqrt{81} =$",
+            "key": {
+              "kind": "number",
+              "value": 9
+            }
+          },
+          {
+            "label": "Perimetro: $4 \\times 9 =$",
+            "key": {
+              "kind": "number",
+              "value": 36
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Per trovare l'altezza si divide l'area per la base, non si moltiplica.",
+        "Il lato del quadrato si trova con la radice dell'area, non dividendo per 4."
+      ]
+    },
+    {
+      "skillId": "math.pyth.theorem",
+      "title": "Teorema di Pitagora",
+      "understand": {
+        "paragraphs": [
+          "In un triangolo rettangolo il lato opposto all'angolo retto si chiama ipotenusa, gli altri due cateti.",
+          "Pitagora dice: il quadrato dell'ipotenusa è uguale alla somma dei quadrati dei cateti. Con 3, 4 e 5: $9 + 16 = 25$."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "right-triangle",
+            "legA": "3 cm",
+            "legB": "4 cm",
+            "hypotenuse": "5 cm"
+          }
+        }
+      },
+      "recipe": [
+        "Ipotenusa: $i = \\sqrt{c_1^2 + c_2^2}$ (somma dei quadrati, poi radice).",
+        "Cateto: $c = \\sqrt{i^2 - c_1^2}$ (differenza dei quadrati, poi radice).",
+        "L'ipotenusa è sempre il lato più lungo: controlla il risultato."
+      ],
+      "example": {
+        "prompt": "Cateti di 6 cm e 8 cm. Ipotenusa?",
+        "steps": [
+          "$6^2 + 8^2 = 36 + 64 = 100$",
+          "$\\sqrt{100} = 10$ cm"
+        ],
+        "answer": "10 cm"
+      },
+      "complete": {
+        "prompt": "Ipotenusa 13 cm, un cateto 5 cm. Trova l'altro cateto.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "$13^2 - 5^2 = 169 - 25 =$",
+            "key": {
+              "kind": "number",
+              "value": 144
+            }
+          },
+          {
+            "label": "$\\sqrt{144} =$",
+            "key": {
+              "kind": "number",
+              "value": 12
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "L'ipotenusa non è la somma dei cateti.",
+        "Per trovare un cateto si sottrae, non si somma."
+      ]
+    },
+    {
+      "skillId": "math.pyth.triples",
+      "title": "Terne pitagoriche",
+      "understand": {
+        "paragraphs": [
+          "Una terna pitagorica è un gruppo di tre numeri interi che funzionano con il teorema di Pitagora: 3, 4, 5 perché $9 + 16 = 25$.",
+          "Moltiplicando una terna per lo stesso numero ottieni un'altra terna: 6, 8, 10 oppure 9, 12, 15."
+        ]
+      },
+      "recipe": [
+        "Prendi il numero più grande: è l'ipotenusa.",
+        "Controlla se il suo quadrato è uguale alla somma dei quadrati degli altri due.",
+        "Terne da ricordare: 3-4-5, 5-12-13, 8-15-17, 7-24-25."
+      ],
+      "example": {
+        "prompt": "8, 15, 17 è una terna?",
+        "steps": [
+          "$8^2 + 15^2 = 64 + 225 = 289$",
+          "$17^2 = 289$"
+        ],
+        "answer": "Sì, è una terna pitagorica"
+      },
+      "complete": {
+        "prompt": "Completa la terna 9, 12, ?",
+        "given": [
+          "È la terna 3-4-5 moltiplicata per 3."
+        ],
+        "blanks": [
+          {
+            "label": "$5 \\times 3 =$",
+            "key": {
+              "kind": "number",
+              "value": 15
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non basta che i numeri siano vicini: 4, 5, 6 non è una terna ($16 + 25 = 41$, non 36)."
+      ]
+    },
+    {
+      "skillId": "math.pyth.in-figures",
+      "title": "Pitagora nelle figure piane",
+      "understand": {
+        "paragraphs": [
+          "Molte figure nascondono un triangolo rettangolo: la diagonale di un rettangolo, l'altezza di un triangolo isoscele, il lato di un rombo.",
+          "Quando trovi il triangolo rettangolo, applichi Pitagora."
+        ],
+        "visual": {
+          "type": "figure",
+          "figure": {
+            "shape": "rectangle",
+            "base": "8 cm",
+            "height": "6 cm",
+            "diagonal": "?"
+          }
+        }
+      },
+      "recipe": [
+        "Disegna la figura e cerca il triangolo rettangolo.",
+        "Riconosci chi è l'ipotenusa e chi sono i cateti.",
+        "Triangolo isoscele: l'altezza divide la base a metà. Rombo: le diagonali si tagliano a metà.",
+        "Applica Pitagora, poi calcola quello che chiede il problema (area, perimetro…)."
+      ],
+      "example": {
+        "prompt": "Rettangolo di lati 8 cm e 6 cm. Diagonale?",
+        "steps": [
+          "La diagonale è l'ipotenusa di un triangolo con cateti 8 e 6",
+          "$\\sqrt{64 + 36} = \\sqrt{100} = 10$ cm"
+        ],
+        "answer": "10 cm"
+      },
+      "complete": {
+        "prompt": "Un rombo ha le diagonali di 16 cm e 12 cm. Trova il lato.",
+        "given": [
+          "Le metà delle diagonali sono 8 cm e 6 cm."
+        ],
+        "blanks": [
+          {
+            "label": "$8^2 + 6^2 =$",
+            "key": {
+              "kind": "number",
+              "value": 100
+            }
+          },
+          {
+            "label": "Lato: $\\sqrt{100} =$",
+            "key": {
+              "kind": "number",
+              "value": 10
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Nel triangolo isoscele usa metà base, non la base intera.",
+        "Nel rombo usa le metà delle diagonali."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "math.gen.angles.1",
+      "skillId": "math.geo.angles",
+      "level": "base",
+      "generator": "angles",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.angles.2",
+      "skillId": "math.geo.angles",
+      "level": "medium",
+      "generator": "angles",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.angles.3",
+      "skillId": "math.geo.angles",
+      "level": "advanced",
+      "generator": "angles",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.rectangle-square.1",
+      "skillId": "math.geo.rectangle-square",
+      "level": "base",
+      "generator": "rectangle-square",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.rectangle-square.2",
+      "skillId": "math.geo.rectangle-square",
+      "level": "medium",
+      "generator": "rectangle-square",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.rectangle-square.3",
+      "skillId": "math.geo.rectangle-square",
+      "level": "advanced",
+      "generator": "rectangle-square",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.triangle-area.1",
+      "skillId": "math.geo.triangle-area",
+      "level": "base",
+      "generator": "triangle-area",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.triangle-area.2",
+      "skillId": "math.geo.triangle-area",
+      "level": "medium",
+      "generator": "triangle-area",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.triangle-area.3",
+      "skillId": "math.geo.triangle-area",
+      "level": "advanced",
+      "generator": "triangle-area",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.quadrilateral-area.1",
+      "skillId": "math.geo.quadrilateral-area",
+      "level": "base",
+      "generator": "quadrilateral-area",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.quadrilateral-area.2",
+      "skillId": "math.geo.quadrilateral-area",
+      "level": "medium",
+      "generator": "quadrilateral-area",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.quadrilateral-area.3",
+      "skillId": "math.geo.quadrilateral-area",
+      "level": "advanced",
+      "generator": "quadrilateral-area",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.inverse-formulas.1",
+      "skillId": "math.geo.inverse-formulas",
+      "level": "base",
+      "generator": "inverse-formulas",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.inverse-formulas.2",
+      "skillId": "math.geo.inverse-formulas",
+      "level": "medium",
+      "generator": "inverse-formulas",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.inverse-formulas.3",
+      "skillId": "math.geo.inverse-formulas",
+      "level": "advanced",
+      "generator": "inverse-formulas",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.pythagoras-theorem.1",
+      "skillId": "math.pyth.theorem",
+      "level": "base",
+      "generator": "pythagoras-theorem",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.pythagoras-theorem.2",
+      "skillId": "math.pyth.theorem",
+      "level": "medium",
+      "generator": "pythagoras-theorem",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.pythagoras-theorem.3",
+      "skillId": "math.pyth.theorem",
+      "level": "advanced",
+      "generator": "pythagoras-theorem",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.pythagorean-triples.1",
+      "skillId": "math.pyth.triples",
+      "level": "base",
+      "generator": "pythagorean-triples",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.pythagorean-triples.2",
+      "skillId": "math.pyth.triples",
+      "level": "medium",
+      "generator": "pythagorean-triples",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.pythagorean-triples.3",
+      "skillId": "math.pyth.triples",
+      "level": "advanced",
+      "generator": "pythagorean-triples",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.pythagoras-figures.1",
+      "skillId": "math.pyth.in-figures",
+      "level": "base",
+      "generator": "pythagoras-figures",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.pythagoras-figures.2",
+      "skillId": "math.pyth.in-figures",
+      "level": "medium",
+      "generator": "pythagoras-figures",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.pythagoras-figures.3",
+      "skillId": "math.pyth.in-figures",
+      "level": "advanced",
+      "generator": "pythagoras-figures",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "math.problem.geo.1",
+      "skillId": "math.geo.rectangle-square",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un campo rettangolare è lungo 60 m e largo 40 m. Si vuole recintarlo con 3 giri di filo. Quanti metri di filo servono?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "Filo",
+            "units": [
+              "m",
+              "m²",
+              "m³"
+            ]
+          }
+        ],
+        "figure": {
+          "shape": "rectangle",
+          "base": "60 m",
+          "height": "40 m"
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 600,
+            "knownErrors": [
+              {
+                "value": 200,
+                "tag": "stops_early",
+                "message": "200 m è un solo giro: i giri sono 3."
+              },
+              {
+                "value": 2400,
+                "tag": "perimeter_area_confusion",
+                "message": "Il filo segue il contorno: serve il perimetro, non l'area."
+              }
+            ],
+            "unit": "m"
+          }
+        }
+      },
+      "solution": [
+        "Un giro è il perimetro: $2 \\times (60 + 40) = 200$ m",
+        "Tre giri: $200 \\times 3 = 600$ m"
+      ]
+    },
+    {
+      "id": "math.problem.geo.2",
+      "skillId": "math.geo.rectangle-square",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un pavimento rettangolare di 5 m per 4 m viene coperto con piastrelle quadrate di 50 cm di lato. Quante piastrelle servono?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "piastrelle"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 80,
+            "knownErrors": [
+              {
+                "value": 40,
+                "tag": "area_units_factor",
+                "message": "Una piastrella non ha area 0,5 m²: è $0{,}5 \\times 0{,}5 = 0{,}25$ m²."
+              },
+              {
+                "value": 0.08,
+                "tag": "unit_conversion",
+                "message": "Prima porta tutto alla stessa unità di misura."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Area del pavimento: $5 \\times 4 = 20$ m²",
+        "Una piastrella: $0{,}5 \\times 0{,}5 = 0{,}25$ m²",
+        "Piastrelle: $20 : 0{,}25 = 80$"
+      ]
+    },
+    {
+      "id": "math.problem.geo.3",
+      "skillId": "math.pyth.in-figures",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Una scala lunga 5 m è appoggiata a un muro. Il piede della scala è a 3 m dal muro. A che altezza arriva la scala?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "Altezza",
+            "units": [
+              "m",
+              "m²",
+              "m³"
+            ]
+          }
+        ],
+        "figure": {
+          "shape": "right-triangle",
+          "legA": "?",
+          "legB": "3 m",
+          "hypotenuse": "5 m"
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 4,
+            "knownErrors": [
+              {
+                "value": 8,
+                "tag": "pythagoras_sum_legs",
+                "message": "Non si sommano i lati: si usa il teorema di Pitagora."
+              },
+              {
+                "value": 5.830952,
+                "tag": "pythagoras_add_instead_subtract",
+                "message": "La scala è l'ipotenusa: per trovare un cateto si sottrae."
+              }
+            ],
+            "unit": "m"
+          }
+        }
+      },
+      "solution": [
+        "Scala, muro e pavimento formano un triangolo rettangolo: la scala è l'ipotenusa",
+        "$\\sqrt{5^2 - 3^2} = \\sqrt{25 - 9} = \\sqrt{16} = 4$ m"
+      ]
+    },
+    {
+      "id": "math.problem.geo.4",
+      "skillId": "math.pyth.theorem",
+      "level": "base",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Lo schermo di un televisore è largo 80 cm e alto 60 cm. Quanto misura la diagonale?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "Diagonale",
+            "units": [
+              "cm",
+              "cm²",
+              "cm³"
+            ]
+          }
+        ],
+        "figure": {
+          "shape": "rectangle",
+          "base": "80 cm",
+          "height": "60 cm",
+          "diagonal": "?"
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 100,
+            "knownErrors": [
+              {
+                "value": 140,
+                "tag": "pythagoras_sum_legs",
+                "message": "La diagonale non è la somma dei lati: usa Pitagora."
+              }
+            ],
+            "unit": "cm"
+          }
+        }
+      },
+      "solution": [
+        "La diagonale è l'ipotenusa di un triangolo rettangolo con cateti 80 e 60",
+        "$\\sqrt{80^2 + 60^2} = \\sqrt{6400 + 3600} = \\sqrt{10\\,000} = 100$ cm"
+      ]
+    }
+  ]
+}

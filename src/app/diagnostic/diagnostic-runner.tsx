@@ -1,41 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { PauseTimer } from "@/components/pause-timer";
 import { Button, Card } from "@/components/ui";
 import { toEngineSections, type AssessmentView, type AttemptState } from "@/lib/assessments/view";
 import { nextStep, progress, type SectionChoices } from "@/lib/diagnostic/engine";
 import type { ItemResponse } from "@/lib/items/schemas";
+import type { AnswerStats } from "@/lib/tracking/schema";
 import { chooseSection, finishDiagnostic, startDiagnostic, startPart, submitAnswer } from "./actions";
-import { QuestionCard } from "./question-card";
+import { QuestionCard } from "@/components/exercise/question-card";
 
 const ERROR_MESSAGE = "Qualcosa non ha funzionato. Controlla la connessione e riprova.";
 
 function ProgressBar({ done, total }: { done: number; total: number }) {
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
   return (
-    <div className="h-2.5 w-full overflow-hidden rounded-full bg-line" role="progressbar" aria-valuenow={percent}>
+    <div className="h-3 w-full overflow-hidden rounded-full bg-line" role="progressbar" aria-valuenow={percent}>
       <div className="h-full rounded-full bg-brand transition-all duration-500" style={{ width: `${percent}%` }} />
     </div>
   );
-}
-
-function PauseTimer({ minutes }: { minutes: number }) {
-  const [left, setLeft] = useState(minutes * 60);
-
-  useEffect(() => {
-    const startedAt = Date.now();
-    const timer = setInterval(() => {
-      const value = Math.max(0, minutes * 60 - Math.floor((Date.now() - startedAt) / 1000));
-      setLeft(value);
-      if (value === 0) clearInterval(timer);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [minutes]);
-
-  const mm = String(Math.floor(left / 60)).padStart(2, "0");
-  const ss = String(left % 60).padStart(2, "0");
-  return <p className="text-5xl font-bold tabular-nums text-brand">{`${mm}:${ss}`}</p>;
 }
 
 export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; attempt: AttemptState | null }) {
@@ -77,10 +61,10 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
       setAttemptId(result.attemptId);
     });
 
-  const answer = (itemId: string, response: ItemResponse, timeMs: number) =>
+  const answer = (itemId: string, response: ItemResponse, timeMs: number, stats: AnswerStats) =>
     run(async () => {
       if (!attemptId) return;
-      const { score } = await submitAnswer({ attemptId, itemId, response, timeMs });
+      const { score } = await submitAnswer({ attemptId, itemId, response, timeMs, stats });
       setScores((previous) => ({ ...previous, [itemId]: score }));
     });
 
@@ -106,7 +90,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
     });
 
   const errorBanner = error && (
-    <p role="alert" className="rounded-xl bg-bad-soft px-4 py-3 text-sm text-bad">
+    <p role="alert" className="rounded-2xl bg-bad-soft px-4 py-3 text-sm text-bad">
       {error}
     </p>
   );
@@ -115,7 +99,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
     return (
       <Card className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold">{view.title}</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight">{view.title}</h1>
           <p className="text-ink-soft">{view.description}</p>
         </div>
         <ul className="flex flex-col gap-2 text-base">
@@ -157,7 +141,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
             key={item.id}
             item={item}
             pending={pending}
-            onSubmit={(response, timeMs) => answer(item.id, response, timeMs)}
+            onSubmit={(response, timeMs, stats) => answer(item.id, response, timeMs, stats)}
           />
         </Card>
         {errorBanner}
@@ -192,7 +176,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
         {header("Pausa")}
         <Card className="flex flex-col items-center gap-5 text-center">
           <p className="text-4xl">💪</p>
-          <h2 className="text-2xl font-bold">Prima parte finita!</h2>
+          <h2 className="text-2xl font-extrabold">Prima parte finita!</h2>
           <p className="text-ink-soft">
             Fai una pausa di {view.config.pauseMinutes} minuti: alzati, bevi un bicchiere d’acqua, muoviti un po’.
           </p>
@@ -211,7 +195,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
       {header("Fine")}
       <Card className="flex flex-col items-center gap-5 text-center">
         <p className="text-4xl">🎉</p>
-        <h2 className="text-2xl font-bold">Hai finito il test!</h2>
+        <h2 className="text-2xl font-extrabold">Hai finito il test!</h2>
         <p className="text-ink-soft">Bravo per l’impegno. Adesso vediamo insieme la tua mappa di partenza.</p>
         <Button onClick={finish} disabled={pending} className="w-full">
           Scopri la tua mappa

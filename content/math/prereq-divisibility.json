@@ -1,0 +1,321 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.div.prime-factorization",
+      "title": "Scomposizione in fattori primi",
+      "understand": {
+        "paragraphs": [
+          "Un numero primo si può dividere solo per 1 e per se stesso: 2, 3, 5, 7, 11, 13…",
+          "Scomporre un numero vuol dire scriverlo come prodotto di numeri primi: è come smontare un oggetto nei suoi pezzi più piccoli. Ogni numero ha una sola scomposizione."
+        ]
+      },
+      "recipe": [
+        "Prova a dividere per 2 finché puoi.",
+        "Poi prova con 3, poi con 5, 7, 11…",
+        "Scrivi i divisori in colonna, fino ad arrivare a 1.",
+        "Raccogli i fattori uguali con le potenze: $2 \\times 2 \\times 2 = 2^3$."
+      ],
+      "example": {
+        "prompt": "Scomponi 60",
+        "steps": [
+          "$60 : 2 = 30$",
+          "$30 : 2 = 15$",
+          "$15 : 3 = 5$",
+          "$5 : 5 = 1$"
+        ],
+        "answer": "$60 = 2^2 \\times 3 \\times 5$"
+      },
+      "complete": {
+        "prompt": "Scomponi 36.",
+        "given": [
+          "$36 : 2 = 18$, $18 : 2 = 9$, $9 : 3 = 3$, $3 : 3 = 1$"
+        ],
+        "blanks": [
+          {
+            "label": "Quante volte compare il fattore 2?",
+            "key": {
+              "kind": "number",
+              "value": 2
+            }
+          },
+          {
+            "label": "Quante volte compare il fattore 3?",
+            "key": {
+              "kind": "number",
+              "value": 2
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Controlla sempre: moltiplicando i fattori deve tornare il numero di partenza.",
+        "$2 \\times 30$ non è una scomposizione in fattori primi: 30 si può ancora scomporre."
+      ]
+    },
+    {
+      "skillId": "math.div.gcd",
+      "title": "Massimo comun divisore (MCD)",
+      "understand": {
+        "paragraphs": [
+          "Il MCD di due numeri è il numero più grande che li divide entrambi senza resto.",
+          "Serve quando devi dividere cose in gruppi uguali senza avanzi, e per semplificare le frazioni."
+        ]
+      },
+      "recipe": [
+        "Scomponi i due numeri in fattori primi.",
+        "Prendi solo i fattori comuni, cioè quelli che ci sono in tutti e due.",
+        "Di ognuno prendi l'esponente più piccolo.",
+        "Moltiplica: ottieni il MCD."
+      ],
+      "example": {
+        "prompt": "MCD tra 24 e 36",
+        "steps": [
+          "$24 = 2^3 \\times 3$",
+          "$36 = 2^2 \\times 3^2$",
+          "Comuni con l'esponente più piccolo: $2^2 \\times 3 = 12$"
+        ],
+        "answer": "MCD = 12"
+      },
+      "complete": {
+        "prompt": "Trova il MCD tra 18 e 30.",
+        "given": [
+          "$18 = 2 \\times 3^2$",
+          "$30 = 2 \\times 3 \\times 5$"
+        ],
+        "blanks": [
+          {
+            "label": "Fattori comuni con l'esponente più piccolo: $2 \\times 3 =$",
+            "key": {
+              "kind": "number",
+              "value": 6
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non confondere MCD e mcm: il MCD è più piccolo (o uguale) dei due numeri.",
+        "Prendi solo i fattori che compaiono in tutti e due i numeri."
+      ]
+    },
+    {
+      "skillId": "math.div.lcm",
+      "title": "Minimo comune multiplo (mcm)",
+      "understand": {
+        "paragraphs": [
+          "Il mcm di due numeri è il numero più piccolo che è multiplo di entrambi.",
+          "Serve per capire quando due cose che si ripetono tornano a coincidere, e per il denominatore comune delle frazioni."
+        ]
+      },
+      "recipe": [
+        "Scomponi i due numeri in fattori primi.",
+        "Prendi tutti i fattori, comuni e non comuni.",
+        "Di ognuno prendi l'esponente più grande.",
+        "Moltiplica: ottieni il mcm."
+      ],
+      "example": {
+        "prompt": "mcm tra 12 e 18",
+        "steps": [
+          "$12 = 2^2 \\times 3$",
+          "$18 = 2 \\times 3^2$",
+          "Tutti i fattori con l'esponente più grande: $2^2 \\times 3^2 = 36$"
+        ],
+        "answer": "mcm = 36"
+      },
+      "complete": {
+        "prompt": "Trova il mcm tra 6 e 10.",
+        "given": [
+          "$6 = 2 \\times 3$",
+          "$10 = 2 \\times 5$"
+        ],
+        "blanks": [
+          {
+            "label": "$2 \\times 3 \\times 5 =$",
+            "key": {
+              "kind": "number",
+              "value": 30
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Moltiplicare i due numeri dà un multiplo comune, ma spesso non il più piccolo: $6 \\times 10 = 60$, il mcm è 30.",
+        "Il mcm è più grande (o uguale) dei due numeri."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "math.gen.prime-factorization.1",
+      "skillId": "math.div.prime-factorization",
+      "level": "base",
+      "generator": "prime-factorization",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.prime-factorization.2",
+      "skillId": "math.div.prime-factorization",
+      "level": "medium",
+      "generator": "prime-factorization",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.prime-factorization.3",
+      "skillId": "math.div.prime-factorization",
+      "level": "advanced",
+      "generator": "prime-factorization",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.gcd.1",
+      "skillId": "math.div.gcd",
+      "level": "base",
+      "generator": "gcd",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.gcd.2",
+      "skillId": "math.div.gcd",
+      "level": "medium",
+      "generator": "gcd",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.gcd.3",
+      "skillId": "math.div.gcd",
+      "level": "advanced",
+      "generator": "gcd",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.lcm.1",
+      "skillId": "math.div.lcm",
+      "level": "base",
+      "generator": "lcm",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.lcm.2",
+      "skillId": "math.div.lcm",
+      "level": "medium",
+      "generator": "lcm",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.lcm.3",
+      "skillId": "math.div.lcm",
+      "level": "advanced",
+      "generator": "lcm",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "math.problem.div.1",
+      "skillId": "math.div.gcd",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un fioraio ha 48 rose e 36 tulipani. Vuole preparare mazzi tutti uguali, usando tutti i fiori, con il numero più grande possibile di mazzi. Quanti mazzi prepara?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "mazzi"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 12,
+            "knownErrors": [
+              {
+                "value": 144,
+                "tag": "gcd_lcm_confusion",
+                "message": "Qui serve il MCD: vuoi dividere i fiori in gruppi uguali."
+              },
+              {
+                "value": 6,
+                "tag": "gcd_incomplete",
+                "message": "6 funziona, ma si possono fare più mazzi."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Servono gruppi uguali senza avanzi: è il MCD",
+        "$48 = 2^4 \\times 3$, $36 = 2^2 \\times 3^2$",
+        "MCD $= 2^2 \\times 3 = 12$",
+        "Risposta: prepara 12 mazzi."
+      ]
+    },
+    {
+      "id": "math.problem.div.2",
+      "skillId": "math.div.lcm",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Anna va in piscina ogni 4 giorni, Paolo ogni 6 giorni. Oggi ci sono andati insieme. Tra quanti giorni si incontreranno di nuovo in piscina?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "giorni"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 12,
+            "knownErrors": [
+              {
+                "value": 24,
+                "tag": "lcm_product",
+                "message": "24 funziona, ma si incontrano prima."
+              },
+              {
+                "value": 2,
+                "tag": "gcd_lcm_confusion",
+                "message": "Qui serve il mcm, non il MCD."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Cerco il primo giorno multiplo di 4 e di 6: è il mcm",
+        "$4 = 2^2$, $6 = 2 \\times 3$",
+        "mcm $= 2^2 \\times 3 = 12$",
+        "Risposta: tra 12 giorni."
+      ]
+    }
+  ]
+}

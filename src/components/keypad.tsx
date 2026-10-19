@@ -51,11 +51,11 @@ export function Keypad({
   disabled: boolean;
 }) {
   const baseClass =
-    "h-12 rounded-xl bg-surface font-semibold shadow-sm ring-1 ring-line transition active:scale-95 active:bg-brand-soft disabled:opacity-40";
-  const keyClass = `${baseClass} text-xl text-ink`;
+    "h-12 rounded-2xl border-2 font-display font-extrabold transition-[transform,box-shadow] duration-75 active:translate-y-[3px] active:shadow-none disabled:opacity-40";
+  const keyClass = `${baseClass} border-line bg-surface text-xl text-ink shadow-[0_3px_0_var(--color-line)] active:bg-brand-soft`;
 
   return (
-    <div className="grid grid-cols-3 gap-2 rounded-2xl bg-canvas p-2 ring-1 ring-line">
+    <div className="grid grid-cols-3 gap-2 rounded-3xl border-2 border-line bg-canvas p-2">
       {DIGIT_ROWS.flat().map((key) => (
         <button
           key={key}
@@ -80,7 +80,7 @@ export function Keypad({
       {showNext && (
         <button
           type="button"
-          className={`${baseClass} col-span-2 text-base text-brand`}
+          className={`${baseClass} col-span-2 border-brand bg-brand text-base text-white shadow-[0_3px_0_var(--color-brand-dark)]`}
           disabled={disabled}
           onClick={() => onKey("next")}
         >

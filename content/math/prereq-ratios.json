@@ -1,0 +1,553 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.ratio.percent",
+      "title": "Le percentuali",
+      "understand": {
+        "paragraphs": [
+          "Per cento vuol dire \\\"su cento\\\": il 25% è 25 parti su 100, cioè $\\frac{25}{100} = \\frac{1}{4}$.",
+          "Il quadrato qui sotto ha 100 caselle: le 25 colorate sono il 25%."
+        ],
+        "visual": {
+          "type": "decimal-grid",
+          "filled": 25,
+          "label": "25% = 25 su 100"
+        }
+      },
+      "recipe": [
+        "Per calcolare il p% di un numero: dividi per 100 e moltiplica per p.",
+        "Scorciatoie: 10% = dividi per 10; 50% = la metà; 25% = un quarto.",
+        "Per trovare che percentuale è una parte: parte : totale × 100."
+      ],
+      "example": {
+        "prompt": "Calcola il 15% di 80",
+        "steps": [
+          "L'1%: $80 : 100 = 0{,}8$",
+          "Il 15%: $0{,}8 \\times 15 = 12$"
+        ],
+        "answer": "12"
+      },
+      "complete": {
+        "prompt": "Calcola il 30% di 250.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "L'1%: $250 : 100 =$",
+            "key": {
+              "kind": "number",
+              "value": 2.5
+            }
+          },
+          {
+            "label": "Il 30%: $2{,}5 \\times 30 =$",
+            "key": {
+              "kind": "number",
+              "value": 75
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Il 20% di 50 non è 50 − 20: è 10.",
+        "Per sapere che percentuale è, ricordati di moltiplicare per 100."
+      ]
+    },
+    {
+      "skillId": "math.ratio.proportions",
+      "title": "Le proporzioni",
+      "understand": {
+        "paragraphs": [
+          "Una proporzione è un'uguaglianza tra due rapporti: $3 : 5 = 6 : 10$ si legge \\\"3 sta a 5 come 6 sta a 10\\\".",
+          "Il primo e l'ultimo termine sono gli estremi, i due in mezzo sono i medi."
+        ]
+      },
+      "recipe": [
+        "Proprietà fondamentale: prodotto dei medi = prodotto degli estremi.",
+        "Per trovare un estremo: moltiplica i medi e dividi per l'altro estremo.",
+        "Per trovare un medio: moltiplica gli estremi e dividi per l'altro medio.",
+        "Medio proporzionale ($a : x = x : b$): $x = \\sqrt{a \\times b}$."
+      ],
+      "example": {
+        "prompt": "Trova $x$: $4 : 7 = 12 : x$",
+        "steps": [
+          "x è un estremo: medi per medi, diviso l'altro estremo",
+          "$x = 7 \\times 12 : 4 = 84 : 4 = 21$"
+        ],
+        "answer": "x = 21"
+      },
+      "complete": {
+        "prompt": "Trova $x$: $x : 6 = 10 : 15$.",
+        "given": [
+          "x è un estremo."
+        ],
+        "blanks": [
+          {
+            "label": "Prodotto dei medi: $6 \\times 10 =$",
+            "key": {
+              "kind": "number",
+              "value": 60
+            }
+          },
+          {
+            "label": "$x = 60 : 15 =$",
+            "key": {
+              "kind": "number",
+              "value": 4
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Nelle proporzioni si moltiplica e si divide, mai si somma.",
+        "Controlla sempre: prodotto dei medi = prodotto degli estremi."
+      ]
+    },
+    {
+      "skillId": "math.ratio.percent-problems",
+      "title": "Sconti e aumenti",
+      "understand": {
+        "paragraphs": [
+          "Negli sconti si toglie una percentuale dal prezzo; negli aumenti la si aggiunge.",
+          "Attenzione: la percentuale si calcola sempre sul prezzo di partenza."
+        ]
+      },
+      "recipe": [
+        "Calcola la percentuale del prezzo (sconto o aumento).",
+        "Sconto: togli il risultato dal prezzo. Aumento: aggiungilo.",
+        "Problema al contrario (conosci il prezzo finale): con uno sconto del 20% paghi l'80%. Dividi il prezzo finale per 80 e moltiplica per 100."
+      ],
+      "example": {
+        "prompt": "Una giacca costa 120 € ed è scontata del 25%. Quanto si paga?",
+        "steps": [
+          "Sconto: $120 : 100 \\times 25 = 30$ €",
+          "Prezzo finale: $120 - 30 = 90$ €"
+        ],
+        "answer": "90 €"
+      },
+      "complete": {
+        "prompt": "Un paio di cuffie costa 60 € e aumenta del 10%. Quanto costa adesso?",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Aumento: $60 : 100 \\times 10 =$",
+            "key": {
+              "kind": "number",
+              "value": 6
+            }
+          },
+          {
+            "label": "Nuovo prezzo: $60 + 6 =$",
+            "key": {
+              "kind": "number",
+              "value": 66
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Lo sconto del 15% non vuol dire togliere 15 €.",
+        "Nei problemi al contrario non calcolare la percentuale sul prezzo finale."
+      ]
+    },
+    {
+      "skillId": "math.prop.direct",
+      "title": "Proporzionalità diretta",
+      "understand": {
+        "paragraphs": [
+          "Due grandezze sono direttamente proporzionali se, quando una raddoppia, raddoppia anche l'altra: più quaderni compri, più spendi.",
+          "Il loro rapporto resta sempre uguale: è la costante di proporzionalità."
+        ]
+      },
+      "recipe": [
+        "Trova quanto vale 1 (per esempio il prezzo di un oggetto): dividi.",
+        "Moltiplica per la quantità che ti chiedono.",
+        "Controllo: se la quantità aumenta, anche il risultato deve aumentare."
+      ],
+      "example": {
+        "prompt": "3 biglietti costano 12 €. Quanto costano 7 biglietti?",
+        "steps": [
+          "Un biglietto: $12 : 3 = 4$ €",
+          "Sette biglietti: $4 \\times 7 = 28$ €"
+        ],
+        "answer": "28 €"
+      },
+      "complete": {
+        "prompt": "5 gelati costano 15 €. Quanto costano 8 gelati?",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Un gelato: $15 : 5 =$",
+            "key": {
+              "kind": "number",
+              "value": 3
+            }
+          },
+          {
+            "label": "Otto gelati: $3 \\times 8 =$",
+            "key": {
+              "kind": "number",
+              "value": 24
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non aggiungere la differenza: se 3 biglietti costano 12 €, 4 biglietti non costano 13 €."
+      ]
+    },
+    {
+      "skillId": "math.prop.inverse",
+      "title": "Proporzionalità inversa",
+      "understand": {
+        "paragraphs": [
+          "Due grandezze sono inversamente proporzionali se, quando una raddoppia, l'altra si dimezza: più operai lavorano, meno giorni servono.",
+          "Il loro prodotto resta sempre uguale."
+        ]
+      },
+      "recipe": [
+        "Calcola il prodotto delle due grandezze (per esempio il lavoro totale).",
+        "Dividi per il nuovo valore.",
+        "Controllo: se una grandezza aumenta, l'altra deve diminuire."
+      ],
+      "example": {
+        "prompt": "6 operai finiscono un lavoro in 4 giorni. Quanti giorni servono a 3 operai?",
+        "steps": [
+          "Lavoro totale: $6 \\times 4 = 24$ giornate",
+          "Con 3 operai: $24 : 3 = 8$ giorni"
+        ],
+        "answer": "8 giorni"
+      },
+      "complete": {
+        "prompt": "A 60 km/h un viaggio dura 3 ore. Quanto dura a 90 km/h?",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Distanza: $60 \\times 3 =$",
+            "key": {
+              "kind": "number",
+              "value": 180
+            }
+          },
+          {
+            "label": "Tempo: $180 : 90 =$",
+            "key": {
+              "kind": "number",
+              "value": 2
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non usare la proporzione diretta: più operai ci mettono meno giorni, non di più."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "math.gen.percent.1",
+      "skillId": "math.ratio.percent",
+      "level": "base",
+      "generator": "percent",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.percent.2",
+      "skillId": "math.ratio.percent",
+      "level": "medium",
+      "generator": "percent",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.percent.3",
+      "skillId": "math.ratio.percent",
+      "level": "advanced",
+      "generator": "percent",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.proportions.1",
+      "skillId": "math.ratio.proportions",
+      "level": "base",
+      "generator": "proportions",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.proportions.2",
+      "skillId": "math.ratio.proportions",
+      "level": "medium",
+      "generator": "proportions",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.proportions.3",
+      "skillId": "math.ratio.proportions",
+      "level": "advanced",
+      "generator": "proportions",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.percent-problems.1",
+      "skillId": "math.ratio.percent-problems",
+      "level": "base",
+      "generator": "percent-problems",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.percent-problems.2",
+      "skillId": "math.ratio.percent-problems",
+      "level": "medium",
+      "generator": "percent-problems",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.percent-problems.3",
+      "skillId": "math.ratio.percent-problems",
+      "level": "advanced",
+      "generator": "percent-problems",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.direct-proportionality.1",
+      "skillId": "math.prop.direct",
+      "level": "base",
+      "generator": "direct-proportionality",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.direct-proportionality.2",
+      "skillId": "math.prop.direct",
+      "level": "medium",
+      "generator": "direct-proportionality",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.direct-proportionality.3",
+      "skillId": "math.prop.direct",
+      "level": "advanced",
+      "generator": "direct-proportionality",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "math.gen.inverse-proportionality.1",
+      "skillId": "math.prop.inverse",
+      "level": "base",
+      "generator": "inverse-proportionality",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "math.gen.inverse-proportionality.2",
+      "skillId": "math.prop.inverse",
+      "level": "medium",
+      "generator": "inverse-proportionality",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "math.gen.inverse-proportionality.3",
+      "skillId": "math.prop.inverse",
+      "level": "advanced",
+      "generator": "inverse-proportionality",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "math.problem.ratio.1",
+      "skillId": "math.ratio.percent",
+      "level": "base",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "In una classe di 25 alunni, il 40% sono femmine. Quante sono le femmine?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "femmine"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 10,
+            "knownErrors": [
+              {
+                "value": 15,
+                "tag": "complement_missing",
+                "message": "15 sono i maschi: la domanda chiede le femmine."
+              },
+              {
+                "value": 40,
+                "tag": "percent_inverse",
+                "message": "40 è la percentuale, non il numero di alunne."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "L'1% di 25: $25 : 100 = 0{,}25$",
+        "Il 40%: $0{,}25 \\times 40 = 10$",
+        "Risposta: le femmine sono 10."
+      ]
+    },
+    {
+      "id": "math.problem.ratio.2",
+      "skillId": "math.ratio.percent-problems",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un telefono costava 300 €. Prima è stato scontato del 20%, poi il nuovo prezzo è aumentato del 10%. Quanto costa adesso?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "€"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 264,
+            "knownErrors": [
+              {
+                "value": 270,
+                "tag": "percent_successive",
+                "message": "Le percentuali non si sommano: il 10% si calcola sul prezzo dopo lo sconto."
+              },
+              {
+                "value": 240,
+                "tag": "stops_early",
+                "message": "240 € è il prezzo dopo lo sconto: manca l'aumento."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Dopo lo sconto: $300 - 60 = 240$ €",
+        "Aumento del 10% di 240: $240 : 100 \\times 10 = 24$ €",
+        "Prezzo finale: $240 + 24 = 264$ €"
+      ]
+    },
+    {
+      "id": "math.problem.ratio.3",
+      "skillId": "math.prop.direct",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Per fare una torta per 4 persone servono 200 g di farina. Quanta farina serve per una torta per 10 persone?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "g"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 500,
+            "knownErrors": [
+              {
+                "value": 80,
+                "tag": "direct_as_inverse",
+                "message": "Più persone, più farina: è proporzionalità diretta."
+              },
+              {
+                "value": 206,
+                "tag": "proportion_additive",
+                "message": "Non si aggiunge la differenza: trova la farina per una persona."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Farina per una persona: $200 : 4 = 50$ g",
+        "Per 10 persone: $50 \\times 10 = 500$ g"
+      ]
+    },
+    {
+      "id": "math.problem.ratio.4",
+      "skillId": "math.prop.inverse",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Con 3 rubinetti aperti una vasca si riempie in 40 minuti. Quanti minuti servono con 5 rubinetti uguali?",
+        "fields": [
+          {
+            "kind": "number",
+            "id": "answer",
+            "label": "",
+            "suffix": "min"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 24,
+            "knownErrors": [
+              {
+                "value": 66.666667,
+                "tag": "inverse_as_direct",
+                "message": "Più rubinetti riempiono la vasca in meno tempo: è proporzionalità inversa."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Lavoro totale: $3 \\times 40 = 120$ minuti di rubinetto",
+        "Con 5 rubinetti: $120 : 5 = 24$ minuti"
+      ]
+    }
+  ]
+}

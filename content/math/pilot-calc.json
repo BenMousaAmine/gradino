@@ -1,0 +1,278 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.calc.times-tables",
+      "title": "Tabelline e calcolo mentale",
+      "understand": {
+        "paragraphs": [
+          "Le tabelline sono la base di tutti i calcoli: frazioni, equazioni, aree, volumi. Se le sai a memoria, la testa resta libera per ragionare sul problema.",
+          "Buona notizia: metà le sai già. $3 \\times 7$ è uguale a $7 \\times 3$, quindi ogni risultato che impari vale doppio."
+        ]
+      },
+      "recipe": [
+        "Se non ricordi un risultato, parti da uno che sai: $7 \\times 8 = 7 \\times 7 + 7 = 49 + 7 = 56$.",
+        "Trucco del 9: $9 \\times n = 10 \\times n - n$. Esempio: $9 \\times 6 = 60 - 6 = 54$.",
+        "Trucco del 5: è la metà del 10. Esempio: $5 \\times 8 = 80 : 2 = 40$.",
+        "Ripassa ogni giorno solo le tabelline che sbagli: poche alla volta, ma tutti i giorni."
+      ],
+      "example": {
+        "prompt": "Calcola $8 \\times 7$ partendo da un risultato che conosci.",
+        "steps": ["So che $8 \\times 5 = 40$.", "Mi mancano altre due volte 8: $8 \\times 2 = 16$.", "$40 + 16 = 56$"],
+        "answer": "$8 \\times 7 = 56$"
+      },
+      "complete": {
+        "prompt": "Usa il trucco del 9 per calcolare $9 \\times 7$.",
+        "given": ["$9 \\times 7 = 10 \\times 7 - 7$"],
+        "blanks": [
+          { "label": "$10 \\times 7 =$", "key": { "kind": "number", "value": 70 } },
+          { "label": "$70 - 7 =$", "key": { "kind": "number", "value": 63 } }
+        ]
+      },
+      "watchOut": [
+        "Non confondere la moltiplicazione con l'addizione: $6 \\times 3 = 18$, non 9.",
+        "Attenzione alle tabelline vicine: $7 \\times 8 = 56$ ma $7 \\times 9 = 63$."
+      ]
+    },
+    {
+      "skillId": "math.calc.order-of-operations",
+      "title": "Ordine delle operazioni",
+      "understand": {
+        "paragraphs": [
+          "In un'espressione le operazioni non si fanno da sinistra a destra come quando leggi: c'è un ordine preciso, uguale in tutto il mondo.",
+          "Pensa alle parentesi come a delle scatole: prima apri la scatola più interna, poi quelle più esterne."
+        ]
+      },
+      "recipe": [
+        "Parentesi: prima le tonde $(\\;)$, poi le quadre $[\\;]$, poi le graffe $\\{\\;\\}$.",
+        "Potenze.",
+        "Moltiplicazioni e divisioni, da sinistra a destra.",
+        "Addizioni e sottrazioni, da sinistra a destra.",
+        "A ogni passaggio riscrivi tutta l'espressione: così non perdi pezzi."
+      ],
+      "example": {
+        "prompt": "Calcola $20 - 2 \\times (3 + 4)$",
+        "steps": [
+          "Parentesi: $3 + 4 = 7$ → $20 - 2 \\times 7$",
+          "Moltiplicazione: $2 \\times 7 = 14$ → $20 - 14$",
+          "Sottrazione: $20 - 14 = 6$"
+        ],
+        "answer": "6"
+      },
+      "complete": {
+        "prompt": "Calcola $5 + 3 \\times (6 - 2)$ un passaggio alla volta.",
+        "given": [],
+        "blanks": [
+          { "label": "Parentesi: $6 - 2 =$", "key": { "kind": "number", "value": 4 } },
+          { "label": "Moltiplicazione: $3 \\times 4 =$", "key": { "kind": "number", "value": 12 } },
+          { "label": "Addizione: $5 + 12 =$", "key": { "kind": "number", "value": 17 } }
+        ]
+      },
+      "watchOut": [
+        "$3 + 4 \\times 2$ fa 11, non 14: la moltiplicazione va prima dell'addizione.",
+        "Quando riscrivi l'espressione, controlla di non aver dimenticato nessun numero."
+      ]
+    },
+    {
+      "skillId": "math.calc.decimals",
+      "title": "Operazioni con i numeri decimali",
+      "understand": {
+        "paragraphs": [
+          "Un numero decimale ha una parte intera e una parte decimale: in 12,75 ci sono 12 interi, 7 decimi e 5 centesimi.",
+          "Il quadrato qui sotto è diviso in 100 parti: ognuna è un centesimo (0,01). Le parti colorate sono 35, cioè 0,35."
+        ],
+        "visual": { "type": "decimal-grid", "filled": 35, "label": "$0{,}35$ = 35 centesimi" }
+      },
+      "recipe": [
+        "Addizione e sottrazione: incolonna le virgole una sotto l'altra. Se serve aggiungi zeri: $2{,}5 = 2{,}50$.",
+        "Moltiplicazione: moltiplica senza virgole, poi metti nel risultato tante cifre decimali quante ce ne sono in tutto nei due numeri.",
+        "Divisione per un decimale: moltiplica dividendo e divisore per 10, 100… finché il divisore non ha più la virgola."
+      ],
+      "example": {
+        "prompt": "Calcola $1{,}2 \\times 0{,}3$",
+        "steps": [
+          "Moltiplico senza virgole: $12 \\times 3 = 36$",
+          "Cifre decimali in tutto: 1 (in 1,2) + 1 (in 0,3) = 2",
+          "Metto 2 cifre dopo la virgola: $0{,}36$"
+        ],
+        "answer": "$0{,}36$"
+      },
+      "complete": {
+        "prompt": "Calcola $3{,}6 : 0{,}4$.",
+        "given": ["Moltiplico tutti e due per 10, così il divisore non ha più la virgola."],
+        "blanks": [
+          { "label": "$3{,}6 \\times 10 =$", "key": { "kind": "number", "value": 36 } },
+          { "label": "$0{,}4 \\times 10 =$", "key": { "kind": "number", "value": 4 } },
+          { "label": "$36 : 4 =$", "key": { "kind": "number", "value": 9 } }
+        ]
+      },
+      "watchOut": [
+        "$0{,}3 \\times 0{,}2 = 0{,}06$, non 0,6: le cifre decimali si sommano.",
+        "Dividere per un numero minore di 1 dà un risultato più grande: $4{,}5 : 0{,}5 = 9$."
+      ]
+    }
+  ],
+  "templates": [
+    { "id": "math.gen.times-table.1", "skillId": "math.calc.times-tables", "level": "base", "generator": "times-table", "params": { "difficulty": 1 } },
+    { "id": "math.gen.times-table.2", "skillId": "math.calc.times-tables", "level": "medium", "generator": "times-table", "params": { "difficulty": 2 } },
+    { "id": "math.gen.times-table.3", "skillId": "math.calc.times-tables", "level": "advanced", "generator": "times-table", "params": { "difficulty": 3 } },
+    { "id": "math.gen.order-of-operations.1", "skillId": "math.calc.order-of-operations", "level": "base", "generator": "order-of-operations", "params": { "difficulty": 1 } },
+    { "id": "math.gen.order-of-operations.2", "skillId": "math.calc.order-of-operations", "level": "medium", "generator": "order-of-operations", "params": { "difficulty": 2 } },
+    { "id": "math.gen.order-of-operations.3", "skillId": "math.calc.order-of-operations", "level": "advanced", "generator": "order-of-operations", "params": { "difficulty": 3 } },
+    { "id": "math.gen.decimals.1", "skillId": "math.calc.decimals", "level": "base", "generator": "decimals", "params": { "difficulty": 1 } },
+    { "id": "math.gen.decimals.2", "skillId": "math.calc.decimals", "level": "medium", "generator": "decimals", "params": { "difficulty": 2 } },
+    { "id": "math.gen.decimals.3", "skillId": "math.calc.decimals", "level": "advanced", "generator": "decimals", "params": { "difficulty": 3 } }
+  ],
+  "items": [
+    {
+      "id": "math.problem.calc.1",
+      "skillId": "math.calc.times-tables",
+      "level": "base",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "In una scatola ci sono 6 file da 8 cioccolatini. Quanti cioccolatini ci sono in tutto?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "cioccolatini" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 48,
+            "knownErrors": [
+              { "value": 14, "tag": "times_as_sum", "message": "Ci sono 6 file e in ognuna 8 cioccolatini: è una moltiplicazione, non una somma." }
+            ]
+          }
+        }
+      },
+      "solution": ["Dati: 6 file, 8 cioccolatini per fila.", "Ogni fila ha 8 cioccolatini, le file sono 6: $6 \\times 8 = 48$", "Risposta: ci sono 48 cioccolatini."]
+    },
+    {
+      "id": "math.problem.calc.2",
+      "skillId": "math.calc.order-of-operations",
+      "level": "base",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Compri 3 quaderni da 2 € l'uno e una penna da 1 €. Quanto spendi in tutto?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 7,
+            "knownErrors": [
+              { "value": 9, "tag": "order_of_operations", "message": "Prima calcola quanto costano i quaderni ($3 \\times 2$), poi aggiungi la penna." },
+              { "value": 3, "tag": "missing_data", "message": "I quaderni sono 3: il loro costo è $3 \\times 2 = 6$ €." }
+            ]
+          }
+        }
+      },
+      "solution": ["Quaderni: $3 \\times 2 = 6$ €", "Aggiungo la penna: $6 + 1 = 7$ €", "Risposta: spendi 7 €."]
+    },
+    {
+      "id": "math.problem.calc.3",
+      "skillId": "math.calc.decimals",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Al bar compri un cornetto da 1,20 € e un succo da 1,50 €. Paghi con una moneta da 5 €. Quanto ricevi di resto?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 2.3,
+            "knownErrors": [
+              { "value": 2.7, "tag": "stops_early", "message": "2,70 € è quanto spendi: il resto è $5 - 2{,}70$." },
+              { "value": 3.8, "tag": "missing_data", "message": "Hai tolto solo il cornetto: devi togliere anche il succo." }
+            ]
+          }
+        }
+      },
+      "solution": ["Spesa: $1{,}20 + 1{,}50 = 2{,}70$ €", "Resto: $5{,}00 - 2{,}70 = 2{,}30$ €", "Risposta: ricevi 2,30 € di resto."]
+    },
+    {
+      "id": "math.problem.calc.4",
+      "skillId": "math.calc.decimals",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un chilo di mele costa 2,40 €. Quanto costano 1,5 kg di mele?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 3.6,
+            "knownErrors": [
+              { "value": 36, "tag": "decimal_point_product", "message": "Nel prodotto conta le cifre dopo la virgola: $2{,}40 \\times 1{,}5 = 3{,}600$." },
+              { "value": 0.36, "tag": "decimal_point_product", "message": "Nel prodotto conta le cifre dopo la virgola: $2{,}40 \\times 1{,}5 = 3{,}600$." },
+              { "value": 3.9, "tag": "operation_choice", "message": "Il prezzo va moltiplicato per i kg, non sommato." }
+            ]
+          }
+        }
+      },
+      "solution": ["Costo = prezzo al kg × kg", "$2{,}40 \\times 1{,}5$: senza virgole $240 \\times 15 = 3600$", "Cifre decimali: 2 + 1 = 3 → $3{,}600 = 3{,}60$ €", "Risposta: costano 3,60 €."]
+    },
+    {
+      "id": "math.problem.calc.5",
+      "skillId": "math.calc.order-of-operations",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un cinema ha 12 file da 15 posti. Sono già stati venduti 98 biglietti. Quanti posti sono ancora liberi?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "posti" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 82,
+            "knownErrors": [
+              { "value": 180, "tag": "stops_early", "message": "180 sono tutti i posti del cinema: togli quelli già venduti." },
+              { "value": 278, "tag": "operation_choice", "message": "I biglietti venduti vanno tolti dai posti, non aggiunti." }
+            ]
+          }
+        }
+      },
+      "solution": ["Posti in tutto: $12 \\times 15 = 180$", "Posti liberi: $180 - 98 = 82$", "Risposta: restano 82 posti liberi."]
+    },
+    {
+      "id": "math.problem.calc.6",
+      "skillId": "math.calc.decimals",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un nastro lungo 7,5 m viene tagliato in pezzi da 0,25 m. Quanti pezzi si ottengono?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "pezzi" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 30,
+            "knownErrors": [
+              { "value": 3, "tag": "decimal_division", "message": "Ti chiedi quante volte 0,25 sta in 7,5: il risultato è più grande di 7,5." },
+              { "value": 300, "tag": "decimal_division", "message": "Moltiplica dividendo e divisore per 100: $750 : 25$." },
+              { "value": 1.875, "tag": "operation_choice", "message": "Per sapere quanti pezzi si ottengono si divide, non si moltiplica." }
+            ]
+          }
+        }
+      },
+      "solution": ["Pezzi = lunghezza totale : lunghezza di un pezzo", "$7{,}5 : 0{,}25$: moltiplico entrambi per 100 → $750 : 25$", "$750 : 25 = 30$", "Risposta: si ottengono 30 pezzi."]
+    }
+  ]
+}

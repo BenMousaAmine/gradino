@@ -1,0 +1,578 @@
+{
+  "lessons": [
+    {
+      "skillId": "math.frac.simplify",
+      "title": "Semplificare le frazioni",
+      "understand": {
+        "paragraphs": [
+          "Semplificare una frazione vuol dire scriverla con numeri più piccoli, senza cambiarne il valore.",
+          "Guarda le barre: $\\frac{2}{4}$ e $\\frac{1}{2}$ coprono esattamente la stessa parte. Sono frazioni equivalenti: stesso valore, numeri diversi."
+        ],
+        "visual": {
+          "type": "fraction-bars",
+          "bars": [
+            { "numerator": 2, "denominator": 4, "label": "$\\frac{2}{4}$" },
+            { "numerator": 1, "denominator": 2, "label": "$\\frac{1}{2}$" }
+          ]
+        }
+      },
+      "recipe": [
+        "Cerca un numero che divide sia il numeratore sia il denominatore (2, 3, 5…).",
+        "Dividi sopra e sotto per quel numero.",
+        "Ripeti finché non c'è più nessun divisore comune.",
+        "Più veloce: dividi subito per il MCD tra numeratore e denominatore."
+      ],
+      "example": {
+        "prompt": "Semplifica $\\frac{18}{24}$",
+        "steps": [
+          "18 e 24 sono pari: divido per 2 → $\\frac{9}{12}$",
+          "9 e 12 si dividono per 3 → $\\frac{3}{4}$",
+          "3 e 4 non hanno divisori comuni: ho finito."
+        ],
+        "answer": "$\\frac{3}{4}$"
+      },
+      "complete": {
+        "prompt": "Semplifica $\\frac{20}{30}$ fino in fondo.",
+        "given": ["Il MCD tra 20 e 30 è 10."],
+        "blanks": [
+          { "label": "Numeratore: $20 : 10 =$", "key": { "kind": "number", "value": 2 } },
+          { "label": "Denominatore: $30 : 10 =$", "key": { "kind": "number", "value": 3 } }
+        ]
+      },
+      "watchOut": [
+        "Devi dividere sia sopra sia sotto per lo stesso numero.",
+        "$\\frac{9}{12}$ non è finita: si può ancora dividere per 3."
+      ]
+    },
+    {
+      "skillId": "math.frac.compare",
+      "title": "Confrontare le frazioni",
+      "understand": {
+        "paragraphs": [
+          "Per confrontare due frazioni devono parlare la stessa lingua: stesso denominatore, cioè pezzi della stessa grandezza.",
+          "Con lo stesso numeratore vince il denominatore più piccolo: $\\frac{1}{3}$ di pizza è più di $\\frac{1}{5}$, perché i pezzi sono più grandi."
+        ],
+        "visual": {
+          "type": "fraction-bars",
+          "bars": [
+            { "numerator": 1, "denominator": 3, "label": "$\\frac{1}{3}$" },
+            { "numerator": 1, "denominator": 5, "label": "$\\frac{1}{5}$" }
+          ]
+        }
+      },
+      "recipe": [
+        "Stesso denominatore: vince il numeratore più grande.",
+        "Stesso numeratore: vince il denominatore più piccolo.",
+        "Altrimenti: porta le frazioni allo stesso denominatore con il mcm, poi confronta i numeratori."
+      ],
+      "example": {
+        "prompt": "Quale è maggiore tra $\\frac{3}{5}$ e $\\frac{2}{3}$?",
+        "steps": ["mcm(5, 3) = 15", "$\\frac{3}{5} = \\frac{9}{15}$ e $\\frac{2}{3} = \\frac{10}{15}$", "10 è maggiore di 9"],
+        "answer": "È maggiore $\\frac{2}{3}$"
+      },
+      "complete": {
+        "prompt": "Confronta $\\frac{3}{4}$ e $\\frac{5}{6}$ portandole a denominatore 12.",
+        "given": ["mcm(4, 6) = 12"],
+        "blanks": [
+          { "label": "$\\frac{3}{4} = \\frac{?}{12}$, il numeratore è", "key": { "kind": "number", "value": 9 } },
+          { "label": "$\\frac{5}{6} = \\frac{?}{12}$, il numeratore è", "key": { "kind": "number", "value": 10 } }
+        ]
+      },
+      "watchOut": ["Non basta guardare i numeratori: $\\frac{3}{5}$ è minore di $\\frac{2}{3}$ anche se 3 è maggiore di 2."]
+    },
+    {
+      "skillId": "math.frac.of-number",
+      "title": "Frazione di un numero",
+      "understand": {
+        "paragraphs": [
+          "Calcolare i $\\frac{3}{4}$ di 20 vuol dire: dividi 20 in 4 parti uguali e prendine 3.",
+          "Il denominatore dice in quante parti dividere, il numeratore quante parti prendere."
+        ],
+        "visual": { "type": "fraction-bars", "bars": [{ "numerator": 3, "denominator": 4, "label": "$\\frac{3}{4}$" }] }
+      },
+      "recipe": [
+        "Dividi il numero per il denominatore: trovi quanto vale una parte.",
+        "Moltiplica per il numeratore: prendi le parti che ti servono."
+      ],
+      "example": {
+        "prompt": "Calcola i $\\frac{2}{3}$ di 27",
+        "steps": ["Una parte: $27 : 3 = 9$", "Due parti: $9 \\times 2 = 18$"],
+        "answer": "18"
+      },
+      "complete": {
+        "prompt": "Calcola i $\\frac{3}{5}$ di 40.",
+        "given": [],
+        "blanks": [
+          { "label": "Una parte: $40 : 5 =$", "key": { "kind": "number", "value": 8 } },
+          { "label": "Tre parti: $8 \\times 3 =$", "key": { "kind": "number", "value": 24 } }
+        ]
+      },
+      "watchOut": [
+        "Prima si divide per il denominatore, poi si moltiplica per il numeratore: non al contrario.",
+        "Se il problema chiede quanti restano, alla fine togli il risultato dal totale."
+      ]
+    },
+    {
+      "skillId": "math.frac.add-sub",
+      "title": "Addizione e sottrazione di frazioni",
+      "understand": {
+        "paragraphs": [
+          "Si possono sommare solo pezzi della stessa grandezza: $\\frac{1}{4} + \\frac{2}{4} = \\frac{3}{4}$, come 1 fetta più 2 fette della stessa torta.",
+          "Se i pezzi sono diversi, per esempio quarti e sesti, prima li tagli tutti della stessa misura: è il denominatore comune."
+        ],
+        "visual": {
+          "type": "fraction-bars",
+          "bars": [
+            { "numerator": 1, "denominator": 4, "label": "$\\frac{1}{4}$" },
+            { "numerator": 2, "denominator": 4, "label": "$\\frac{2}{4}$" },
+            { "numerator": 3, "denominator": 4, "label": "$\\frac{3}{4}$" }
+          ]
+        }
+      },
+      "recipe": [
+        "Trova il denominatore comune: il mcm dei denominatori.",
+        "Trasforma ogni frazione: dividi il mcm per il denominatore e moltiplica il risultato per il numeratore.",
+        "Somma o sottrai solo i numeratori: il denominatore resta uguale.",
+        "Semplifica il risultato, se puoi."
+      ],
+      "example": {
+        "prompt": "Calcola $\\frac{2}{3} + \\frac{1}{4}$",
+        "steps": ["mcm(3, 4) = 12", "$\\frac{2}{3} = \\frac{8}{12}$ e $\\frac{1}{4} = \\frac{3}{12}$", "$\\frac{8}{12} + \\frac{3}{12} = \\frac{11}{12}$"],
+        "answer": "$\\frac{11}{12}$"
+      },
+      "complete": {
+        "prompt": "Calcola $\\frac{5}{6} - \\frac{1}{4}$.",
+        "given": ["mcm(6, 4) = 12"],
+        "blanks": [
+          { "label": "$\\frac{5}{6} = \\frac{?}{12}$, il numeratore è", "key": { "kind": "number", "value": 10 } },
+          { "label": "$\\frac{1}{4} = \\frac{?}{12}$, il numeratore è", "key": { "kind": "number", "value": 3 } },
+          { "label": "Risultato:", "key": { "kind": "fraction", "numerator": 7, "denominator": 12, "simplified": "flag" } }
+        ]
+      },
+      "watchOut": [
+        "Non si sommano i denominatori: $\\frac{1}{4} + \\frac{2}{4}$ fa $\\frac{3}{4}$, non $\\frac{3}{8}$.",
+        "Quando cambi il denominatore, cambia anche il numeratore."
+      ]
+    },
+    {
+      "skillId": "math.frac.mul-div",
+      "title": "Moltiplicazione e divisione di frazioni",
+      "understand": {
+        "paragraphs": [
+          "Moltiplicare è l'operazione più facile con le frazioni: non serve il denominatore comune.",
+          "Dividere per una frazione vuol dire chiedersi quante volte ci sta: quante metà ci sono in 3? Sono 6. Infatti dividere per $\\frac{1}{2}$ è come moltiplicare per 2."
+        ]
+      },
+      "recipe": [
+        "Moltiplicazione: numeratore per numeratore, denominatore per denominatore.",
+        "Prima di moltiplicare, semplifica in croce se puoi: un numeratore con il denominatore dell'altra frazione.",
+        "Divisione: capovolgi la seconda frazione e moltiplica."
+      ],
+      "example": {
+        "prompt": "Calcola $\\frac{3}{5} : \\frac{9}{10}$",
+        "steps": [
+          "Capovolgo la seconda frazione: $\\frac{3}{5} \\times \\frac{10}{9}$",
+          "Semplifico in croce: 3 e 9 per 3, 10 e 5 per 5 → $\\frac{1}{1} \\times \\frac{2}{3}$",
+          "Risultato: $\\frac{2}{3}$"
+        ],
+        "answer": "$\\frac{2}{3}$"
+      },
+      "complete": {
+        "prompt": "Calcola $\\frac{2}{3} \\times \\frac{9}{4}$.",
+        "given": ["Semplifico in croce: 2 e 4 per 2, 9 e 3 per 3.", "Restano $\\frac{1}{1} \\times \\frac{3}{2}$."],
+        "blanks": [{ "label": "Risultato:", "key": { "kind": "fraction", "numerator": 3, "denominator": 2, "simplified": "flag" } }]
+      },
+      "watchOut": ["Nella divisione si capovolge solo la seconda frazione.", "Nella moltiplicazione non serve il denominatore comune."]
+    },
+    {
+      "skillId": "math.frac.decimals",
+      "title": "Frazioni e numeri decimali",
+      "understand": {
+        "paragraphs": [
+          "Ogni frazione è una divisione: $\\frac{3}{4}$ vuol dire $3 : 4 = 0{,}75$.",
+          "E al contrario: 0,75 sono 75 centesimi, cioè $\\frac{75}{100}$, che semplificato fa $\\frac{3}{4}$."
+        ],
+        "visual": { "type": "decimal-grid", "filled": 75, "label": "$0{,}75 = \\frac{75}{100} = \\frac{3}{4}$" }
+      },
+      "recipe": [
+        "Da frazione a decimale: dividi il numeratore per il denominatore.",
+        "Da decimale a frazione: scrivi il numero senza virgola al numeratore. Al denominatore metti 10 se c'è una cifra dopo la virgola, 100 se ce ne sono due, 1000 se tre.",
+        "Poi semplifica."
+      ],
+      "example": {
+        "prompt": "Scrivi 0,4 come frazione",
+        "steps": ["Una cifra dopo la virgola: $0{,}4 = \\frac{4}{10}$", "Semplifico per 2: $\\frac{2}{5}$"],
+        "answer": "$\\frac{2}{5}$"
+      },
+      "complete": {
+        "prompt": "Scrivi 0,25 come frazione.",
+        "given": ["Ci sono due cifre dopo la virgola."],
+        "blanks": [
+          { "label": "$0{,}25 = \\frac{25}{?}$, il denominatore è", "key": { "kind": "number", "value": 100 } },
+          { "label": "Semplificato:", "key": { "kind": "fraction", "numerator": 1, "denominator": 4, "simplified": "flag" } }
+        ]
+      },
+      "watchOut": [
+        "Conta bene le cifre dopo la virgola: $0{,}25 = \\frac{25}{100}$, non $\\frac{25}{10}$.",
+        "$\\frac{3}{4}$ non è 3,4: è $3 : 4 = 0{,}75$."
+      ]
+    },
+    {
+      "skillId": "math.frac.expressions",
+      "title": "Espressioni con le frazioni",
+      "understand": {
+        "paragraphs": [
+          "Le espressioni con le frazioni seguono le stesse regole di quelle con i numeri interi: parentesi, poi moltiplicazioni e divisioni, poi addizioni e sottrazioni.",
+          "Cambia solo il modo di fare i calcoli: per sommare serve il denominatore comune, per moltiplicare no."
+        ]
+      },
+      "recipe": [
+        "Guarda tutta l'espressione e decidi l'ordine delle operazioni.",
+        "Fai un'operazione alla volta e riscrivi l'espressione.",
+        "Semplifica appena puoi: così i numeri restano piccoli.",
+        "Alla fine controlla che il risultato sia semplificato."
+      ],
+      "example": {
+        "prompt": "Calcola $\\left(\\frac{1}{2} + \\frac{1}{3}\\right) \\times \\frac{6}{5}$",
+        "steps": [
+          "Parentesi: $\\frac{1}{2} + \\frac{1}{3} = \\frac{3}{6} + \\frac{2}{6} = \\frac{5}{6}$",
+          "Moltiplicazione: $\\frac{5}{6} \\times \\frac{6}{5} = 1$"
+        ],
+        "answer": "1"
+      },
+      "complete": {
+        "prompt": "Calcola $\\frac{1}{2} + \\frac{1}{4} \\times \\frac{2}{3}$.",
+        "given": ["Prima la moltiplicazione, poi l'addizione."],
+        "blanks": [
+          { "label": "$\\frac{1}{4} \\times \\frac{2}{3} =$", "key": { "kind": "fraction", "numerator": 1, "denominator": 6, "simplified": "flag" } },
+          { "label": "$\\frac{1}{2} + \\frac{1}{6} =$", "key": { "kind": "fraction", "numerator": 2, "denominator": 3, "simplified": "flag" } }
+        ]
+      },
+      "watchOut": [
+        "Non fare le operazioni da sinistra a destra: la moltiplicazione viene prima dell'addizione.",
+        "Dividere per una frazione vuol dire moltiplicare per la sua inversa."
+      ]
+    },
+    {
+      "skillId": "math.frac.inverse-problems",
+      "title": "Problemi con la frazione inversa",
+      "understand": {
+        "paragraphs": [
+          "A volte conosci una parte e devi trovare il tutto: i $\\frac{3}{4}$ di un numero sono 36. Qual è il numero?",
+          "Si fa il percorso al contrario: dalla parte trovi quanto vale un pezzo, e dal pezzo trovi l'intero."
+        ],
+        "visual": { "type": "fraction-bars", "bars": [{ "numerator": 3, "denominator": 4, "label": "3 pezzi su 4 = 36" }] }
+      },
+      "recipe": [
+        "Dividi il numero che conosci per il numeratore: trovi quanto vale un pezzo.",
+        "Moltiplica per il denominatore: trovi l'intero.",
+        "Se il problema dice quanto resta, prima calcola che frazione resta: 1 meno la frazione usata."
+      ],
+      "example": {
+        "prompt": "Luca ha speso i $\\frac{2}{5}$ dei suoi soldi e gli restano 36 €. Quanto aveva?",
+        "steps": [
+          "Gli resta $1 - \\frac{2}{5} = \\frac{3}{5}$ dei soldi",
+          "$\\frac{3}{5}$ valgono 36 €: un pezzo vale $36 : 3 = 12$ €",
+          "L'intero: $12 \\times 5 = 60$ €"
+        ],
+        "answer": "60 €"
+      },
+      "complete": {
+        "prompt": "I $\\frac{2}{7}$ di un numero sono 18. Qual è il numero?",
+        "given": [],
+        "blanks": [
+          { "label": "Un pezzo: $18 : 2 =$", "key": { "kind": "number", "value": 9 } },
+          { "label": "L'intero: $9 \\times 7 =$", "key": { "kind": "number", "value": 63 } }
+        ]
+      },
+      "watchOut": [
+        "Non calcolare i $\\frac{3}{4}$ di 36: 36 è già una parte.",
+        "Leggi bene se il numero è la parte usata o la parte che resta."
+      ]
+    }
+  ],
+  "templates": [
+    { "id": "math.gen.fraction-simplify.1", "skillId": "math.frac.simplify", "level": "base", "generator": "fraction-simplify", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-simplify.2", "skillId": "math.frac.simplify", "level": "medium", "generator": "fraction-simplify", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-simplify.3", "skillId": "math.frac.simplify", "level": "advanced", "generator": "fraction-simplify", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-compare.1", "skillId": "math.frac.compare", "level": "base", "generator": "fraction-compare", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-compare.2", "skillId": "math.frac.compare", "level": "medium", "generator": "fraction-compare", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-compare.3", "skillId": "math.frac.compare", "level": "advanced", "generator": "fraction-compare", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-of-number.1", "skillId": "math.frac.of-number", "level": "base", "generator": "fraction-of-number", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-of-number.2", "skillId": "math.frac.of-number", "level": "medium", "generator": "fraction-of-number", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-of-number.3", "skillId": "math.frac.of-number", "level": "advanced", "generator": "fraction-of-number", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-add-sub.1", "skillId": "math.frac.add-sub", "level": "base", "generator": "fraction-add-sub", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-add-sub.2", "skillId": "math.frac.add-sub", "level": "medium", "generator": "fraction-add-sub", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-add-sub.3", "skillId": "math.frac.add-sub", "level": "advanced", "generator": "fraction-add-sub", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-mul-div.1", "skillId": "math.frac.mul-div", "level": "base", "generator": "fraction-mul-div", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-mul-div.2", "skillId": "math.frac.mul-div", "level": "medium", "generator": "fraction-mul-div", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-mul-div.3", "skillId": "math.frac.mul-div", "level": "advanced", "generator": "fraction-mul-div", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-decimals.1", "skillId": "math.frac.decimals", "level": "base", "generator": "fraction-decimals", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-decimals.2", "skillId": "math.frac.decimals", "level": "medium", "generator": "fraction-decimals", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-decimals.3", "skillId": "math.frac.decimals", "level": "advanced", "generator": "fraction-decimals", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-expressions.1", "skillId": "math.frac.expressions", "level": "base", "generator": "fraction-expressions", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-expressions.2", "skillId": "math.frac.expressions", "level": "medium", "generator": "fraction-expressions", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-expressions.3", "skillId": "math.frac.expressions", "level": "advanced", "generator": "fraction-expressions", "params": { "difficulty": 3 } },
+    { "id": "math.gen.fraction-inverse.1", "skillId": "math.frac.inverse-problems", "level": "base", "generator": "fraction-inverse", "params": { "difficulty": 1 } },
+    { "id": "math.gen.fraction-inverse.2", "skillId": "math.frac.inverse-problems", "level": "medium", "generator": "fraction-inverse", "params": { "difficulty": 2 } },
+    { "id": "math.gen.fraction-inverse.3", "skillId": "math.frac.inverse-problems", "level": "advanced", "generator": "fraction-inverse", "params": { "difficulty": 3 } }
+  ],
+  "items": [
+    {
+      "id": "math.problem.frac.1",
+      "skillId": "math.frac.of-number",
+      "level": "base",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "In una classe di 24 alunni, i $\\frac{3}{8}$ vanno a scuola in bicicletta. Quanti alunni vanno in bicicletta?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "alunni" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 9,
+            "knownErrors": [
+              { "value": 64, "tag": "fraction_inverted", "message": "Si divide per il denominatore (8) e si moltiplica per il numeratore (3), non al contrario." },
+              { "value": 3, "tag": "fraction_of_number_incomplete", "message": "3 è solo $\\frac{1}{8}$ della classe: manca la moltiplicazione per 3." }
+            ]
+          }
+        }
+      },
+      "solution": ["Una parte: $24 : 8 = 3$", "Tre parti: $3 \\times 3 = 9$", "Risposta: 9 alunni vanno in bicicletta."]
+    },
+    {
+      "id": "math.problem.frac.2",
+      "skillId": "math.frac.add-sub",
+      "level": "base",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Marta mangia $\\frac{1}{4}$ di pizza e Luca ne mangia $\\frac{2}{4}$. Che frazione di pizza hanno mangiato in tutto?",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "fraction",
+            "numerator": 3,
+            "denominator": 4,
+            "simplified": "flag",
+            "knownErrors": [
+              { "numerator": 3, "denominator": 8, "tag": "fraction_add_denominators", "message": "Le fette sono tutte quarti: si sommano solo i numeratori, il denominatore resta 4." }
+            ]
+          }
+        }
+      },
+      "solution": ["Stessi pezzi (quarti): sommo i numeratori, $1 + 2 = 3$", "Risultato: $\\frac{3}{4}$ di pizza"]
+    },
+    {
+      "id": "math.problem.frac.3",
+      "skillId": "math.frac.compare",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "choice",
+        "prompt": "Anna ha mangiato i $\\frac{3}{8}$ di una torta, Bruno i $\\frac{2}{5}$ della stessa torta. Chi ne ha mangiata di più?",
+        "options": [
+          { "id": "anna", "text": "Anna" },
+          { "id": "bruno", "text": "Bruno" },
+          { "id": "equal", "text": "Ne hanno mangiata uguale" }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "bruno",
+        "knownErrors": [
+          { "option": "anna", "tag": "compare_numerators_only", "message": "Non basta guardare i numeratori: $\\frac{3}{8} = \\frac{15}{40}$ e $\\frac{2}{5} = \\frac{16}{40}$." },
+          { "option": "equal", "tag": "compare_fractions", "message": "Porta le frazioni allo stesso denominatore: $\\frac{15}{40}$ e $\\frac{16}{40}$." }
+        ]
+      },
+      "solution": ["mcm(8, 5) = 40", "$\\frac{3}{8} = \\frac{15}{40}$ e $\\frac{2}{5} = \\frac{16}{40}$", "16 è più di 15: Bruno ne ha mangiata di più."]
+    },
+    {
+      "id": "math.problem.frac.4",
+      "skillId": "math.frac.of-number",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un libro ha 180 pagine. Sara ne ha già letto i $\\frac{2}{5}$. Quante pagine le mancano da leggere?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "pagine" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 108,
+            "knownErrors": [
+              { "value": 72, "tag": "complement_missing", "message": "72 sono le pagine già lette: la domanda chiede quelle che mancano, $180 - 72$." },
+              { "value": 36, "tag": "fraction_of_number_incomplete", "message": "36 è solo $\\frac{1}{5}$ del libro." }
+            ]
+          }
+        }
+      },
+      "solution": ["Pagine lette: $180 : 5 \\times 2 = 72$", "Pagine che mancano: $180 - 72 = 108$", "Risposta: le mancano 108 pagine."]
+    },
+    {
+      "id": "math.problem.frac.5",
+      "skillId": "math.frac.inverse-problems",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "I $\\frac{3}{4}$ degli alunni di una scuola sono 36. Quanti sono gli alunni in tutto?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "alunni" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 48,
+            "knownErrors": [
+              { "value": 27, "tag": "fraction_inverse_multiply", "message": "36 è già una parte: dividi per 3 per trovare un pezzo, poi moltiplica per 4." },
+              { "value": 12, "tag": "fraction_inverse_incomplete", "message": "12 è un solo pezzo ($\\frac{1}{4}$): manca la moltiplicazione per 4." }
+            ]
+          }
+        }
+      },
+      "solution": ["36 alunni sono 3 pezzi su 4", "Un pezzo: $36 : 3 = 12$", "Tutti: $12 \\times 4 = 48$", "Risposta: gli alunni sono 48."]
+    },
+    {
+      "id": "math.problem.frac.6",
+      "skillId": "math.frac.decimals",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Una ricetta chiede $\\frac{3}{4}$ di kg di farina. La bilancia mostra i kg con la virgola. Che numero deve comparire sulla bilancia?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "kg" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 0.75,
+            "knownErrors": [
+              { "value": 3.4, "tag": "fraction_as_division", "message": "Una frazione è una divisione: $3 : 4 = 0{,}75$." },
+              { "value": 1.333333, "tag": "division_inverted", "message": "Si divide il numeratore per il denominatore: $3 : 4$, non $4 : 3$." }
+            ]
+          }
+        }
+      },
+      "solution": ["$\\frac{3}{4}$ vuol dire $3 : 4$", "$3 : 4 = 0{,}75$", "Risposta: la bilancia deve segnare 0,75 kg."]
+    },
+    {
+      "id": "math.problem.frac.7",
+      "skillId": "math.frac.add-sub",
+      "level": "medium",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Un serbatoio è pieno per $\\frac{2}{3}$. Si usa $\\frac{1}{4}$ del serbatoio. Che frazione del serbatoio resta piena?",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "fraction",
+            "numerator": 5,
+            "denominator": 12,
+            "simplified": "flag",
+            "knownErrors": [
+              { "numerator": 11, "denominator": 12, "tag": "operation_choice", "message": "Il carburante usato va tolto, non aggiunto: $\\frac{2}{3} - \\frac{1}{4}$." },
+              { "numerator": 1, "denominator": 12, "tag": "fraction_common_denominator", "message": "Quando porti a dodicesimi, cambia anche i numeratori: $\\frac{2}{3} = \\frac{8}{12}$ e $\\frac{1}{4} = \\frac{3}{12}$." }
+            ]
+          }
+        }
+      },
+      "solution": ["Resta: $\\frac{2}{3} - \\frac{1}{4}$", "mcm(3, 4) = 12: $\\frac{8}{12} - \\frac{3}{12}$", "$= \\frac{5}{12}$", "Risposta: resta pieno per $\\frac{5}{12}$."]
+    },
+    {
+      "id": "math.problem.frac.8",
+      "skillId": "math.frac.inverse-problems",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Giulia spende i $\\frac{2}{7}$ dei suoi risparmi per un libro e le restano 45 €. Quanto aveva risparmiato?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 63,
+            "knownErrors": [
+              { "value": 157.5, "tag": "fraction_part_confusion", "message": "45 € sono la parte che resta, cioè i $\\frac{5}{7}$, non i $\\frac{2}{7}$." },
+              { "value": 57.857143, "tag": "fraction_of_remaining", "message": "La frazione spesa si riferisce a tutti i risparmi, non a quelli rimasti." }
+            ]
+          }
+        }
+      },
+      "solution": ["Resta $1 - \\frac{2}{7} = \\frac{5}{7}$ dei risparmi", "$\\frac{5}{7}$ valgono 45 €: un pezzo vale $45 : 5 = 9$ €", "Tutti i risparmi: $9 \\times 7 = 63$ €", "Risposta: aveva risparmiato 63 €."]
+    },
+    {
+      "id": "math.problem.frac.9",
+      "skillId": "math.frac.mul-div",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "Una bottiglia contiene $\\frac{3}{4}$ di litro. Si riempiono bicchieri da $\\frac{1}{8}$ di litro. Quanti bicchieri si riempiono?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "bicchieri" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 6,
+            "knownErrors": [
+              { "value": 0.09375, "tag": "fraction_div_no_reciprocal", "message": "Per sapere quante volte $\\frac{1}{8}$ sta in $\\frac{3}{4}$ si divide: $\\frac{3}{4} \\times 8 = 6$." }
+            ]
+          }
+        }
+      },
+      "solution": ["Quante volte $\\frac{1}{8}$ sta in $\\frac{3}{4}$? È una divisione.", "$\\frac{3}{4} : \\frac{1}{8} = \\frac{3}{4} \\times \\frac{8}{1} = \\frac{24}{4} = 6$", "Risposta: si riempiono 6 bicchieri."]
+    },
+    {
+      "id": "math.problem.frac.10",
+      "skillId": "math.frac.expressions",
+      "level": "advanced",
+      "kind": "problem",
+      "content": {
+        "type": "input",
+        "prompt": "In una gara, $\\frac{1}{3}$ dei ragazzi corre, $\\frac{2}{5}$ nuota e gli altri 12 vanno in bici. Quanti ragazzi partecipano in tutto?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "ragazzi" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 45,
+            "knownErrors": [
+              { "value": 16.363636, "tag": "fraction_part_confusion", "message": "I 12 ragazzi in bici sono la parte che resta: calcola prima quale frazione resta." }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Corrono e nuotano: $\\frac{1}{3} + \\frac{2}{5} = \\frac{5}{15} + \\frac{6}{15} = \\frac{11}{15}$",
+        "In bici: $1 - \\frac{11}{15} = \\frac{4}{15}$",
+        "$\\frac{4}{15}$ valgono 12 ragazzi: un pezzo vale $12 : 4 = 3$",
+        "Tutti: $3 \\times 15 = 45$",
+        "Risposta: partecipano 45 ragazzi."
+      ]
+    }
+  ]
+}

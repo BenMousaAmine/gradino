@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { assessmentConfigSchema } from "@/lib/diagnostic/engine";
+import { GENERATORS, generateItem, generatorParamsSchema } from "@/lib/generators/registry";
 import { gradeItem } from "@/lib/items/grade";
 import { formatDecimal } from "@/lib/items/numbers";
 import {
@@ -11,6 +12,7 @@ import {
   type ItemKey,
   type ItemResponse,
 } from "@/lib/items/schemas";
+import { completeAsItem, lessonSchema } from "@/lib/lessons/schema";
 
 const idSchema = z.string().min(1).max(80);
 const titleSchema = z.string().min(1);
@@ -46,8 +48,23 @@ export const packSchema = z.object({
         skillId: idSchema,
         level: levelSchema,
         status: z.enum(["draft", "published"]).default("published"),
+        kind: z.enum(["exercise", "problem"]).default("exercise"),
         content: itemContentSchema,
         key: itemKeySchema,
+        solution: z.array(z.string().min(1)).default([]),
+      }),
+    )
+    .default([]),
+  lessons: z.array(lessonSchema.extend({ skillId: idSchema })).default([]),
+  templates: z
+    .array(
+      z.object({
+        id: idSchema,
+        skillId: idSchema,
+        level: levelSchema,
+        generator: z.string().min(1),
+        params: generatorParamsSchema,
+        status: z.enum(["draft", "published"]).default("published"),
       }),
     )
     .default([]),
@@ -75,6 +92,8 @@ export function mergePacks(packs: readonly Pack[]): Pack {
     areas: packs.flatMap((pack) => pack.areas),
     skills: packs.flatMap((pack) => pack.skills),
     items: packs.flatMap((pack) => pack.items),
+    lessons: packs.flatMap((pack) => pack.lessons),
+    templates: packs.flatMap((pack) => pack.templates),
     assessments: packs.flatMap((pack) => pack.assessments),
   };
 }
@@ -110,10 +129,8 @@ export function correctResponse(content: ItemContent, key: ItemKey): ItemRespons
   }
 }
 
-function checkItem(item: PackItem): string[] {
+export function checkItemConsistency(where: string, content: ItemContent, key: ItemKey): string[] {
   const errors: string[] = [];
-  const { content, key } = item;
-  const where = `item ${item.id}`;
 
   if (content.type !== key.type) return [`${where}: content type ${content.type} differs from key type ${key.type}`];
 
@@ -196,6 +213,8 @@ export function validatePack(pack: Pack): string[] {
     ["area", pack.areas],
     ["skill", pack.skills],
     ["item", pack.items],
+    ["lesson", pack.lessons.map((lesson) => ({ id: lesson.skillId }))],
+    ["template", pack.templates],
     ["assessment", pack.assessments],
     ["section", pack.assessments.flatMap((assessment) => assessment.sections)],
   ];
@@ -215,7 +234,30 @@ export function validatePack(pack: Pack): string[] {
   }
   for (const item of pack.items) {
     if (!skillIds.has(item.skillId)) errors.push(`item ${item.id}: unknown skill ${item.skillId}`);
-    errors.push(...checkItem(item));
+    errors.push(...checkItemConsistency(`item ${item.id}`, item.content, item.key));
+  }
+  for (const item of pack.items) {
+    if (item.kind === "problem" && item.solution.length === 0) errors.push(`item ${item.id}: problems need a solution`);
+  }
+  for (const lesson of pack.lessons) {
+    if (!skillIds.has(lesson.skillId)) errors.push(`lesson ${lesson.skillId}: unknown skill`);
+    const { content, key } = completeAsItem(lesson.complete);
+    errors.push(...checkItemConsistency(`lesson ${lesson.skillId} complete`, content, key));
+  }
+  for (const template of pack.templates) {
+    if (!skillIds.has(template.skillId)) errors.push(`template ${template.id}: unknown skill ${template.skillId}`);
+    if (!GENERATORS[template.generator]) {
+      errors.push(`template ${template.id}: unknown generator ${template.generator}`);
+      continue;
+    }
+    for (let seed = 1; seed <= 50; seed++) {
+      const generated = generateItem(template.generator, template.params, seed);
+      const problems = checkItemConsistency(`template ${template.id} seed ${seed}`, generated.content, generated.key);
+      if (problems.length > 0) {
+        errors.push(...problems);
+        break;
+      }
+    }
   }
   for (const assessment of pack.assessments) {
     if (!subjectIds.has(assessment.subjectId)) {
