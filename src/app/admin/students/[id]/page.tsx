@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ColumnChart } from "@/components/admin/column-chart";
+import { InsightList } from "@/components/admin/insight-list";
 import { StatTile } from "@/components/admin/stat-tile";
 import { AppHeader } from "@/components/app-header";
 import { Gradini } from "@/components/gradini";
@@ -9,6 +10,7 @@ import { MathText } from "@/components/math-text";
 import { formatDateTime, formatDay, shortDay } from "@/lib/admin/format";
 import { requireAdmin, studentOverview } from "@/lib/admin/queries";
 import { APP_NAME } from "@/lib/app";
+import { buttonClass } from "@/components/ui";
 import { LEVEL_LABELS } from "@/lib/study/plan";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
@@ -66,9 +68,14 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
         <Link href="/admin" className="text-sm font-semibold text-ink-soft hover:text-ink">
           ← Tutti gli studenti
         </Link>
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">{data.profile.name}</h1>
-          <p className="text-ink-soft">{data.profile.email}</p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight">{data.profile.name}</h1>
+            <p className="text-ink-soft">{data.profile.email}</p>
+          </div>
+          <Link href={`/admin/students/${id}/day/${data.today}`} className={buttonClass()}>
+            Com’è andata oggi →
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -77,6 +84,10 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
           <StatTile label="Risposte giuste" value={week.accuracy === null ? "—" : `${week.accuracy}%`} delta={delta(week.accuracy, previousWeek.accuracy)} />
           <StatTile label="Risposte “Non lo so”" value={week.helpRate === null ? "—" : `${week.helpRate}%`} delta={delta(week.helpRate, previousWeek.helpRate)} upIsGood={false} />
         </div>
+
+        <Section title="Cosa gli serve adesso" subtitle="Ultimi 14 giorni, test iniziale compreso: cosa notiamo e cosa fare">
+          <InsightList insights={data.report} empty="Ancora pochi dati per dire qualcosa di utile: servono almeno una decina di risposte." />
+        </Section>
 
         <Section title="Andamento" subtitle="Ultimi 30 giorni">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -97,6 +108,25 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
                 label: shortDay(point.day),
                 value: point.accuracy,
                 detail: point.answers > 0 ? `${formatDay(point.day)} · ${point.correct} giuste su ${point.answers}` : `${formatDay(point.day)} · nessun esercizio`,
+              }))}
+            />
+            <ColumnChart
+              title="“Non lo so” al giorno"
+              unit="%"
+              max={100}
+              points={data.trends.map((point) => ({
+                label: shortDay(point.day),
+                value: point.skipRate,
+                detail: point.skipRate === null ? `${formatDay(point.day)} · troppo poche risposte` : `${formatDay(point.day)} · ${point.skipRate}% delle domande`,
+              }))}
+            />
+            <ColumnChart
+              title="Secondi prima di iniziare a scrivere"
+              unit="s"
+              points={data.trends.map((point) => ({
+                label: shortDay(point.day),
+                value: point.thinkSeconds,
+                detail: point.thinkSeconds === null ? `${formatDay(point.day)} · troppo poche risposte` : `${formatDay(point.day)} · mediana ${point.thinkSeconds} s`,
               }))}
             />
           </div>
@@ -334,6 +364,23 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
                 </tbody>
               </table>
             </div>
+          )}
+        </Section>
+
+        <Section title="Cosa migliorare nell’app per lui" subtitle="Le idee che vengono dai suoi dati: la lista da cui partire per le prossime modifiche">
+          {data.report.some((insight) => insight.product) ? (
+            <ul className="flex flex-col gap-2">
+              {data.report
+                .filter((insight) => insight.product)
+                .map((insight) => (
+                  <li key={insight.id} className="flex flex-col rounded-2xl bg-canvas px-4 py-3">
+                    <span className="font-medium text-ink">{insight.product}</span>
+                    <span className="text-sm text-ink-soft">Perché: {insight.title}</span>
+                  </li>
+                ))}
+            </ul>
+          ) : (
+            <p className="text-ink-soft">Per ora nessuna modifica suggerita.</p>
           )}
         </Section>
 

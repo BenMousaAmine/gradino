@@ -12,6 +12,8 @@ import { itemContentSchema, itemKeySchema, itemResponseSchema, levelSchema, type
 import { addDays, dayInRome, startOfDayInRome } from "@/lib/study/dates";
 import type { Admin } from "@/lib/study/exercises";
 import { stepsClimbed, type SkillStatus } from "@/lib/study/mastery";
+import { chunks, computeSignals, dailySignals } from "@/lib/insights/engine";
+import { coachStats, parentReport } from "@/lib/insights/report";
 import { SESSION_BLOCKS } from "@/lib/study/plan";
 import {
   activeMs,
@@ -81,7 +83,7 @@ type AnswerDbRow = {
   note_source: string | null;
 };
 
-function toAnswer(row: AnswerDbRow): AnswerRow {
+export function toAnswer(row: AnswerDbRow): AnswerRow {
   const details = detailsSchema.safeParse(row.details);
   const retry = details.success ? details.data.retry : undefined;
   return {
@@ -104,7 +106,7 @@ function toAnswer(row: AnswerDbRow): AnswerRow {
   };
 }
 
-const RESPONSE_COLUMNS = "id, attempt_id, score, error_tag, details, time_ms, created_at, items(skill_id, level)";
+export const RESPONSE_COLUMNS = "id, attempt_id, score, error_tag, details, time_ms, created_at, items(skill_id, level)";
 
 type ResponseDbRow = {
   id: string;
@@ -116,7 +118,7 @@ type ResponseDbRow = {
   items: { skill_id: string; level: string };
 };
 
-function responseToAnswer(row: ResponseDbRow): AnswerRow {
+export function responseToAnswer(row: ResponseDbRow): AnswerRow {
   return toAnswer({
     id: row.id,
     skill_id: row.items.skill_id,
@@ -135,7 +137,7 @@ function responseToAnswer(row: ResponseDbRow): AnswerRow {
   });
 }
 
-const byCreatedAt = (a: AnswerRow, b: AnswerRow) => a.createdAt.localeCompare(b.createdAt);
+export const byCreatedAt = (a: AnswerRow, b: AnswerRow) => a.createdAt.localeCompare(b.createdAt);
 
 function toEvent(row: { type: string; skill_id: string | null; session_id: string | null; payload: unknown; created_at: string }): EventRow {
   const payload = payloadSchema.safeParse(row.payload);
@@ -148,7 +150,7 @@ function toEvent(row: { type: string; skill_id: string | null; session_id: strin
   };
 }
 
-const ANSWER_COLUMNS =
+export const ANSWER_COLUMNS =
   "id, skill_id, level, purpose, score, error_tag, details, time_ms, created_at, session_id, attempts, final_score, note_ms, note_source";
 
 async function emails(admin: Admin): Promise<Map<string, string>> {
@@ -386,6 +388,12 @@ export async function studentOverview(admin: Admin, studentId: string) {
         }
       : null;
 
+  const recentFrom = startOfDayInRome(days[days.length - 14]);
+  const signals = computeSignals(answers.filter((answer) => answer.createdAt >= recentFrom));
+  const coach = coachStats(events);
+  const report = parentReport(signals, titleOf, coach);
+  const trends = dailySignals(days, answers);
+
   const open = attempt ? null : openAttempt.data;
   const openRows = open ? (responsesResult.data ?? []).filter((row) => row.attempt_id === open.id) : [];
   const openMs = [...activeMs(openRows.map(responseToAnswer), []).values()].reduce((sum, ms) => sum + ms, 0);
@@ -416,6 +424,9 @@ export async function studentOverview(admin: Admin, studentId: string) {
     sessions,
     diagnostic,
     diagnosticProgress,
+    report,
+    trends,
+    coach,
   };
 }
 
@@ -623,11 +634,24 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
 
   timeline.sort((a, b) => a.at.localeCompare(b.at));
   const answers = timeline.filter((entry) => entry.kind === "answer");
-  const minutes = dailySeries([day], (practice.data ?? []).map(toAnswer), eventRows)[0]?.minutes ?? 0;
+  const dayAnswers = [
+    ...(practice.data ?? []).map(toAnswer),
+    ...(diagnostic.data ?? []).map((row) => responseToAnswer({ ...row, id: `${row.item_id}:${row.created_at}` })),
+  ].sort(byCreatedAt);
+  const minutes = dailySeries([day], dayAnswers, eventRows)[0]?.minutes ?? 0;
+  const daySignals = computeSignals(dayAnswers);
+  const first = timeline[0]?.at;
+  const last = timeline.at(-1)?.at;
   return {
     profile,
     day,
     timeline,
+    analytics: {
+      signals: daySignals,
+      report: parentReport(daySignals, titleOf, coachStats(eventRows)),
+      chunks: chunks(dayAnswers),
+      spanMinutes: first && last ? Math.round((Date.parse(last) - Date.parse(first)) / 60_000) : 0,
+    },
     summary: {
       answers: answers.length,
       correct: answers.filter((entry) => entry.kind === "answer" && entry.score === 1).length,

@@ -24,6 +24,7 @@ export const CLIENT_EVENT_TYPES = [
   "pause_ended",
   "time_up",
   "away",
+  "coach",
 ] as const;
 
 export const SERVER_EVENT_TYPES = ["session_started", "block_started", "session_completed"] as const;

@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AppHeader } from "@/components/app-header";
+import { CoachProvider } from "@/components/coach";
 import { APP_NAME } from "@/lib/app";
 import { getCurrentUser, getUserId } from "@/lib/auth/session";
+import { loadSignals } from "@/lib/insights/load";
+import { coachFlags } from "@/lib/insights/tips";
 import { lessonSchema } from "@/lib/lessons/schema";
 import { templateExercise } from "@/lib/study/exercises";
 import { loadStudyContext, pathEntries } from "@/lib/study/progress";
@@ -16,10 +19,11 @@ async function Skill({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const userId = await getUserId();
   const admin = createSupabaseAdminClient();
-  const [user, context, lessonRow] = await Promise.all([
+  const [user, context, lessonRow, signals] = await Promise.all([
     getCurrentUser(),
     loadStudyContext(admin, userId),
     admin.from("lessons").select("content").eq("skill_id", id).maybeSingle(),
+    loadSignals(admin, userId),
   ]);
   if (!context) redirect("/diagnostic");
 
@@ -35,12 +39,14 @@ async function Skill({ params }: { params: Promise<{ id: string }> }) {
     <>
       <AppHeader name={user.displayName} />
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 py-6">
-        <SkillView
-          entry={entry}
-          lesson={lesson}
-          lessonDone={Boolean(context.progress.get(id)?.lessonDoneAt)}
-          firstExercise={firstExercise}
-        />
+        <CoachProvider flags={coachFlags(signals)}>
+          <SkillView
+            entry={entry}
+            lesson={lesson}
+            lessonDone={Boolean(context.progress.get(id)?.lessonDoneAt)}
+            firstExercise={firstExercise}
+          />
+        </CoachProvider>
       </main>
     </>
   );

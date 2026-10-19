@@ -2,11 +2,14 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
 import { AppHeader } from "@/components/app-header";
+import { CoachCard } from "@/components/coach-card";
 import { Gradini } from "@/components/gradini";
 import { buttonClass, Card } from "@/components/ui";
 import { DIAGNOSTIC_ID } from "@/lib/app";
 import { loadLatestAttempt } from "@/lib/assessments/queries";
 import { getCurrentUser, getUserId } from "@/lib/auth/session";
+import { loadSignals } from "@/lib/insights/load";
+import { cheer, coachTips, tipOfDay } from "@/lib/insights/tips";
 import { dayInRome } from "@/lib/study/dates";
 import { LEVEL_LABELS, SESSION_BLOCKS } from "@/lib/study/plan";
 import { loadStudyContext, pathEntries } from "@/lib/study/progress";
@@ -110,11 +113,12 @@ async function Home() {
   const userId = await getUserId();
   const supabase = await createSupabaseServerClient();
   const admin = createSupabaseAdminClient();
-  const [user, attempt, studyContext, session] = await Promise.all([
+  const [user, attempt, studyContext, session, signals] = await Promise.all([
     getCurrentUser(),
     loadLatestAttempt(supabase, userId, DIAGNOSTIC_ID),
     loadStudyContext(admin, userId),
     admin.from("study_sessions").select("block, status").eq("user_id", userId).eq("day", dayInRome()).maybeSingle(),
+    loadSignals(admin, userId),
   ]);
   if (user.mode === "admin") redirect("/admin");
   const context = attempt?.status === "completed" ? studyContext : null;
@@ -137,6 +141,11 @@ async function Home() {
   if (session.error) throw new Error(session.error.message);
   const path = pathEntries(context);
   const mastered = path.filter((entry) => entry.status !== "learning").length;
+  const tip = tipOfDay(
+    coachTips(signals, (skillId) => context.skills.has(skillId)),
+    context.today,
+  );
+  const strength = cheer(signals, (skillId) => context.skills.get(skillId)?.title ?? skillId);
 
   return (
     <HomeLayout
@@ -172,6 +181,8 @@ async function Home() {
           </Link>
         )}
       </Card>
+
+      <CoachCard tip={tip} cheer={strength} />
 
       <Card className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between">

@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AppHeader } from "@/components/app-header";
+import { CoachProvider } from "@/components/coach";
 import { APP_NAME } from "@/lib/app";
 import { getCurrentUser, getUserId } from "@/lib/auth/session";
+import { loadSignals } from "@/lib/insights/load";
+import { coachFlags } from "@/lib/insights/tips";
 import { dayInRome, startOfDayInRome } from "@/lib/study/dates";
 import { loadStudyContext } from "@/lib/study/progress";
 import { findSession, getOrCreateSession, sessionView, todayAnswers } from "@/lib/study/session";
@@ -16,11 +19,12 @@ async function Today() {
   const userId = await getUserId();
   const admin = createSupabaseAdminClient();
   const today = dayInRome();
-  const [user, context, found, answers] = await Promise.all([
+  const [user, context, found, answers, signals] = await Promise.all([
     getCurrentUser(),
     loadStudyContext(admin, userId),
     findSession(admin, userId, today),
     todayAnswers(admin, userId, startOfDayInRome(today)),
+    loadSignals(admin, userId),
   ]);
   if (!context) redirect("/diagnostic");
   const session = await getOrCreateSession(admin, userId, context.today, found);
@@ -30,7 +34,9 @@ async function Today() {
     <>
       <AppHeader name={user.displayName} />
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 py-6">
-        <TodayRunner initial={view} />
+        <CoachProvider flags={coachFlags(signals)}>
+          <TodayRunner initial={view} />
+        </CoachProvider>
       </main>
     </>
   );

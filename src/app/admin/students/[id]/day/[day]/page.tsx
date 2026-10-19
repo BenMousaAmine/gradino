@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { ColumnChart } from "@/components/admin/column-chart";
+import { InsightList } from "@/components/admin/insight-list";
+import { StatTile } from "@/components/admin/stat-tile";
 import { AppHeader } from "@/components/app-header";
 import { MathText } from "@/components/math-text";
 import { formatDay, formatTime } from "@/lib/admin/format";
@@ -66,6 +69,43 @@ async function Day({ params }: { params: Promise<{ id: string; day: string }> })
             tentativo{data.summary.recovered > 0 ? ` · ${data.summary.recovered} recuperate al secondo` : ""}
           </p>
         </div>
+
+        {data.timeline.length > 0 && (
+          <>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <StatTile label="Tempo attivo" value={`${data.summary.minutes} min`} />
+              <StatTile label="Dal primo all’ultimo esercizio" value={`${data.analytics.spanMinutes} min`} />
+              <StatTile
+                label="Risposte “Non lo so”"
+                value={data.analytics.signals.skipRate === null ? "—" : `${data.analytics.signals.skipRate}%`}
+              />
+              <StatTile
+                label="Secondi prima di scrivere"
+                value={data.analytics.signals.thinkSeconds === null ? "—" : `${data.analytics.signals.thinkSeconds} s`}
+              />
+            </div>
+
+            {data.analytics.chunks.length >= 2 && (
+              <section className="flex flex-col gap-3 rounded-3xl border-2 border-line bg-surface p-5">
+                <ColumnChart
+                  title="Come è andata durante la giornata (gruppi di 5 domande)"
+                  unit="%"
+                  max={100}
+                  points={data.analytics.chunks.map((chunk) => ({
+                    label: chunk.label,
+                    value: chunk.accuracy,
+                    detail: `Domande ${chunk.label}: ${chunk.accuracy}% giuste · ${chunk.seconds} s a domanda`,
+                  }))}
+                />
+              </section>
+            )}
+
+            <section className="flex flex-col gap-4 rounded-3xl border-2 border-line bg-surface p-5">
+              <h2 className="text-xl font-extrabold">Cosa notiamo oggi</h2>
+              <InsightList insights={data.analytics.report} empty="Niente di particolare da segnalare oggi." />
+            </section>
+          </>
+        )}
 
         {data.timeline.length === 0 ? (
           <p className="rounded-3xl border-2 border-line bg-surface p-5 text-ink-soft">Nessuna attività in questo giorno.</p>
