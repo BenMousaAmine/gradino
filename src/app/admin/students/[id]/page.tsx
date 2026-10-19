@@ -213,8 +213,42 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
                   </li>
                 ))}
               </ul>
+            ) : data.diagnosticProgress ? (
+              <div className="flex flex-col gap-3">
+                <p className="w-fit rounded-full bg-brand-soft px-3 py-1 text-sm font-bold text-brand-dark">
+                  In corso · parte {data.diagnosticProgress.part}
+                </p>
+                <dl className="grid grid-cols-3 gap-3 text-sm">
+                  <div>
+                    <dt className="text-ink-soft">Risposte</dt>
+                    <dd className="text-lg font-semibold">{data.diagnosticProgress.answers}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-soft">Giuste</dt>
+                    <dd className="text-lg font-semibold">
+                      {data.diagnosticProgress.correct}
+                      {data.diagnosticProgress.answers > 0 &&
+                        ` (${Math.round((data.diagnosticProgress.correct / data.diagnosticProgress.answers) * 100)}%)`}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-soft">Tempo</dt>
+                    <dd className="text-lg font-semibold">{data.diagnosticProgress.minutes} min</dd>
+                  </div>
+                </dl>
+                <p className="text-sm text-ink-soft">
+                  Iniziato {formatDateTime(data.diagnosticProgress.startedAt)}
+                  {data.diagnosticProgress.lastAt && ` · ultima risposta ${formatDateTime(data.diagnosticProgress.lastAt)}`}
+                </p>
+                <Link
+                  href={`/admin/students/${id}/day/${data.diagnosticProgress.day}`}
+                  className="text-sm font-semibold text-brand hover:text-brand-dark"
+                >
+                  Vedi le risposte una per una →
+                </Link>
+              </div>
             ) : (
-              <p className="text-ink-soft">Non ancora completato.</p>
+              <p className="text-ink-soft">Non ancora iniziato.</p>
             )}
           </Section>
         </div>

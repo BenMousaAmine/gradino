@@ -14,6 +14,7 @@ import type { Admin } from "@/lib/study/exercises";
 import { stepsClimbed, type SkillStatus } from "@/lib/study/mastery";
 import { SESSION_BLOCKS } from "@/lib/study/plan";
 import {
+  activeMs,
   dailySeries,
   errorGroups,
   habits,
@@ -103,6 +104,39 @@ function toAnswer(row: AnswerDbRow): AnswerRow {
   };
 }
 
+const RESPONSE_COLUMNS = "id, attempt_id, score, error_tag, details, time_ms, created_at, items(skill_id, level)";
+
+type ResponseDbRow = {
+  id: string;
+  score: number;
+  error_tag: string | null;
+  details: unknown;
+  time_ms: number;
+  created_at: string;
+  items: { skill_id: string; level: string };
+};
+
+function responseToAnswer(row: ResponseDbRow): AnswerRow {
+  return toAnswer({
+    id: row.id,
+    skill_id: row.items.skill_id,
+    level: row.items.level,
+    purpose: "diagnostic",
+    score: row.score,
+    error_tag: row.error_tag,
+    details: row.details,
+    time_ms: row.time_ms,
+    created_at: row.created_at,
+    session_id: null,
+    attempts: 1,
+    final_score: row.score,
+    note_ms: null,
+    note_source: null,
+  });
+}
+
+const byCreatedAt = (a: AnswerRow, b: AnswerRow) => a.createdAt.localeCompare(b.createdAt);
+
 function toEvent(row: { type: string; skill_id: string | null; session_id: string | null; payload: unknown; created_at: string }): EventRow {
   const payload = payloadSchema.safeParse(row.payload);
   return {
@@ -142,6 +176,8 @@ export type StudentSummary = {
   accuracyWeek: number | null;
   sessionsWeek: number;
   diagnosticDone: boolean;
+  diagnosticInProgress: boolean;
+  diagnosticAnswers: number;
   isSelf: boolean;
 };
 
@@ -159,11 +195,12 @@ export async function listStudents(admin: Admin, selfId: string): Promise<Studen
   const ids = students.map((student) => student.id);
   if (ids.length === 0) return [];
 
-  const [answers, events, sessions, attempts, latest] = await Promise.all([
+  const [answers, responses, events, sessions, attempts, latest] = await Promise.all([
     admin.from("practice_answers").select(`user_id, ${ANSWER_COLUMNS}`).in("user_id", ids).gte("created_at", since),
+    admin.from("responses").select(`user_id, ${RESPONSE_COLUMNS}`).in("user_id", ids).gte("created_at", since),
     admin.from("activity_events").select("user_id, type, skill_id, session_id, payload, created_at").in("user_id", ids).gte("created_at", since).in("type", ["feedback_closed", "lesson_step"]),
     admin.from("study_sessions").select("user_id, status, day").in("user_id", ids).gte("day", addDays(today, -6)),
-    admin.from("attempts").select("user_id, status, completed_at").in("user_id", ids),
+    admin.from("attempts").select("user_id, status, completed_at, responses(count)").in("user_id", ids),
     Promise.all(
       ids.map(async (id) => {
         const [practice, test] = await Promise.all([
@@ -175,12 +212,18 @@ export async function listStudents(admin: Admin, selfId: string): Promise<Studen
       }),
     ),
   ]);
-  for (const result of [answers, events, sessions, attempts]) if (result.error) throw new Error(result.error.message);
+  for (const result of [answers, responses, events, sessions, attempts]) if (result.error) throw new Error(result.error.message);
   const latestById = new Map(latest);
   const days = lastDays(today, 7);
 
   return students.map((student) => {
-    const mine = (answers.data ?? []).filter((row) => row.user_id === student.id).map(toAnswer);
+    const mine = [
+      ...(answers.data ?? []).filter((row) => row.user_id === student.id).map(toAnswer),
+      ...(responses.data ?? []).filter((row) => row.user_id === student.id).map(responseToAnswer),
+    ].sort(byCreatedAt);
+    const myAttempts = (attempts.data ?? []).filter((row) => row.user_id === student.id);
+    const diagnosticDone = myAttempts.some((row) => row.status === "completed");
+    const inProgress = diagnosticDone ? undefined : myAttempts.find((row) => row.status === "in_progress");
     const myEvents = (events.data ?? []).filter((row) => row.user_id === student.id).map(toEvent);
     const series = dailySeries(days, mine, myEvents);
     const week = periodStats(series, mine);
@@ -194,7 +237,9 @@ export async function listStudents(admin: Admin, selfId: string): Promise<Studen
       answersWeek: week.answers,
       accuracyWeek: week.accuracy,
       sessionsWeek: (sessions.data ?? []).filter((row) => row.user_id === student.id && row.status === "completed").length,
-      diagnosticDone: (attempts.data ?? []).some((row) => row.user_id === student.id && row.status === "completed"),
+      diagnosticDone,
+      diagnosticInProgress: Boolean(inProgress),
+      diagnosticAnswers: inProgress?.responses[0]?.count ?? 0,
       isSelf: student.id === selfId,
     };
   });
@@ -233,10 +278,20 @@ export async function studentOverview(admin: Admin, studentId: string) {
   const days = lastDays(today, 30);
   const since = startOfDayInRome(days[0]);
 
-  const [profile, view, attempt, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles] = await Promise.all([
+  const [profile, view, attempt, openAttempt, responsesResult, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles] = await Promise.all([
     studentProfile(admin, studentId),
     loadAssessment(admin, DIAGNOSTIC_ID),
     loadLatestAttempt(admin, studentId, DIAGNOSTIC_ID, "completed"),
+    admin
+      .from("attempts")
+      .select("id, current_part, started_at")
+      .eq("user_id", studentId)
+      .eq("assessment_id", DIAGNOSTIC_ID)
+      .eq("status", "in_progress")
+      .order("started_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    admin.from("responses").select(RESPONSE_COLUMNS).eq("user_id", studentId).gte("created_at", since).limit(5000),
     admin.from("practice_answers").select(ANSWER_COLUMNS).eq("user_id", studentId).gte("created_at", since).order("created_at", { ascending: true }).limit(5000),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", since).limit(10000),
     admin.from("study_sessions").select("id, day, status, block").eq("user_id", studentId).gte("day", days[0]).order("day", { ascending: false }),
@@ -251,9 +306,9 @@ export async function studentOverview(admin: Admin, studentId: string) {
       .limit(20),
     skillTitles(admin),
   ]);
-  for (const result of [answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult]) if (result.error) throw new Error(result.error.message);
+  for (const result of [openAttempt, responsesResult, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult]) if (result.error) throw new Error(result.error.message);
 
-  const answers = (answersResult.data ?? []).map(toAnswer);
+  const answers = [...(answersResult.data ?? []).map(toAnswer), ...(responsesResult.data ?? []).map(responseToAnswer)].sort(byCreatedAt);
   const events = (eventsResult.data ?? []).map(toEvent);
   const series = dailySeries(days, answers, events);
   const week = periodStats(series.slice(-7), answers);
@@ -331,6 +386,21 @@ export async function studentOverview(admin: Admin, studentId: string) {
         }
       : null;
 
+  const open = attempt ? null : openAttempt.data;
+  const openRows = open ? (responsesResult.data ?? []).filter((row) => row.attempt_id === open.id) : [];
+  const openMs = [...activeMs(openRows.map(responseToAnswer), []).values()].reduce((sum, ms) => sum + ms, 0);
+  const diagnosticProgress = open
+    ? {
+        startedAt: open.started_at,
+        day: dayInRome(new Date(open.started_at)),
+        part: open.current_part,
+        answers: openRows.length,
+        correct: openRows.filter((row) => row.score === 1).length,
+        minutes: Math.round(openMs / 60_000),
+        lastAt: openRows.map((row) => row.created_at).sort().at(-1) ?? null,
+      }
+    : null;
+
   return {
     profile,
     today,
@@ -345,6 +415,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
     progress,
     sessions,
     diagnostic,
+    diagnosticProgress,
   };
 }
 

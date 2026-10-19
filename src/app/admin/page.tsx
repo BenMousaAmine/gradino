@@ -47,10 +47,18 @@ async function Students() {
                     </div>
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                        student.diagnosticDone ? "bg-good-soft text-good" : "bg-warn-soft text-warn"
+                        student.diagnosticDone
+                          ? "bg-good-soft text-good"
+                          : student.diagnosticInProgress
+                            ? "bg-brand-soft text-brand-dark"
+                            : "bg-warn-soft text-warn"
                       }`}
                     >
-                      {student.diagnosticDone ? "Test iniziale fatto" : "Test iniziale da fare"}
+                      {student.diagnosticDone
+                        ? "Test iniziale fatto"
+                        : student.diagnosticInProgress
+                          ? `Test iniziale in corso · ${student.diagnosticAnswers} risposte`
+                          : "Test iniziale da fare"}
                     </span>
                   </div>
                   <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
@@ -73,7 +81,7 @@ async function Students() {
                   </dl>
                   <p className="text-sm text-ink-soft">
                     {student.lastActivity ? `Ultima attività: ${formatDateTime(student.lastActivity)}` : "Nessuna attività"}
-                    {student.answersWeek > 0 && ` · ${student.answersWeek} esercizi in 7 giorni`}
+                    {student.answersWeek > 0 && ` · ${student.answersWeek} risposte in 7 giorni`}
                   </p>
                 </Link>
               </li>
