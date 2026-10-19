@@ -1,0 +1,71 @@
+{
+  "subjects": [{ "id": "math", "title": "Matematica" }],
+  "areas": [
+    { "id": "math.calc", "subjectId": "math", "title": "Calcolo" },
+    { "id": "math.divisibility", "subjectId": "math", "title": "Divisibilità, MCD e mcm" },
+    { "id": "math.fractions", "subjectId": "math", "title": "Frazioni" },
+    { "id": "math.powers", "subjectId": "math", "title": "Potenze e radici" },
+    { "id": "math.integers", "subjectId": "math", "title": "Numeri relativi" },
+    { "id": "math.ratios", "subjectId": "math", "title": "Rapporti, proporzioni e percentuali" },
+    { "id": "math.proportionality", "subjectId": "math", "title": "Proporzionalità" },
+    { "id": "math.measures", "subjectId": "math", "title": "Misure ed equivalenze" },
+    { "id": "math.plane-geometry", "subjectId": "math", "title": "Geometria piana" },
+    { "id": "math.pythagoras", "subjectId": "math", "title": "Teorema di Pitagora" },
+    { "id": "math.problem-solving", "subjectId": "math", "title": "Risolvere problemi" }
+  ],
+  "skills": [
+    { "id": "math.calc.times-tables", "areaId": "math.calc", "title": "Tabelline e calcolo mentale", "schoolYear": 1 },
+    { "id": "math.calc.order-of-operations", "areaId": "math.calc", "title": "Ordine delle operazioni ed espressioni", "schoolYear": 1 },
+    { "id": "math.calc.decimals", "areaId": "math.calc", "title": "Operazioni con i numeri decimali", "schoolYear": 1 },
+
+    { "id": "math.div.prime-factorization", "areaId": "math.divisibility", "title": "Scomposizione in fattori primi", "schoolYear": 1 },
+    { "id": "math.div.gcd", "areaId": "math.divisibility", "title": "Massimo comun divisore", "schoolYear": 1, "prerequisites": ["math.div.prime-factorization"] },
+    { "id": "math.div.lcm", "areaId": "math.divisibility", "title": "Minimo comune multiplo", "schoolYear": 1, "prerequisites": ["math.div.prime-factorization"] },
+
+    { "id": "math.frac.simplify", "areaId": "math.fractions", "title": "Semplificare le frazioni", "schoolYear": 1, "prerequisites": ["math.div.gcd"] },
+    { "id": "math.frac.compare", "areaId": "math.fractions", "title": "Confrontare le frazioni", "schoolYear": 1, "prerequisites": ["math.div.lcm"] },
+    { "id": "math.frac.of-number", "areaId": "math.fractions", "title": "Frazione di un numero", "schoolYear": 1 },
+    { "id": "math.frac.add-sub", "areaId": "math.fractions", "title": "Addizione e sottrazione di frazioni", "schoolYear": 1, "prerequisites": ["math.div.lcm", "math.frac.simplify"] },
+    { "id": "math.frac.mul-div", "areaId": "math.fractions", "title": "Moltiplicazione e divisione di frazioni", "schoolYear": 1, "prerequisites": ["math.frac.simplify"] },
+    { "id": "math.frac.decimals", "areaId": "math.fractions", "title": "Frazioni e numeri decimali", "schoolYear": 2 },
+    { "id": "math.frac.expressions", "areaId": "math.fractions", "title": "Espressioni con le frazioni", "schoolYear": 1, "prerequisites": ["math.frac.add-sub", "math.frac.mul-div", "math.calc.order-of-operations"] },
+    { "id": "math.frac.inverse-problems", "areaId": "math.fractions", "title": "Problemi con la frazione inversa", "schoolYear": 1, "prerequisites": ["math.frac.of-number"] },
+
+    { "id": "math.pow.basics", "areaId": "math.powers", "title": "Potenze: definizione e casi particolari", "schoolYear": 1 },
+    { "id": "math.pow.properties", "areaId": "math.powers", "title": "Proprietà delle potenze", "schoolYear": 1, "prerequisites": ["math.pow.basics"] },
+    { "id": "math.pow.square-root", "areaId": "math.powers", "title": "Radice quadrata", "schoolYear": 2, "prerequisites": ["math.pow.basics"] },
+    { "id": "math.pow.root-estimate", "areaId": "math.powers", "title": "Stimare una radice quadrata", "schoolYear": 2, "prerequisites": ["math.pow.square-root"] },
+
+    { "id": "math.int.add-sub", "areaId": "math.integers", "title": "Addizione e sottrazione con i numeri relativi", "schoolYear": 3 },
+    { "id": "math.int.mul-div", "areaId": "math.integers", "title": "Moltiplicazione e divisione con i numeri relativi", "schoolYear": 3, "prerequisites": ["math.int.add-sub"] },
+    { "id": "math.int.powers", "areaId": "math.integers", "title": "Potenze dei numeri relativi", "schoolYear": 3, "prerequisites": ["math.int.mul-div", "math.pow.basics"] },
+
+    { "id": "math.ratio.percent", "areaId": "math.ratios", "title": "Percentuali", "schoolYear": 2 },
+    { "id": "math.ratio.proportions", "areaId": "math.ratios", "title": "Proporzioni", "schoolYear": 2 },
+    { "id": "math.ratio.percent-problems", "areaId": "math.ratios", "title": "Problemi con sconti e aumenti", "schoolYear": 2, "prerequisites": ["math.ratio.percent"] },
+
+    { "id": "math.prop.direct", "areaId": "math.proportionality", "title": "Proporzionalità diretta", "schoolYear": 2, "prerequisites": ["math.ratio.proportions"] },
+    { "id": "math.prop.inverse", "areaId": "math.proportionality", "title": "Proporzionalità inversa", "schoolYear": 2, "prerequisites": ["math.ratio.proportions"] },
+
+    { "id": "math.meas.length-mass", "areaId": "math.measures", "title": "Equivalenze di lunghezza e massa", "schoolYear": 1 },
+    { "id": "math.meas.area-units", "areaId": "math.measures", "title": "Equivalenze di superficie", "schoolYear": 1, "prerequisites": ["math.meas.length-mass"] },
+    { "id": "math.meas.volume-capacity", "areaId": "math.measures", "title": "Volume e capacità", "schoolYear": 1, "prerequisites": ["math.meas.area-units"] },
+    { "id": "math.meas.time", "areaId": "math.measures", "title": "Misure di tempo", "schoolYear": 1 },
+
+    { "id": "math.geo.angles", "areaId": "math.plane-geometry", "title": "Angoli dei poligoni", "schoolYear": 1 },
+    { "id": "math.geo.rectangle-square", "areaId": "math.plane-geometry", "title": "Perimetro e area di rettangolo e quadrato", "schoolYear": 1 },
+    { "id": "math.geo.triangle-area", "areaId": "math.plane-geometry", "title": "Area del triangolo", "schoolYear": 1 },
+    { "id": "math.geo.quadrilateral-area", "areaId": "math.plane-geometry", "title": "Area di trapezio e rombo", "schoolYear": 2 },
+    { "id": "math.geo.inverse-formulas", "areaId": "math.plane-geometry", "title": "Formule inverse", "schoolYear": 2, "prerequisites": ["math.geo.rectangle-square"] },
+
+    { "id": "math.pyth.theorem", "areaId": "math.pythagoras", "title": "Teorema di Pitagora", "schoolYear": 2, "prerequisites": ["math.pow.square-root"] },
+    { "id": "math.pyth.triples", "areaId": "math.pythagoras", "title": "Terne pitagoriche", "schoolYear": 2, "prerequisites": ["math.pyth.theorem"] },
+    { "id": "math.pyth.in-figures", "areaId": "math.pythagoras", "title": "Pitagora nelle figure piane", "schoolYear": 2, "prerequisites": ["math.pyth.theorem", "math.geo.triangle-area"] },
+
+    { "id": "math.ps.one-step", "areaId": "math.problem-solving", "title": "Problemi a un passaggio", "schoolYear": 1 },
+    { "id": "math.ps.multi-step", "areaId": "math.problem-solving", "title": "Problemi a più passaggi", "schoolYear": 2, "prerequisites": ["math.ps.one-step"] },
+    { "id": "math.ps.segments", "areaId": "math.problem-solving", "title": "Problemi con i segmenti", "schoolYear": 1 },
+    { "id": "math.ps.planning", "areaId": "math.problem-solving", "title": "Pianificare la soluzione", "schoolYear": 1 },
+    { "id": "math.ps.missing-data", "areaId": "math.problem-solving", "title": "Dati mancanti e inutili", "schoolYear": 1 }
+  ]
+}

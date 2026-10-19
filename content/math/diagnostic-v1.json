@@ -1,0 +1,1810 @@
+{
+  "items": [
+    {
+      "id": "math.diag1.A1",
+      "skillId": "math.calc.times-tables",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Tabelline lampo: hai 60 secondi. Rispondi a più moltiplicazioni che puoi.",
+        "timeLimitSec": 60,
+        "fields": [
+          { "kind": "number", "id": "t1", "label": "$7 \\times 8$" },
+          { "kind": "number", "id": "t2", "label": "$6 \\times 9$" },
+          { "kind": "number", "id": "t3", "label": "$8 \\times 4$" },
+          { "kind": "number", "id": "t4", "label": "$9 \\times 7$" },
+          { "kind": "number", "id": "t5", "label": "$6 \\times 7$" },
+          { "kind": "number", "id": "t6", "label": "$8 \\times 8$" },
+          { "kind": "number", "id": "t7", "label": "$7 \\times 7$" },
+          { "kind": "number", "id": "t8", "label": "$4 \\times 9$" },
+          { "kind": "number", "id": "t9", "label": "$6 \\times 8$" },
+          { "kind": "number", "id": "t10", "label": "$9 \\times 9$" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "t1": { "kind": "number", "value": 56 },
+          "t2": { "kind": "number", "value": 54 },
+          "t3": { "kind": "number", "value": 32 },
+          "t4": { "kind": "number", "value": 63 },
+          "t5": { "kind": "number", "value": 42 },
+          "t6": { "kind": "number", "value": 64 },
+          "t7": { "kind": "number", "value": 49 },
+          "t8": { "kind": "number", "value": 36 },
+          "t9": { "kind": "number", "value": 48 },
+          "t10": { "kind": "number", "value": 81 }
+        },
+        "threshold": {
+          "min": 8,
+          "tag": "times_tables_not_automatic",
+          "message": "Le tabelline non sono ancora automatiche: rallentano tutti i calcoli."
+        }
+      }
+    },
+    {
+      "id": "math.diag1.A2",
+      "skillId": "math.calc.order-of-operations",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $3 + 4 \\times 2$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 11,
+            "knownErrors": [
+              { "value": 14, "tag": "order_of_operations", "message": "La moltiplicazione si fa prima dell'addizione." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.A3",
+      "skillId": "math.calc.decimals",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $0{,}3 \\times 0{,}2$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 0.06,
+            "knownErrors": [
+              {
+                "value": 0.6,
+                "tag": "decimal_point_product",
+                "message": "Nel prodotto tra decimali le cifre dopo la virgola si sommano: 1 + 1 = 2 cifre decimali."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.A4",
+      "skillId": "math.calc.decimals",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $4{,}5 : 0{,}5$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 9,
+            "knownErrors": [
+              {
+                "value": 0.9,
+                "tag": "decimal_division",
+                "message": "Dividere per 0,5 vuol dire chiedersi quante volte 0,5 sta in 4,5: il risultato è più grande di 4,5."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.A5",
+      "skillId": "math.calc.order-of-operations",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $20 - 2 \\times (3 + 4)$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 6,
+            "knownErrors": [
+              {
+                "value": 126,
+                "tag": "order_of_operations",
+                "message": "Prima le parentesi, poi la moltiplicazione, solo alla fine la sottrazione."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.A6",
+      "skillId": "math.calc.order-of-operations",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $[(12 - 4) : 2 + 3] \\times 2 - 5$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": { "type": "input", "fields": { "answer": { "kind": "number", "value": 9 } } }
+    },
+
+    {
+      "id": "math.diag1.B1",
+      "skillId": "math.div.prime-factorization",
+      "level": "base",
+      "content": {
+        "type": "choice",
+        "prompt": "Qual è la scomposizione in fattori primi di 60?",
+        "options": [
+          { "id": "a", "text": "$2 \\times 30$" },
+          { "id": "b", "text": "$6 \\times 10$" },
+          { "id": "c", "text": "$2^2 \\times 15$" },
+          { "id": "d", "text": "$2^2 \\times 3 \\times 5$" }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "d",
+        "knownErrors": [
+          { "option": "a", "tag": "not_prime_factors", "message": "30 non è un numero primo: bisogna continuare a scomporre." },
+          { "option": "b", "tag": "not_prime_factors", "message": "6 e 10 non sono numeri primi: bisogna continuare a scomporre." },
+          { "option": "c", "tag": "incomplete_factorization", "message": "15 si può ancora scomporre: 15 = 3 × 5." }
+        ]
+      }
+    },
+    {
+      "id": "math.diag1.B2",
+      "skillId": "math.div.gcd",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola il MCD (massimo comun divisore) tra 24 e 36.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 12,
+            "knownErrors": [
+              { "value": 72, "tag": "gcd_lcm_confusion", "message": "72 è il mcm. Il MCD è il numero più grande che divide sia 24 sia 36." },
+              { "value": 6, "tag": "gcd_incomplete", "message": "6 divide entrambi, ma c'è un divisore comune più grande." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.B3",
+      "skillId": "math.div.lcm",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola il mcm (minimo comune multiplo) tra 6 e 8.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 24,
+            "knownErrors": [
+              { "value": 48, "tag": "lcm_product", "message": "48 è un multiplo comune, ma non il più piccolo." },
+              { "value": 2, "tag": "gcd_lcm_confusion", "message": "2 è il MCD. Il mcm è il più piccolo numero multiplo sia di 6 sia di 8." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.B4",
+      "skillId": "math.div.lcm",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Due autobus partono insieme dal capolinea. Il primo ripassa ogni 12 minuti, il secondo ogni 18 minuti. Dopo quanti minuti ripartono di nuovo insieme?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "minuti" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 36,
+            "knownErrors": [
+              { "value": 6, "tag": "gcd_lcm_confusion", "message": "Qui serve il mcm, non il MCD: cerchi il primo momento in cui coincidono." },
+              { "value": 216, "tag": "lcm_product", "message": "Dopo 216 minuti ripartono insieme, ma succede prima: cerca il minimo comune multiplo." }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.C1",
+      "skillId": "math.frac.simplify",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Semplifica la frazione $\\frac{18}{24}$ fino in fondo.",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": { "answer": { "kind": "fraction", "numerator": 3, "denominator": 4, "simplified": "required" } }
+      }
+    },
+    {
+      "id": "math.diag1.C2",
+      "skillId": "math.frac.compare",
+      "level": "base",
+      "content": {
+        "type": "choice",
+        "prompt": "Quale frazione è maggiore?",
+        "options": [
+          { "id": "a", "text": "$\\frac{3}{5}$" },
+          { "id": "b", "text": "$\\frac{2}{3}$" },
+          { "id": "c", "text": "Sono uguali" }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "b",
+        "knownErrors": [
+          {
+            "option": "a",
+            "tag": "compare_numerators_only",
+            "message": "Non basta guardare i numeratori: con lo stesso denominatore diventano 9/15 e 10/15."
+          },
+          { "option": "c", "tag": "compare_fractions", "message": "Prova a scriverle con lo stesso denominatore: 9/15 e 10/15." }
+        ]
+      }
+    },
+    {
+      "id": "math.diag1.C3",
+      "skillId": "math.frac.of-number",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola i $\\frac{2}{3}$ di 27.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 18,
+            "knownErrors": [
+              {
+                "value": 40.5,
+                "tag": "fraction_inverted",
+                "message": "Hai usato la frazione al contrario: si divide per il denominatore (27 : 3) e si moltiplica per il numeratore (× 2)."
+              },
+              { "value": 9, "tag": "fraction_of_number_incomplete", "message": "9 è 1/3 di 27: manca l'ultimo passaggio, moltiplicare per 2." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.C4",
+      "skillId": "math.frac.add-sub",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $\\frac{2}{3} + \\frac{1}{4}$",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "fraction",
+            "numerator": 11,
+            "denominator": 12,
+            "simplified": "flag",
+            "knownErrors": [
+              {
+                "numerator": 3,
+                "denominator": 7,
+                "tag": "fraction_add_num_den",
+                "message": "Non si sommano numeratori e denominatori: prima si porta tutto allo stesso denominatore (12)."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.C5",
+      "skillId": "math.frac.add-sub",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $\\frac{5}{6} - \\frac{1}{3}$",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "fraction",
+            "numerator": 1,
+            "denominator": 2,
+            "simplified": "flag",
+            "knownErrors": [
+              {
+                "numerator": 4,
+                "denominator": 3,
+                "tag": "fraction_sub_num_den",
+                "message": "Non si sottraggono numeratori e denominatori: prima si porta tutto allo stesso denominatore (6)."
+              },
+              {
+                "numerator": 2,
+                "denominator": 3,
+                "tag": "fraction_common_denominator",
+                "message": "Prima di sottrarre, 1/3 va trasformato in sesti: 1/3 = 2/6."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.C6",
+      "skillId": "math.frac.mul-div",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $\\frac{3}{4} \\times \\frac{8}{9}$",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": { "answer": { "kind": "fraction", "numerator": 2, "denominator": 3, "simplified": "flag" } }
+      }
+    },
+    {
+      "id": "math.diag1.C7",
+      "skillId": "math.frac.mul-div",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $\\frac{3}{5} : \\frac{9}{10}$",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "fraction",
+            "numerator": 2,
+            "denominator": 3,
+            "simplified": "flag",
+            "knownErrors": [
+              {
+                "numerator": 27,
+                "denominator": 50,
+                "tag": "fraction_div_no_reciprocal",
+                "message": "Nella divisione si moltiplica per l'inversa della seconda frazione: 3/5 × 10/9."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.C8",
+      "skillId": "math.frac.decimals",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Trasforma i numeri.",
+        "fields": [
+          { "kind": "fraction", "id": "toFraction", "label": "$0{,}75$ come frazione" },
+          { "kind": "number", "id": "toDecimal", "label": "$\\frac{3}{8}$ come numero decimale" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "toFraction": {
+            "kind": "fraction",
+            "numerator": 3,
+            "denominator": 4,
+            "simplified": "flag",
+            "knownErrors": [
+              { "numerator": 75, "denominator": 10, "tag": "place_value", "message": "0,75 vuol dire 75 centesimi: 75/100." }
+            ]
+          },
+          "toDecimal": {
+            "kind": "number",
+            "value": 0.375,
+            "knownErrors": [
+              { "value": 3.8, "tag": "fraction_as_division", "message": "Una frazione è una divisione: 3/8 = 3 : 8." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.C9",
+      "skillId": "math.frac.expressions",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $\\left(\\frac{1}{2} + \\frac{1}{3}\\right) \\times \\frac{6}{5} - \\frac{1}{2}$",
+        "fields": [{ "kind": "fraction", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": { "answer": { "kind": "fraction", "numerator": 1, "denominator": 2, "simplified": "flag" } }
+      }
+    },
+    {
+      "id": "math.diag1.C10",
+      "skillId": "math.frac.inverse-problems",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Luca ha speso i $\\frac{2}{5}$ dei suoi soldi e gli restano 36 €. Quanti soldi aveva all'inizio?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 60,
+            "knownErrors": [
+              { "value": 14.4, "tag": "fraction_inverse_problem", "message": "36 € non è il totale: è la parte che resta, cioè i 3/5." },
+              { "value": 90, "tag": "fraction_part_confusion", "message": "I 36 € sono la parte rimasta (3/5), non quella spesa (2/5)." }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.D1",
+      "skillId": "math.pow.basics",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $2^3$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 8,
+            "knownErrors": [
+              { "value": 6, "tag": "power_as_product", "message": "La potenza non è base × esponente: $2^3 = 2 \\times 2 \\times 2$." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.D2",
+      "skillId": "math.pow.basics",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola le due potenze.",
+        "fields": [
+          { "kind": "number", "id": "zero", "label": "$5^0$" },
+          { "kind": "number", "id": "one", "label": "$7^1$" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "zero": {
+            "kind": "number",
+            "value": 1,
+            "knownErrors": [
+              { "value": 0, "tag": "power_zero", "message": "Ogni numero diverso da 0 elevato alla 0 fa 1." },
+              { "value": 5, "tag": "power_zero", "message": "Ogni numero diverso da 0 elevato alla 0 fa 1." }
+            ]
+          },
+          "one": {
+            "kind": "number",
+            "value": 7,
+            "knownErrors": [
+              { "value": 1, "tag": "power_one", "message": "Un numero elevato alla 1 resta uguale a se stesso." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.D3",
+      "skillId": "math.pow.square-root",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola le due radici quadrate.",
+        "fields": [
+          { "kind": "number", "id": "r81", "label": "$\\sqrt{81}$" },
+          { "kind": "number", "id": "r144", "label": "$\\sqrt{144}$" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "r81": {
+            "kind": "number",
+            "value": 9,
+            "knownErrors": [
+              {
+                "value": 40.5,
+                "tag": "root_as_half",
+                "message": "La radice quadrata non è la metà: cerca il numero che moltiplicato per se stesso dà 81."
+              }
+            ]
+          },
+          "r144": {
+            "kind": "number",
+            "value": 12,
+            "knownErrors": [
+              {
+                "value": 72,
+                "tag": "root_as_half",
+                "message": "La radice quadrata non è la metà: cerca il numero che moltiplicato per se stesso dà 144."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.D4",
+      "skillId": "math.pow.properties",
+      "level": "medium",
+      "content": {
+        "type": "choice",
+        "prompt": "Scrivi come un'unica potenza: $3^4 \\times 3^2$",
+        "options": [
+          { "id": "a", "text": "$3^6$" },
+          { "id": "b", "text": "$3^8$" },
+          { "id": "c", "text": "$9^6$" },
+          { "id": "d", "text": "$9^8$" }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "a",
+        "knownErrors": [
+          {
+            "option": "b",
+            "tag": "power_product_multiply_exponents",
+            "message": "Nel prodotto di potenze con la stessa base gli esponenti si sommano, non si moltiplicano."
+          },
+          { "option": "c", "tag": "power_product_multiply_bases", "message": "La base resta la stessa (3): si sommano solo gli esponenti." },
+          { "option": "d", "tag": "power_product_multiply_bases", "message": "La base resta la stessa (3) e gli esponenti si sommano." }
+        ]
+      }
+    },
+    {
+      "id": "math.diag1.D5",
+      "skillId": "math.pow.properties",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $(2^3)^2$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 64,
+            "knownErrors": [
+              {
+                "value": 32,
+                "tag": "power_of_power_add_exponents",
+                "message": "Nella potenza di potenza gli esponenti si moltiplicano: $2^{3 \\times 2} = 2^6$."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.D6",
+      "skillId": "math.pow.basics",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $2^3 + 3^2$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 17,
+            "knownErrors": [
+              {
+                "value": 12,
+                "tag": "power_as_product",
+                "message": "$2^3 = 2 \\times 2 \\times 2 = 8$ e $3^2 = 3 \\times 3 = 9$."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.D7",
+      "skillId": "math.pow.square-root",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $\\sqrt{36 + 64}$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 10,
+            "knownErrors": [
+              {
+                "value": 14,
+                "tag": "root_of_sum",
+                "message": "La radice di una somma non è la somma delle radici: prima si calcola 36 + 64 = 100."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.D8",
+      "skillId": "math.pow.root-estimate",
+      "level": "advanced",
+      "content": {
+        "type": "choice",
+        "prompt": "Tra quali numeri interi consecutivi si trova $\\sqrt{50}$?",
+        "options": [
+          { "id": "a", "text": "6 e 7" },
+          { "id": "b", "text": "7 e 8" },
+          { "id": "c", "text": "8 e 9" },
+          { "id": "d", "text": "25 e 26" }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "b",
+        "knownErrors": [
+          { "option": "d", "tag": "root_as_half", "message": "La radice quadrata non è la metà: $7^2 = 49$ e $8^2 = 64$." },
+          { "option": "a", "tag": "root_estimate", "message": "Cerca i quadrati vicini a 50: $7^2 = 49$ e $8^2 = 64$." },
+          { "option": "c", "tag": "root_estimate", "message": "Cerca i quadrati vicini a 50: $7^2 = 49$ e $8^2 = 64$." }
+        ]
+      }
+    },
+
+    {
+      "id": "math.diag1.J1",
+      "skillId": "math.int.add-sub",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $(-3) + (-5)$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": -8,
+            "knownErrors": [
+              {
+                "value": 8,
+                "tag": "sign_rule_product_in_sum",
+                "message": "Nella somma \"meno per meno fa più\" non vale: due debiti si sommano, −3 − 5 = −8."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.J2",
+      "skillId": "math.int.mul-div",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $(-4) \\times (-6)$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 24,
+            "knownErrors": [
+              { "value": -24, "tag": "sign_rule_product", "message": "Nel prodotto, due segni uguali danno un risultato positivo." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.J3",
+      "skillId": "math.int.add-sub",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $(+7) - (-3)$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 10,
+            "knownErrors": [
+              { "value": 4, "tag": "subtract_negative", "message": "Sottrarre un numero negativo è come aggiungere il suo opposto: 7 + 3." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.J4",
+      "skillId": "math.int.mul-div",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola: $(-12) : (+4)$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": -3,
+            "knownErrors": [
+              { "value": 3, "tag": "sign_rule_division", "message": "Nella divisione, segni diversi danno un risultato negativo." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.J5",
+      "skillId": "math.int.powers",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola separatamente le tre potenze.",
+        "fields": [
+          { "kind": "number", "id": "oddPower", "label": "$(-2)^3$" },
+          { "kind": "number", "id": "evenPower", "label": "$(-3)^2$" },
+          { "kind": "number", "id": "noParenthesis", "label": "$-3^2$" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "oddPower": {
+            "kind": "number",
+            "value": -8,
+            "knownErrors": [
+              { "value": 8, "tag": "odd_power_sign", "message": "Con esponente dispari il segno meno resta: (−2)·(−2)·(−2) = −8." }
+            ]
+          },
+          "evenPower": {
+            "kind": "number",
+            "value": 9,
+            "knownErrors": [
+              { "value": -9, "tag": "parenthesis_power", "message": "Con la parentesi si eleva anche il segno: (−3)·(−3) = +9." }
+            ]
+          },
+          "noParenthesis": {
+            "kind": "number",
+            "value": -9,
+            "knownErrors": [
+              { "value": 9, "tag": "parenthesis_power", "message": "Senza parentesi si eleva solo il 3: −(3·3) = −9." }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.E1",
+      "skillId": "math.ratio.percent",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola il 10% di 250.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 25,
+            "knownErrors": [
+              { "value": 2500, "tag": "percent_concept", "message": "Il 10% è un decimo: 250 : 10." },
+              { "value": 2.5, "tag": "percent_concept", "message": "Il 10% è un decimo: 250 : 10." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.E2",
+      "skillId": "math.ratio.percent",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Calcola il 25% di 80.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 20,
+            "knownErrors": [
+              { "value": 55, "tag": "percent_subtract", "message": "Il 25% non vuol dire togliere 25: è un quarto di 80." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.E3",
+      "skillId": "math.ratio.proportions",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Trova $x$ nella proporzione $3 : 5 = x : 20$",
+        "fields": [{ "kind": "number", "id": "answer", "label": "$x =$" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 12,
+            "knownErrors": [
+              {
+                "value": 0.75,
+                "tag": "proportion_property",
+                "message": "Il prodotto dei medi è uguale al prodotto degli estremi: 5 × x = 3 × 20."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.E4",
+      "skillId": "math.ratio.percent-problems",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un paio di scarpe costa 80 € ed è scontato del 15%. Quanto si paga?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 68,
+            "knownErrors": [
+              { "value": 12, "tag": "discount_stop_early", "message": "12 € è lo sconto: va ancora tolto dal prezzo." },
+              { "value": 65, "tag": "discount_subtract_percent", "message": "Lo sconto non è 15 €, ma il 15% di 80 €." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.E5",
+      "skillId": "math.ratio.percent",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "In una classe di 25 alunni, 10 sono femmine. Che percentuale della classe sono le femmine?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "%" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 40,
+            "knownErrors": [
+              { "value": 10, "tag": "percent_inverse", "message": "10 è il numero di femmine: 10 su 25 è come 40 su 100." },
+              { "value": 2.5, "tag": "percent_inverse", "message": "10 su 25 è come 40 su 100." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.E6",
+      "skillId": "math.ratio.percent-problems",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Dopo un aumento del 20% un prezzo è diventato 60 €. Qual era il prezzo prima dell'aumento?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 50,
+            "knownErrors": [
+              {
+                "value": 48,
+                "tag": "percent_reverse",
+                "message": "Il 20% si calcola sul prezzo iniziale, non su 60 €: 60 € è il 120% del prezzo iniziale."
+              }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.I1",
+      "skillId": "math.prop.direct",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "3 quaderni costano 4,50 €. Quanto costano 7 quaderni?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "€" }]
+      },
+      "key": { "type": "input", "fields": { "answer": { "kind": "number", "value": 10.5 } } }
+    },
+    {
+      "id": "math.diag1.I2",
+      "skillId": "math.prop.inverse",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "4 operai finiscono un lavoro in 6 giorni. In quanti giorni lo finiscono 3 operai, lavorando allo stesso modo?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "giorni" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 8,
+            "knownErrors": [
+              {
+                "value": 4.5,
+                "tag": "inverse_as_direct",
+                "message": "Meno operai ci mettono più giorni: è una proporzionalità inversa (4 × 6 = 3 × ?)."
+              }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.F1",
+      "skillId": "math.meas.length-mass",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa l'equivalenza: 3,5 m = … cm",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "cm" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 350,
+            "knownErrors": [
+              { "value": 35, "tag": "length_units", "message": "Da metri a centimetri si moltiplica per 100." },
+              { "value": 3500, "tag": "length_units", "message": "Da metri a centimetri si moltiplica per 100." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.F2",
+      "skillId": "math.meas.length-mass",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa l'equivalenza: 2.500 g = … kg",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "kg" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 2.5,
+            "knownErrors": [
+              { "value": 25, "tag": "mass_units", "message": "Da grammi a chilogrammi si divide per 1.000." },
+              { "value": 250, "tag": "mass_units", "message": "Da grammi a chilogrammi si divide per 1.000." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.F3",
+      "skillId": "math.meas.area-units",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa l'equivalenza: 4 m² = … dm²",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "dm²" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 400,
+            "knownErrors": [
+              { "value": 40, "tag": "area_units_factor", "message": "Per le superfici ogni passaggio vale × 100, non × 10." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.F4",
+      "skillId": "math.meas.volume-capacity",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa l'equivalenza: 3 dm³ = … cm³",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "cm³" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 3000,
+            "knownErrors": [
+              { "value": 30, "tag": "volume_units_factor", "message": "Per i volumi ogni passaggio vale × 1.000." },
+              { "value": 300, "tag": "volume_units_factor", "message": "Per i volumi ogni passaggio vale × 1.000." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.F5",
+      "skillId": "math.meas.volume-capacity",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa le equivalenze.",
+        "fields": [
+          { "kind": "number", "id": "dm3", "label": "2,5 dm³ =", "suffix": "L" },
+          { "kind": "number", "id": "cm3", "label": "500 cm³ =", "suffix": "L" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "dm3": {
+            "kind": "number",
+            "value": 2.5,
+            "knownErrors": [
+              { "value": 25, "tag": "volume_capacity", "message": "1 dm³ contiene esattamente 1 litro." },
+              { "value": 250, "tag": "volume_capacity", "message": "1 dm³ contiene esattamente 1 litro." },
+              { "value": 2500, "tag": "volume_capacity", "message": "1 dm³ contiene esattamente 1 litro." }
+            ]
+          },
+          "cm3": {
+            "kind": "number",
+            "value": 0.5,
+            "knownErrors": [
+              { "value": 500, "tag": "volume_capacity", "message": "1 L = 1 dm³ = 1.000 cm³, quindi 500 cm³ sono mezzo litro." },
+              { "value": 5, "tag": "volume_capacity", "message": "1 L = 1 dm³ = 1.000 cm³, quindi 500 cm³ sono mezzo litro." },
+              { "value": 50, "tag": "volume_capacity", "message": "1 L = 1 dm³ = 1.000 cm³, quindi 500 cm³ sono mezzo litro." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.F6",
+      "skillId": "math.meas.time",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa le equivalenze.",
+        "fields": [
+          { "kind": "number", "id": "hm", "label": "1 h 15 min =", "suffix": "min" },
+          { "kind": "number", "id": "decimal", "label": "1,5 h =", "suffix": "min" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "hm": {
+            "kind": "number",
+            "value": 75,
+            "knownErrors": [
+              { "value": 115, "tag": "time_decimal", "message": "Un'ora ha 60 minuti, non 100: 60 + 15." }
+            ]
+          },
+          "decimal": {
+            "kind": "number",
+            "value": 90,
+            "knownErrors": [
+              { "value": 150, "tag": "time_decimal", "message": "1,5 h vuol dire un'ora e mezza: 60 + 30 minuti." },
+              { "value": 110, "tag": "time_decimal", "message": "1,5 h non è 1 h 50 min: mezz'ora sono 30 minuti." }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.G1",
+      "skillId": "math.geo.angles",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Un triangolo ha due angoli di 50° e 70°. Quanto misura il terzo angolo?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "°" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 60,
+            "knownErrors": [
+              {
+                "value": 120,
+                "tag": "triangle_angle_sum",
+                "message": "La somma degli angoli interni di un triangolo è 180°: 180 − 50 − 70."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.G2",
+      "skillId": "math.geo.rectangle-square",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Un rettangolo ha i lati di 8 cm e 5 cm. Calcola il perimetro e l'area.",
+        "fields": [
+          { "kind": "number", "id": "perimeter", "label": "Perimetro", "units": ["cm", "cm²", "cm³"] },
+          { "kind": "number", "id": "area", "label": "Area", "units": ["cm", "cm²", "cm³"] }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "perimeter": {
+            "kind": "number",
+            "value": 26,
+            "unit": "cm",
+            "knownErrors": [
+              { "value": 13, "tag": "perimeter_half", "message": "Il perimetro è la somma di tutti e 4 i lati: 8 + 5 + 8 + 5." },
+              { "value": 40, "tag": "perimeter_area_confusion", "message": "40 è l'area. Il perimetro è la somma dei lati." }
+            ]
+          },
+          "area": {
+            "kind": "number",
+            "value": 40,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 26, "tag": "perimeter_area_confusion", "message": "26 è il perimetro. L'area è base × altezza." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.G3",
+      "skillId": "math.geo.triangle-area",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Un triangolo ha la base di 10 cm e l'altezza di 6 cm. Calcola l'area.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Area", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 30,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 60, "tag": "triangle_area_no_half", "message": "L'area del triangolo è base × altezza diviso 2." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.G4",
+      "skillId": "math.geo.quadrilateral-area",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un trapezio ha le basi di 12 cm e 8 cm e l'altezza di 5 cm. Calcola l'area.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Area", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 50,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 100, "tag": "trapezoid_no_half", "message": "Area del trapezio: (base maggiore + base minore) × altezza : 2." },
+              { "value": 480, "tag": "trapezoid_formula", "message": "Le basi si sommano, non si moltiplicano: (12 + 8) × 5 : 2." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.G5",
+      "skillId": "math.geo.quadrilateral-area",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un rombo ha le diagonali di 10 cm e 6 cm. Calcola l'area.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Area", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 30,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 60, "tag": "rhombus_no_half", "message": "Area del rombo: diagonale × diagonale : 2." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.G6",
+      "skillId": "math.geo.rectangle-square",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un quadrato ha il perimetro di 36 cm. Calcola l'area.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Area", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 81,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 324, "tag": "square_from_perimeter", "message": "Prima trova il lato: 36 : 4 = 9 cm. Poi l'area: 9 × 9." },
+              { "value": 36, "tag": "square_from_perimeter", "message": "Prima trova il lato: 36 : 4 = 9 cm. Poi l'area: 9 × 9." },
+              { "value": 1296, "tag": "square_from_perimeter", "message": "Prima trova il lato: 36 : 4 = 9 cm. Poi l'area: 9 × 9." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.G7",
+      "skillId": "math.geo.inverse-formulas",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Un rettangolo ha l'area di 48 cm² e la base di 8 cm. Calcola il perimetro.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Perimetro", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 28,
+            "unit": "cm",
+            "knownErrors": [
+              { "value": 384, "tag": "inverse_formula", "message": "Per trovare l'altezza si divide l'area per la base: 48 : 8 = 6 cm." },
+              { "value": 6, "tag": "perimeter_missing_step", "message": "6 cm è l'altezza: manca il perimetro, 2 × (8 + 6)." }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.H1",
+      "skillId": "math.pyth.theorem",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Un triangolo rettangolo ha i cateti di 6 cm e 8 cm. Calcola l'ipotenusa.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Ipotenusa", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 10,
+            "unit": "cm",
+            "knownErrors": [
+              {
+                "value": 14,
+                "tag": "pythagoras_sum_legs",
+                "message": "L'ipotenusa non è la somma dei cateti: $\\sqrt{6^2 + 8^2} = \\sqrt{100}$."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.H2",
+      "skillId": "math.pyth.triples",
+      "level": "base",
+      "content": {
+        "type": "multi_choice",
+        "prompt": "Quali di queste sono terne pitagoriche? Puoi sceglierne più di una.",
+        "options": [
+          { "id": "a", "text": "3, 4, 5" },
+          { "id": "b", "text": "5, 12, 13" },
+          { "id": "c", "text": "4, 5, 6" }
+        ]
+      },
+      "key": {
+        "type": "multi_choice",
+        "correct": ["a", "b"],
+        "knownErrors": [
+          {
+            "includes": "c",
+            "tag": "pythagorean_triple_check",
+            "message": "Verifica sempre: $4^2 + 5^2 = 41$, che non è $6^2 = 36$."
+          }
+        ]
+      }
+    },
+    {
+      "id": "math.diag1.H3",
+      "skillId": "math.pyth.theorem",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un triangolo rettangolo ha l'ipotenusa di 13 cm e un cateto di 5 cm. Calcola l'altro cateto.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Cateto", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 12,
+            "unit": "cm",
+            "knownErrors": [
+              {
+                "value": 13.93,
+                "tolerance": 0.1,
+                "tag": "pythagoras_add_instead_subtract",
+                "message": "Per trovare un cateto si sottrae: $\\sqrt{13^2 - 5^2}$."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.H4",
+      "skillId": "math.pyth.in-figures",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un rettangolo ha i lati di 9 cm e 12 cm. Calcola la diagonale.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Diagonale", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 15,
+            "unit": "cm",
+            "knownErrors": [
+              {
+                "value": 21,
+                "tag": "pythagoras_sum_legs",
+                "message": "La diagonale divide il rettangolo in due triangoli rettangoli: usa il teorema di Pitagora."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.H5",
+      "skillId": "math.pyth.in-figures",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Un triangolo isoscele ha la base di 10 cm e il lato obliquo di 13 cm. Calcola l'altezza e l'area.",
+        "fields": [
+          { "kind": "number", "id": "height", "label": "Altezza", "units": ["cm", "cm²", "cm³"] },
+          { "kind": "number", "id": "area", "label": "Area", "units": ["cm", "cm²", "cm³"] }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "height": {
+            "kind": "number",
+            "value": 12,
+            "unit": "cm",
+            "knownErrors": [
+              {
+                "value": 8.31,
+                "tolerance": 0.05,
+                "tag": "isosceles_full_base",
+                "message": "L'altezza divide la base a metà: il cateto è 5 cm, non 10 cm."
+              }
+            ]
+          },
+          "area": {
+            "kind": "number",
+            "value": 60,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 120, "tag": "triangle_area_no_half", "message": "Area del triangolo: base × altezza : 2." }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "math.diag1.K1",
+      "skillId": "math.ps.one-step",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Una bottiglia contiene 1,5 L d'acqua. Quanti bicchieri da 250 mL si riempiono?",
+        "fields": [{ "kind": "number", "id": "answer", "label": "", "suffix": "bicchieri" }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 6,
+            "knownErrors": [
+              { "value": 0.006, "tag": "unit_conversion", "message": "Prima porta tutto alla stessa unità: 1,5 L = 1.500 mL." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.K2",
+      "skillId": "math.ps.multi-step",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Un rettangolo ha il perimetro di 50 cm e la base di 15 cm. Calcola l'area.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Area", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 150,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 375, "tag": "semiperimeter", "message": "Prima trova l'altezza: (50 − 15 − 15) : 2 = 10 cm." },
+              { "value": 525, "tag": "semiperimeter", "message": "Prima trova l'altezza: (50 − 15 − 15) : 2 = 10 cm." }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.K3",
+      "skillId": "math.ps.segments",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "La somma di due numeri è 48 e uno è il triplo dell'altro. Trova i due numeri.",
+        "fields": [
+          { "kind": "number", "id": "small", "label": "Numero più piccolo" },
+          { "kind": "number", "id": "large", "label": "Numero più grande" }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "small": {
+            "kind": "number",
+            "value": 12,
+            "knownErrors": [
+              {
+                "value": 16,
+                "tag": "segments_method",
+                "message": "Se uno è il triplo dell'altro, in tutto ci sono 4 parti uguali: 48 : 4 = 12."
+              }
+            ]
+          },
+          "large": {
+            "kind": "number",
+            "value": 36,
+            "knownErrors": [
+              {
+                "value": 32,
+                "tag": "segments_method",
+                "message": "Se uno è il triplo dell'altro, in tutto ci sono 4 parti uguali: 48 : 4 = 12."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "math.diag1.K4",
+      "skillId": "math.ps.planning",
+      "level": "medium",
+      "content": {
+        "type": "order",
+        "prompt": "Non fare i calcoli: metti in ordine i passi per risolvere il problema. Un giardino rettangolare ha l'area di 120 m² e la base di 15 m. Si vuole recintarlo con una rete che costa 4 € al metro. Quanto si spende?",
+        "steps": [
+          { "id": "height", "text": "Calcolo l'altezza: area : base" },
+          { "id": "perimeter", "text": "Calcolo il perimetro: 2 × (base + altezza)" },
+          { "id": "cost", "text": "Calcolo il costo: perimetro × 4 €" },
+          { "id": "answer", "text": "Scrivo la risposta con una frase" }
+        ]
+      },
+      "key": { "type": "order", "correct": ["height", "perimeter", "cost", "answer"] }
+    },
+    {
+      "id": "math.diag1.K5",
+      "skillId": "math.ps.missing-data",
+      "level": "medium",
+      "content": {
+        "type": "choice",
+        "prompt": "Un'auto percorre 240 km. Quanti litri di benzina consuma?",
+        "options": [
+          { "id": "a", "text": "24 litri" },
+          { "id": "b", "text": "12 litri" },
+          { "id": "c", "text": "240 litri" },
+          { "id": "d", "text": "Non si può calcolare: manca quanti km fa con un litro" }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "d",
+        "knownErrors": [
+          { "option": "a", "tag": "invents_calculation", "message": "Prima di calcolare controlla di avere tutti i dati: qui manca il consumo dell'auto." },
+          { "option": "b", "tag": "invents_calculation", "message": "Prima di calcolare controlla di avere tutti i dati: qui manca il consumo dell'auto." },
+          { "option": "c", "tag": "invents_calculation", "message": "Prima di calcolare controlla di avere tutti i dati: qui manca il consumo dell'auto." }
+        ]
+      }
+    },
+    {
+      "id": "math.diag1.K6",
+      "skillId": "math.ps.multi-step",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Un triangolo isoscele ha il perimetro di 36 cm e il lato obliquo di 10 cm. Calcola l'area.",
+        "fields": [{ "kind": "number", "id": "answer", "label": "Area", "units": ["cm", "cm²", "cm³"] }]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "number",
+            "value": 48,
+            "unit": "cm²",
+            "knownErrors": [
+              { "value": 96, "tag": "triangle_area_no_half", "message": "Area del triangolo: base × altezza : 2." }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "assessments": [
+    {
+      "id": "math.diagnostic.v1",
+      "subjectId": "math",
+      "kind": "diagnostic",
+      "title": "Test iniziale di matematica",
+      "description": "Una mappa di partenza per capire da dove cominciare. Non è una verifica e non c'è nessun voto.",
+      "config": {
+        "stopAfterBaseErrors": 2,
+        "pauseMinutes": 10,
+        "recoveryOrder": ["A", "B", "C", "D", "E", "I", "F", "G", "H", "K", "J"]
+      },
+      "sections": [
+        {
+          "id": "math.diagnostic.v1.A",
+          "code": "A",
+          "areaId": "math.calc",
+          "title": "Calcolo",
+          "part": 1,
+          "itemIds": ["math.diag1.A1", "math.diag1.A2", "math.diag1.A3", "math.diag1.A4", "math.diag1.A5", "math.diag1.A6"]
+        },
+        {
+          "id": "math.diagnostic.v1.B",
+          "code": "B",
+          "areaId": "math.divisibility",
+          "title": "MCD e mcm",
+          "part": 1,
+          "itemIds": ["math.diag1.B1", "math.diag1.B2", "math.diag1.B3", "math.diag1.B4"]
+        },
+        {
+          "id": "math.diagnostic.v1.C",
+          "code": "C",
+          "areaId": "math.fractions",
+          "title": "Frazioni",
+          "part": 1,
+          "itemIds": [
+            "math.diag1.C1",
+            "math.diag1.C2",
+            "math.diag1.C3",
+            "math.diag1.C4",
+            "math.diag1.C5",
+            "math.diag1.C6",
+            "math.diag1.C7",
+            "math.diag1.C8",
+            "math.diag1.C9",
+            "math.diag1.C10"
+          ]
+        },
+        {
+          "id": "math.diagnostic.v1.D",
+          "code": "D",
+          "areaId": "math.powers",
+          "title": "Potenze e radici",
+          "part": 1,
+          "itemIds": [
+            "math.diag1.D1",
+            "math.diag1.D2",
+            "math.diag1.D3",
+            "math.diag1.D4",
+            "math.diag1.D5",
+            "math.diag1.D6",
+            "math.diag1.D7",
+            "math.diag1.D8"
+          ]
+        },
+        {
+          "id": "math.diagnostic.v1.J",
+          "code": "J",
+          "areaId": "math.integers",
+          "title": "Numeri relativi",
+          "part": 1,
+          "optionalQuestion": "Avete già fatto i numeri relativi in classe? Sono i numeri con il segno, come −3 o +5.",
+          "itemIds": ["math.diag1.J1", "math.diag1.J2", "math.diag1.J3", "math.diag1.J4", "math.diag1.J5"]
+        },
+        {
+          "id": "math.diagnostic.v1.E",
+          "code": "E",
+          "areaId": "math.ratios",
+          "title": "Proporzioni e percentuali",
+          "part": 2,
+          "itemIds": ["math.diag1.E1", "math.diag1.E2", "math.diag1.E3", "math.diag1.E4", "math.diag1.E5", "math.diag1.E6"]
+        },
+        {
+          "id": "math.diagnostic.v1.I",
+          "code": "I",
+          "areaId": "math.proportionality",
+          "title": "Proporzionalità",
+          "part": 2,
+          "itemIds": ["math.diag1.I1", "math.diag1.I2"]
+        },
+        {
+          "id": "math.diagnostic.v1.F",
+          "code": "F",
+          "areaId": "math.measures",
+          "title": "Misure ed equivalenze",
+          "part": 2,
+          "itemIds": ["math.diag1.F1", "math.diag1.F2", "math.diag1.F3", "math.diag1.F4", "math.diag1.F5", "math.diag1.F6"]
+        },
+        {
+          "id": "math.diagnostic.v1.G",
+          "code": "G",
+          "areaId": "math.plane-geometry",
+          "title": "Geometria piana",
+          "part": 2,
+          "itemIds": [
+            "math.diag1.G1",
+            "math.diag1.G2",
+            "math.diag1.G3",
+            "math.diag1.G4",
+            "math.diag1.G5",
+            "math.diag1.G6",
+            "math.diag1.G7"
+          ]
+        },
+        {
+          "id": "math.diagnostic.v1.H",
+          "code": "H",
+          "areaId": "math.pythagoras",
+          "title": "Teorema di Pitagora",
+          "part": 2,
+          "itemIds": ["math.diag1.H1", "math.diag1.H2", "math.diag1.H3", "math.diag1.H4", "math.diag1.H5"]
+        },
+        {
+          "id": "math.diagnostic.v1.K",
+          "code": "K",
+          "areaId": "math.problem-solving",
+          "title": "Problemi",
+          "part": 2,
+          "itemIds": ["math.diag1.K1", "math.diag1.K2", "math.diag1.K3", "math.diag1.K4", "math.diag1.K5", "math.diag1.K6"]
+        }
+      ]
+    }
+  ]
+}
