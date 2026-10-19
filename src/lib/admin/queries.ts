@@ -159,24 +159,23 @@ export async function listStudents(admin: Admin, selfId: string): Promise<Studen
   const ids = students.map((student) => student.id);
   if (ids.length === 0) return [];
 
-  const [answers, events, sessions, attempts] = await Promise.all([
+  const [answers, events, sessions, attempts, latest] = await Promise.all([
     admin.from("practice_answers").select(`user_id, ${ANSWER_COLUMNS}`).in("user_id", ids).gte("created_at", since),
     admin.from("activity_events").select("user_id, type, skill_id, session_id, payload, created_at").in("user_id", ids).gte("created_at", since).in("type", ["feedback_closed", "lesson_step"]),
     admin.from("study_sessions").select("user_id, status, day").in("user_id", ids).gte("day", addDays(today, -6)),
     admin.from("attempts").select("user_id, status, completed_at").in("user_id", ids),
+    Promise.all(
+      ids.map(async (id) => {
+        const [practice, test] = await Promise.all([
+          admin.from("practice_answers").select("created_at").eq("user_id", id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+          admin.from("responses").select("created_at").eq("user_id", id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+        ]);
+        const values = [practice.data?.created_at, test.data?.created_at].filter((value): value is string => Boolean(value)).sort();
+        return [id, values.at(-1) ?? null] as const;
+      }),
+    ),
   ]);
   for (const result of [answers, events, sessions, attempts]) if (result.error) throw new Error(result.error.message);
-
-  const latest = await Promise.all(
-    ids.map(async (id) => {
-      const [practice, test] = await Promise.all([
-        admin.from("practice_answers").select("created_at").eq("user_id", id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-        admin.from("responses").select("created_at").eq("user_id", id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-      ]);
-      const values = [practice.data?.created_at, test.data?.created_at].filter((value): value is string => Boolean(value)).sort();
-      return [id, values.at(-1) ?? null] as const;
-    }),
-  );
   const latestById = new Map(latest);
   const days = lastDays(today, 7);
 
@@ -202,10 +201,12 @@ export async function listStudents(admin: Admin, selfId: string): Promise<Studen
 }
 
 async function studentProfile(admin: Admin, studentId: string) {
-  const { data, error } = await admin.from("profiles").select("id, display_name, role").eq("id", studentId).maybeSingle();
+  const [{ data, error }, mail] = await Promise.all([
+    admin.from("profiles").select("id, display_name, role").eq("id", studentId).maybeSingle(),
+    emails(admin),
+  ]);
   if (error) throw new Error(error.message);
   if (!data) notFound();
-  const mail = await emails(admin);
   return { id: data.id, name: data.display_name, email: mail.get(data.id) ?? "" };
 }
 
@@ -228,12 +229,14 @@ export type NoteRow = {
 export type SessionRow = { id: string; day: string; status: string; block: number; blockTitle: string; answers: number; correct: number };
 
 export async function studentOverview(admin: Admin, studentId: string) {
-  const profile = await studentProfile(admin, studentId);
   const today = dayInRome();
   const days = lastDays(today, 30);
   const since = startOfDayInRome(days[0]);
 
-  const [answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles] = await Promise.all([
+  const [profile, view, attempt, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles] = await Promise.all([
+    studentProfile(admin, studentId),
+    loadAssessment(admin, DIAGNOSTIC_ID),
+    loadLatestAttempt(admin, studentId, DIAGNOSTIC_ID, "completed"),
     admin.from("practice_answers").select(ANSWER_COLUMNS).eq("user_id", studentId).gte("created_at", since).order("created_at", { ascending: true }).limit(5000),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", since).limit(10000),
     admin.from("study_sessions").select("id, day, status, block").eq("user_id", studentId).gte("day", days[0]).order("day", { ascending: false }),
@@ -310,8 +313,6 @@ export async function studentOverview(admin: Admin, studentId: string) {
     ];
   });
 
-  const view = await loadAssessment(admin, DIAGNOSTIC_ID);
-  const attempt = await loadLatestAttempt(admin, studentId, DIAGNOSTIC_ID, "completed");
   const diagnostic =
     view && attempt
       ? {
@@ -431,10 +432,10 @@ function eventLabel(event: EventRow, titleOf: (id: string) => string): string | 
 }
 
 export async function studentDay(admin: Admin, studentId: string, day: string) {
-  const profile = await studentProfile(admin, studentId);
   const from = startOfDayInRome(day);
   const to = startOfDayInRome(addDays(day, 1));
-  const [practice, diagnostic, events, templates, titles] = await Promise.all([
+  const [profile, practice, diagnostic, events, templates, titles] = await Promise.all([
+    studentProfile(admin, studentId),
     admin.from("practice_answers").select(`${ANSWER_COLUMNS}, source, source_id, seed, content, answer, note`).eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("responses").select("item_id, score, error_tag, details, time_ms, created_at, answer, items(skill_id, level, content, item_keys(key))").eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),

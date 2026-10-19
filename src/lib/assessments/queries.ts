@@ -58,7 +58,7 @@ export async function loadLatestAttempt(
 ): Promise<AttemptState | null> {
   let query = supabase
     .from("attempts")
-    .select("id, status, current_part, section_choices, completed_at")
+    .select("id, status, current_part, section_choices, completed_at, responses(item_id, score)")
     .eq("user_id", userId)
     .eq("assessment_id", assessmentId);
   if (status) query = query.eq("status", status);
@@ -71,7 +71,7 @@ export async function loadLatestAttempt(
     status: data.status === "completed" ? "completed" : "in_progress",
     currentPart: data.current_part,
     choices: sectionChoicesSchema.parse(data.section_choices),
-    scores: await loadScores(supabase, data.id),
+    scores: Object.fromEntries(data.responses.map((row) => [row.item_id, row.score])),
     completedAt: data.completed_at,
   };
 }

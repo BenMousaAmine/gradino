@@ -8,7 +8,7 @@ import { Card } from "@/components/ui";
 import { APP_NAME, DIAGNOSTIC_ID } from "@/lib/app";
 import { loadAssessment, loadLatestAttempt } from "@/lib/assessments/queries";
 import { toEngineSections } from "@/lib/assessments/view";
-import { getCurrentUser } from "@/lib/auth/session";
+import { getCurrentUser, getUserId } from "@/lib/auth/session";
 import { recoveryPlan, sectionResults, type AreaColor } from "@/lib/diagnostic/engine";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -32,10 +32,13 @@ function formatSeconds(ms: number) {
 }
 
 async function Results() {
-  const user = await getCurrentUser();
+  const userId = await getUserId();
   const supabase = await createSupabaseServerClient();
-  const view = await loadAssessment(supabase, DIAGNOSTIC_ID);
-  const attempt = await loadLatestAttempt(supabase, user.id, DIAGNOSTIC_ID, "completed");
+  const [user, view, attempt] = await Promise.all([
+    getCurrentUser(),
+    loadAssessment(supabase, DIAGNOSTIC_ID),
+    loadLatestAttempt(supabase, userId, DIAGNOSTIC_ID, "completed"),
+  ]);
   if (!view || !attempt) redirect("/diagnostic");
 
   const engineSections = toEngineSections(view);

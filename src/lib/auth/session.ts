@@ -13,16 +13,24 @@ export type CurrentUser = {
   mode: "student" | "admin";
 };
 
-export const getCurrentUser = cache(async (): Promise<CurrentUser> => {
+export const getUserId = cache(async (): Promise<string> => {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getClaims();
   const userId = data?.claims.sub;
   if (!userId) redirect("/login");
+  return userId;
+});
 
-  const { data: profile } = await supabase.from("profiles").select("display_name, role").eq("id", userId).single();
+export const getCurrentUser = cache(async (): Promise<CurrentUser> => {
+  const userId = await getUserId();
+  const supabase = await createSupabaseServerClient();
+  const [{ data: profile }, cookieStore] = await Promise.all([
+    supabase.from("profiles").select("display_name, role").eq("id", userId).single(),
+    cookies(),
+  ]);
   if (!profile) redirect("/login");
 
   const role = profile.role === "admin" ? "admin" : "student";
-  const studentMode = (await cookies()).get(MODE_COOKIE)?.value === "student";
+  const studentMode = cookieStore.get(MODE_COOKIE)?.value === "student";
   return { id: userId, displayName: profile.display_name, role, mode: role === "admin" && !studentMode ? "admin" : "student" };
 });

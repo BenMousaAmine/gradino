@@ -4,19 +4,21 @@ import { Suspense } from "react";
 import { AppHeader } from "@/components/app-header";
 import { APP_NAME, DIAGNOSTIC_ID } from "@/lib/app";
 import { loadAssessment, loadLatestAttempt } from "@/lib/assessments/queries";
-import { getCurrentUser } from "@/lib/auth/session";
+import { getCurrentUser, getUserId } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { DiagnosticRunner } from "./diagnostic-runner";
 
 export const metadata: Metadata = { title: `Test iniziale · ${APP_NAME}` };
 
 async function Diagnostic() {
-  const user = await getCurrentUser();
+  const userId = await getUserId();
   const supabase = await createSupabaseServerClient();
-  const view = await loadAssessment(supabase, DIAGNOSTIC_ID);
+  const [user, view, attempt] = await Promise.all([
+    getCurrentUser(),
+    loadAssessment(supabase, DIAGNOSTIC_ID),
+    loadLatestAttempt(supabase, userId, DIAGNOSTIC_ID),
+  ]);
   if (!view) throw new Error("Diagnostic test not found. Run pnpm content:import.");
-
-  const attempt = await loadLatestAttempt(supabase, user.id, DIAGNOSTIC_ID);
   if (attempt?.status === "completed") redirect("/diagnostic/results");
 
   return (

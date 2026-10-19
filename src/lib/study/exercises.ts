@@ -63,15 +63,15 @@ export async function templateExercise(
   purpose: ExercisePurpose,
   templateId?: string,
 ): Promise<PublicExercise | null> {
-  let query = admin.from("item_templates").select("id").eq("status", "published");
+  let query = admin.from("item_templates").select("id, level, generator, params").eq("status", "published");
   query = templateId ? query.eq("id", templateId) : query.eq("skill_id", skill.id).eq("level", level);
   const { data, error } = await query;
   if (error) throw new Error(error.message);
   if (data.length === 0) return null;
   const template = data[randomInt(0, data.length)];
   const ref: ExerciseRef = { source: "template", id: template.id, seed: newSeed() };
-  const resolved = await resolveExercise(admin, ref);
-  return { ref, skillId: skill.id, skillTitle: skill.title, level: resolved.level, purpose, content: resolved.content };
+  const { content } = generateItem(template.generator, template.params, ref.seed);
+  return { ref, skillId: skill.id, skillTitle: skill.title, level: levelSchema.parse(template.level), purpose, content };
 }
 
 export async function itemExercise(
@@ -94,8 +94,9 @@ export async function gradeAndStore(input: {
   response: ItemResponse;
   timeMs: number;
   stats: AnswerStats | null;
+  resolved?: Resolved;
 }): Promise<{ resolved: Resolved; feedback: Omit<AnswerFeedback, "event"> }> {
-  const resolved = await resolveExercise(input.admin, input.ref);
+  const resolved = input.resolved ?? (await resolveExercise(input.admin, input.ref));
   const grade = gradeItem(resolved.key, input.response);
   const canRetry = grade.score < 1 && input.response.type !== "skip";
   const { data, error } = await input.admin.from("practice_answers").insert({

@@ -3,21 +3,28 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AppHeader } from "@/components/app-header";
 import { APP_NAME } from "@/lib/app";
-import { getCurrentUser } from "@/lib/auth/session";
+import { getCurrentUser, getUserId } from "@/lib/auth/session";
+import { dayInRome, startOfDayInRome } from "@/lib/study/dates";
 import { loadStudyContext } from "@/lib/study/progress";
-import { getOrCreateSession, sessionView } from "@/lib/study/session";
+import { findSession, getOrCreateSession, sessionView, todayAnswers } from "@/lib/study/session";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { TodayRunner } from "./today-runner";
 
 export const metadata: Metadata = { title: `Sessione di oggi · ${APP_NAME}` };
 
 async function Today() {
-  const user = await getCurrentUser();
+  const userId = await getUserId();
   const admin = createSupabaseAdminClient();
-  const context = await loadStudyContext(admin, user.id);
+  const today = dayInRome();
+  const [user, context, found, answers] = await Promise.all([
+    getCurrentUser(),
+    loadStudyContext(admin, userId),
+    findSession(admin, userId, today),
+    todayAnswers(admin, userId, startOfDayInRome(today)),
+  ]);
   if (!context) redirect("/diagnostic");
-  const session = await getOrCreateSession(admin, user.id, context.today);
-  const view = await sessionView(admin, context, session);
+  const session = await getOrCreateSession(admin, userId, context.today, found);
+  const view = await sessionView(admin, context, session, answers);
 
   return (
     <>

@@ -6,7 +6,8 @@ import { Gradini } from "@/components/gradini";
 import { buttonClass, Card } from "@/components/ui";
 import { DIAGNOSTIC_ID } from "@/lib/app";
 import { loadLatestAttempt } from "@/lib/assessments/queries";
-import { getCurrentUser } from "@/lib/auth/session";
+import { getCurrentUser, getUserId } from "@/lib/auth/session";
+import { dayInRome } from "@/lib/study/dates";
 import { LEVEL_LABELS, SESSION_BLOCKS } from "@/lib/study/plan";
 import { loadStudyContext, pathEntries } from "@/lib/study/progress";
 import type { PathEntry } from "@/lib/study/types";
@@ -106,12 +107,17 @@ function DiagnosticCard({ status, answered }: { status: "none" | "in_progress"; 
 }
 
 async function Home() {
-  const user = await getCurrentUser();
-  if (user.mode === "admin") redirect("/admin");
+  const userId = await getUserId();
   const supabase = await createSupabaseServerClient();
-  const attempt = await loadLatestAttempt(supabase, user.id, DIAGNOSTIC_ID);
   const admin = createSupabaseAdminClient();
-  const context = attempt?.status === "completed" ? await loadStudyContext(admin, user.id) : null;
+  const [user, attempt, studyContext, session] = await Promise.all([
+    getCurrentUser(),
+    loadLatestAttempt(supabase, userId, DIAGNOSTIC_ID),
+    loadStudyContext(admin, userId),
+    admin.from("study_sessions").select("block, status").eq("user_id", userId).eq("day", dayInRome()).maybeSingle(),
+  ]);
+  if (user.mode === "admin") redirect("/admin");
+  const context = attempt?.status === "completed" ? studyContext : null;
 
   if (!context) {
     return (
@@ -128,12 +134,6 @@ async function Home() {
     );
   }
 
-  const session = await admin
-    .from("study_sessions")
-    .select("block, status")
-    .eq("user_id", user.id)
-    .eq("day", context.today)
-    .maybeSingle();
   if (session.error) throw new Error(session.error.message);
   const path = pathEntries(context);
   const mastered = path.filter((entry) => entry.status !== "learning").length;

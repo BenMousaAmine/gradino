@@ -48,41 +48,37 @@ function toProgress(row: {
 }
 
 async function loadDiagnostic(admin: Admin, userId: string): Promise<DiagnosticItem[] | null> {
-  const attempt = await admin
-    .from("attempts")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("assessment_id", DIAGNOSTIC_ID)
-    .eq("status", "completed")
-    .order("completed_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (attempt.error) throw new Error(attempt.error.message);
-  if (!attempt.data) return null;
-
-  const [items, responses] = await Promise.all([
+  const [attempt, items] = await Promise.all([
+    admin
+      .from("attempts")
+      .select("id, responses(item_id, score)")
+      .eq("user_id", userId)
+      .eq("assessment_id", DIAGNOSTIC_ID)
+      .eq("status", "completed")
+      .order("completed_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
     admin
       .from("assessment_items")
       .select("item_id, items(skill_id), assessment_sections!inner(assessment_id)")
       .eq("assessment_sections.assessment_id", DIAGNOSTIC_ID),
-    admin.from("responses").select("item_id, score").eq("attempt_id", attempt.data.id),
   ]);
+  if (attempt.error) throw new Error(attempt.error.message);
   if (items.error) throw new Error(items.error.message);
-  if (responses.error) throw new Error(responses.error.message);
+  if (!attempt.data) return null;
 
-  const scores = new Map(responses.data.map((row) => [row.item_id, row.score]));
+  const scores = new Map(attempt.data.responses.map((row) => [row.item_id, row.score]));
   return items.data.map((row) => ({ skillId: row.items.skill_id, score: scores.get(row.item_id) ?? null }));
 }
 
 export async function loadStudyContext(admin: Admin, userId: string): Promise<StudyContext | null> {
   const today = dayInRome();
-  const templates = await admin.from("item_templates").select("skill_id").eq("status", "published");
-  if (templates.error) throw new Error(templates.error.message);
-  const skillIds = [...new Set(templates.data.map((row) => row.skill_id))];
-
   const [skillsResult, prerequisitesResult, progressResult] = await Promise.all([
-    admin.from("skills").select("id, title, position, areas(title, position)").in("id", skillIds),
-    admin.from("skill_prerequisites").select("skill_id, prerequisite_id").in("skill_id", skillIds),
+    admin
+      .from("skills")
+      .select("id, title, position, areas(title, position), item_templates!inner(id)")
+      .eq("item_templates.status", "published"),
+    admin.from("skill_prerequisites").select("skill_id, prerequisite_id"),
     admin
       .from("skill_progress")
       .select("skill_id, status, level, review_step, next_review_on, lesson_done_at")
@@ -91,6 +87,7 @@ export async function loadStudyContext(admin: Admin, userId: string): Promise<St
   if (skillsResult.error) throw new Error(skillsResult.error.message);
   if (prerequisitesResult.error) throw new Error(prerequisitesResult.error.message);
   if (progressResult.error) throw new Error(progressResult.error.message);
+  const skillIds = skillsResult.data.map((row) => row.id);
 
   const skills = new Map<string, SkillInfo>(
     skillsResult.data.map((row) => [
@@ -166,55 +163,65 @@ async function saveProgress(admin: Admin, userId: string, skillId: string, progr
   if (error) throw new Error(error.message);
 }
 
+export type ProgressInput = { progress: ProgressState; previous: { id: string; score: number }[] };
+
+export async function loadProgressInput(
+  admin: Admin,
+  userId: string,
+  skillId: string,
+  level: Level,
+  purpose: ExercisePurpose,
+): Promise<ProgressInput | null> {
+  if (purpose !== "practice" && purpose !== "review") return null;
+  const answers = admin
+    .from("practice_answers")
+    .select("id, score")
+    .eq("user_id", userId)
+    .eq("skill_id", skillId)
+    .eq("purpose", purpose);
+  const [row, previous] = await Promise.all([
+    admin
+      .from("skill_progress")
+      .select("status, level, review_step, next_review_on, lesson_done_at")
+      .eq("user_id", userId)
+      .eq("skill_id", skillId)
+      .maybeSingle(),
+    purpose === "practice"
+      ? answers.eq("level", level).order("created_at", { ascending: false }).limit(10)
+      : answers.gte("created_at", startOfDayInRome(dayInRome())).order("created_at", { ascending: true }),
+  ]);
+  if (row.error) throw new Error(row.error.message);
+  if (previous.error) throw new Error(previous.error.message);
+  if (!row.data) return null;
+  return { progress: toProgress(row.data), previous: purpose === "practice" ? previous.data.reverse() : previous.data };
+}
+
 export async function applyAnswer(
   admin: Admin,
   userId: string,
   skillId: string,
   level: Level,
   purpose: ExercisePurpose,
+  input: ProgressInput | null,
+  answer: { id: string; score: number },
 ): Promise<ProgressEvent | null> {
-  if (purpose !== "practice" && purpose !== "review") return null;
+  if (!input) return null;
   const today = dayInRome();
-  const row = await admin
-    .from("skill_progress")
-    .select("status, level, review_step, next_review_on, lesson_done_at")
-    .eq("user_id", userId)
-    .eq("skill_id", skillId)
-    .maybeSingle();
-  if (row.error) throw new Error(row.error.message);
-  if (!row.data) return null;
-  const progress = toProgress(row.data);
+  const { progress } = input;
+  const previous = input.previous.filter((row) => row.id !== answer.id).map((row) => row.score);
 
   if (purpose === "practice") {
     if (progress.status !== "learning" || progress.level !== level) return null;
-    const answers = await admin
-      .from("practice_answers")
-      .select("score")
-      .eq("user_id", userId)
-      .eq("skill_id", skillId)
-      .eq("level", level)
-      .eq("purpose", "practice")
-      .order("created_at", { ascending: false })
-      .limit(10);
-    if (answers.error) throw new Error(answers.error.message);
-    const result = afterPractice(progress, answers.data.map((answer) => answer.score).reverse(), today);
+    const result = afterPractice(progress, [...previous.slice(-9), answer.score], today);
     if (!result.event) return null;
     await saveProgress(admin, userId, skillId, result.progress);
     return result.event;
   }
 
   if (!isReviewDue(progress, today)) return null;
-  const answers = await admin
-    .from("practice_answers")
-    .select("score")
-    .eq("user_id", userId)
-    .eq("skill_id", skillId)
-    .eq("purpose", "review")
-    .gte("created_at", startOfDayInRome(today))
-    .order("created_at", { ascending: true });
-  if (answers.error) throw new Error(answers.error.message);
-  if (answers.data.length < REVIEW_SIZE) return null;
-  const result = afterReview(progress, answers.data.slice(-REVIEW_SIZE).map((answer) => answer.score), today);
+  const scores = [...previous, answer.score];
+  if (scores.length < REVIEW_SIZE) return null;
+  const result = afterReview(progress, scores.slice(-REVIEW_SIZE), today);
   await saveProgress(admin, userId, skillId, result.progress);
   return result.event;
 }

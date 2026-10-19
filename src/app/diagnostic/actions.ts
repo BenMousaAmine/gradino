@@ -4,7 +4,7 @@ import { z } from "zod";
 import { DIAGNOSTIC_ID } from "@/lib/app";
 import { loadAssessment, loadScores } from "@/lib/assessments/queries";
 import { toEngineSections } from "@/lib/assessments/view";
-import { getCurrentUser } from "@/lib/auth/session";
+import { getUserId } from "@/lib/auth/session";
 import {
   nextStep,
   recoveryPlan,
@@ -19,28 +19,37 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 const UNIQUE_VIOLATION = "23505";
 
-async function ownedAttempt(attemptId: string) {
-  const user = await getCurrentUser();
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin
+type Admin = ReturnType<typeof createSupabaseAdminClient>;
+
+function attemptQuery(admin: Admin, attemptId: string) {
+  return admin
     .from("attempts")
     .select("id, user_id, assessment_id, status, current_part, section_choices")
     .eq("id", attemptId)
     .maybeSingle();
+}
+
+function ensureOwned({ data, error }: Awaited<ReturnType<typeof attemptQuery>>, userId: string) {
   if (error) throw new Error(error.message);
-  if (!data || data.user_id !== user.id) throw new Error("Attempt not found.");
+  if (!data || data.user_id !== userId) throw new Error("Attempt not found.");
   if (data.status !== "in_progress") throw new Error("Attempt already completed.");
-  return { user, admin, attempt: data };
+  return data;
+}
+
+async function ownedAttempt(attemptId: string) {
+  const userId = await getUserId();
+  const admin = createSupabaseAdminClient();
+  return { userId, admin, attempt: ensureOwned(await attemptQuery(admin, attemptId), userId) };
 }
 
 export async function startDiagnostic(): Promise<{ attemptId: string }> {
-  const user = await getCurrentUser();
+  const userId = await getUserId();
   const admin = createSupabaseAdminClient();
 
   const existing = await admin
     .from("attempts")
     .select("id")
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .eq("assessment_id", DIAGNOSTIC_ID)
     .eq("status", "in_progress")
     .maybeSingle();
@@ -49,7 +58,7 @@ export async function startDiagnostic(): Promise<{ attemptId: string }> {
 
   const { data, error } = await admin
     .from("attempts")
-    .insert({ user_id: user.id, assessment_id: DIAGNOSTIC_ID })
+    .insert({ user_id: userId, assessment_id: DIAGNOSTIC_ID })
     .select("id")
     .single();
   if (error) throw new Error(error.message);
@@ -66,33 +75,29 @@ const submitSchema = z.object({
 
 export async function submitAnswer(input: z.input<typeof submitSchema>): Promise<{ score: number }> {
   const { attemptId, itemId, response, timeMs, stats } = submitSchema.parse(input);
-  const { user, admin, attempt } = await ownedAttempt(attemptId);
+  const userId = await getUserId();
+  const admin = createSupabaseAdminClient();
 
-  const membership = await admin
-    .from("assessment_items")
-    .select("item_id, assessment_sections!inner(assessment_id)")
-    .eq("item_id", itemId)
-    .eq("assessment_sections.assessment_id", attempt.assessment_id)
-    .limit(1);
+  const [attemptResult, membership, existing, keyRow] = await Promise.all([
+    attemptQuery(admin, attemptId),
+    admin.from("assessment_items").select("item_id, assessment_sections!inner(assessment_id)").eq("item_id", itemId),
+    admin.from("responses").select("score").eq("attempt_id", attemptId).eq("item_id", itemId).maybeSingle(),
+    admin.from("item_keys").select("key").eq("item_id", itemId).maybeSingle(),
+  ]);
+  const attempt = ensureOwned(attemptResult, userId);
   if (membership.error) throw new Error(membership.error.message);
-  if (membership.data.length === 0) throw new Error("Item not in this assessment.");
-
-  const existing = await admin
-    .from("responses")
-    .select("score")
-    .eq("attempt_id", attemptId)
-    .eq("item_id", itemId)
-    .maybeSingle();
+  if (!membership.data.some((row) => row.assessment_sections.assessment_id === attempt.assessment_id)) {
+    throw new Error("Item not in this assessment.");
+  }
   if (existing.error) throw new Error(existing.error.message);
   if (existing.data) return { score: existing.data.score };
-
-  const keyRow = await admin.from("item_keys").select("key").eq("item_id", itemId).single();
   if (keyRow.error) throw new Error(keyRow.error.message);
+  if (!keyRow.data) throw new Error(`Item ${itemId} has no key`);
 
   const grade = gradeItem(itemKeySchema.parse(keyRow.data.key), response);
   const insert = await admin.from("responses").insert({
     attempt_id: attemptId,
-    user_id: user.id,
+    user_id: userId,
     item_id: itemId,
     answer: response,
     score: grade.score,
@@ -113,16 +118,18 @@ const chooseSchema = z.object({
 
 export async function chooseSection(input: z.input<typeof chooseSchema>): Promise<void> {
   const { attemptId, sectionId, choice } = chooseSchema.parse(input);
-  const { admin, attempt } = await ownedAttempt(attemptId);
+  const userId = await getUserId();
+  const admin = createSupabaseAdminClient();
 
-  const section = await admin
-    .from("assessment_sections")
-    .select("id, optional_question")
-    .eq("id", sectionId)
-    .eq("assessment_id", attempt.assessment_id)
-    .maybeSingle();
+  const [attemptResult, section] = await Promise.all([
+    attemptQuery(admin, attemptId),
+    admin.from("assessment_sections").select("id, assessment_id, optional_question").eq("id", sectionId).maybeSingle(),
+  ]);
+  const attempt = ensureOwned(attemptResult, userId);
   if (section.error) throw new Error(section.error.message);
-  if (!section.data || section.data.optional_question === null) throw new Error("Section is not optional.");
+  if (!section.data || section.data.assessment_id !== attempt.assessment_id || section.data.optional_question === null) {
+    throw new Error("Section is not optional.");
+  }
 
   const choices = { ...sectionChoicesSchema.parse(attempt.section_choices), [sectionId]: choice };
   const update = await admin.from("attempts").update({ section_choices: choices }).eq("id", attemptId);
@@ -142,12 +149,13 @@ export async function startPart(input: z.input<typeof partSchema>): Promise<void
 
 export async function finishDiagnostic(input: { attemptId: string }): Promise<void> {
   const { attemptId } = z.object({ attemptId: z.uuid() }).parse(input);
-  const { admin, attempt } = await ownedAttempt(attemptId);
+  const userId = await getUserId();
+  const admin = createSupabaseAdminClient();
 
+  const [attemptResult, scores] = await Promise.all([attemptQuery(admin, attemptId), loadScores(admin, attemptId)]);
+  const attempt = ensureOwned(attemptResult, userId);
   const view = await loadAssessment(admin, attempt.assessment_id);
   if (!view) throw new Error("Assessment not found.");
-
-  const scores = await loadScores(admin, attemptId);
   const state = {
     scores: new Map(Object.entries(scores)),
     choices: sectionChoicesSchema.parse(attempt.section_choices),
