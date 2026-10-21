@@ -7,12 +7,14 @@ import { formatDateTime } from "@/lib/admin/format";
 import { listStudents, requireAdmin } from "@/lib/admin/queries";
 import { APP_NAME } from "@/lib/app";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { pendingWritingCount } from "@/lib/writing/queries";
 
 export const metadata: Metadata = { title: `Admin · ${APP_NAME}` };
 
 async function Students() {
   const user = await requireAdmin();
-  const students = await listStudents(createSupabaseAdminClient(), user.id);
+  const admin = createSupabaseAdminClient();
+  const [students, pendingWritings] = await Promise.all([listStudents(admin, user.id), pendingWritingCount(admin)]);
 
   return (
     <>
@@ -23,9 +25,14 @@ async function Students() {
             <h1 className="text-3xl font-extrabold tracking-tight">Pannello admin</h1>
             <p className="text-ink-soft">I tuoi studenti e cosa hanno fatto negli ultimi 7 giorni.</p>
           </div>
-          <Link href="/admin/students/new" className={buttonClass("secondary")}>
-            + Nuovo studente
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/admin/writing" className={buttonClass("secondary")}>
+              Scritture da correggere ({pendingWritings})
+            </Link>
+            <Link href="/admin/students/new" className={buttonClass("secondary")}>
+              + Nuovo studente
+            </Link>
+          </div>
         </div>
         {students.length === 0 ? (
           <p className="rounded-3xl border-2 border-line bg-surface p-5 text-ink-soft">Non ci sono ancora studenti.</p>

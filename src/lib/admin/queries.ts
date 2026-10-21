@@ -15,6 +15,7 @@ import { stepsClimbed, type SkillStatus } from "@/lib/study/mastery";
 import { chunks, computeSignals, dailySignals } from "@/lib/insights/engine";
 import { coachStats, parentReport } from "@/lib/insights/report";
 import { parseSubject, SUBJECT_IDS, SUBJECTS, subjectOfSkill, type SubjectId } from "@/lib/subjects";
+import { toWriting, WRITING_COLUMNS, type WritingView } from "@/lib/writing/queries";
 import {
   activeMs,
   dailySeries,
@@ -500,7 +501,8 @@ export type TimelineEntry =
       retry: AttemptView | null;
       note: { text: string; source: string | null; seconds: number | null } | null;
     }
-  | { kind: "event"; at: string; label: string };
+  | { kind: "event"; at: string; label: string }
+  | { kind: "writing"; at: string; writing: WritingView };
 
 export type AttemptView = {
   given: string[];
@@ -563,15 +565,16 @@ function eventLabel(event: EventRow, titleOf: (id: string) => string): string | 
 export async function studentDay(admin: Admin, studentId: string, day: string) {
   const from = startOfDayInRome(day);
   const to = startOfDayInRome(addDays(day, 1));
-  const [profile, practice, diagnostic, events, templates, titles] = await Promise.all([
+  const [profile, practice, diagnostic, events, templates, titles, writings] = await Promise.all([
     studentProfile(admin, studentId),
     admin.from("practice_answers").select(`${ANSWER_COLUMNS}, source, source_id, seed, content, answer, note`).eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("responses").select("item_id, score, error_tag, details, time_ms, created_at, answer, items(skill_id, level, content, item_keys(key))").eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
     admin.from("item_templates").select("id, generator, params"),
     skillTitles(admin),
+    admin.from("writing_submissions").select(WRITING_COLUMNS).eq("user_id", studentId).gte("created_at", from).lt("created_at", to).order("created_at"),
   ]);
-  for (const result of [practice, diagnostic, events, templates]) if (result.error) throw new Error(result.error.message);
+  for (const result of [practice, diagnostic, events, templates, writings]) if (result.error) throw new Error(result.error.message);
 
   const titleOf = (id: string) => titles.get(id)?.title ?? id;
   const templateById = new Map((templates.data ?? []).map((row) => [row.id, row]));
@@ -675,6 +678,8 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
       note: null,
     });
   }
+
+  for (const row of writings.data ?? []) timeline.push({ kind: "writing", at: row.created_at, writing: toWriting(row) });
 
   for (const event of eventRows) {
     if (event.type === "feedback_closed") continue;

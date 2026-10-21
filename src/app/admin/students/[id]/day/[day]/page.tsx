@@ -7,6 +7,7 @@ import { InsightList } from "@/components/admin/insight-list";
 import { StatTile } from "@/components/admin/stat-tile";
 import { AppHeader } from "@/components/app-header";
 import { MathText } from "@/components/math-text";
+import { WritingBadge } from "@/components/writing-feedback";
 import { formatDay, formatTime } from "@/lib/admin/format";
 import { requireAdmin, studentDay, type AttemptView } from "@/lib/admin/queries";
 import { APP_NAME } from "@/lib/app";
@@ -118,6 +119,28 @@ async function Day({ params }: { params: Promise<{ id: string; day: string }> })
                   <span className="w-12 shrink-0 tabular-nums">{formatTime(entry.at)}</span>
                   <span className="h-px flex-1 bg-line" aria-hidden="true" />
                   <span className="text-right">{entry.label}</span>
+                </li>
+              ) : entry.kind === "writing" ? (
+                <li key={index} className="flex flex-col gap-3 rounded-2xl border-2 border-line bg-surface p-4">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="tabular-nums text-ink-soft">{formatTime(entry.at)}</span>
+                    <span className="font-semibold">Scrittura libera: {entry.writing.prompt.title}</span>
+                    <span className="ml-auto">
+                      <WritingBadge writing={entry.writing} />
+                    </span>
+                  </div>
+                  <p lang="en" className="line-clamp-4 whitespace-pre-wrap">
+                    {entry.writing.body}
+                  </p>
+                  <p className="text-xs text-ink-soft">
+                    {entry.writing.words} parole · {Math.max(1, Math.round(entry.writing.seconds / 60))} min
+                    {entry.writing.stats.pastes > 0
+                      ? ` · incollato ${entry.writing.stats.pastes} ${entry.writing.stats.pastes === 1 ? "volta" : "volte"}`
+                      : ""}
+                  </p>
+                  <Link href={`/admin/writing/${entry.writing.id}`} className="text-sm font-semibold text-brand-dark hover:underline">
+                    {entry.writing.review ? "Apri il testo e la correzione →" : "Apri e correggi →"}
+                  </Link>
                 </li>
               ) : (
                 <li

@@ -241,6 +241,19 @@ async function Home({ searchParams }: { searchParams: PageProps<"/">["searchPara
 
       <CoachCard tip={tip} cheer={strength} />
 
+      {subject === "english" && (
+        <Card className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <p className={eyebrow}>Come all’esame</p>
+            <h2 className="text-xl font-extrabold">Scrittura libera</h2>
+            <p className="text-ink-soft">Scrivi un’email o un dialogo su una traccia d’esame, poi ricevi la correzione con i consigli.</p>
+          </div>
+          <Link href="/writing" className={linkButton}>
+            Scrivi un testo
+          </Link>
+        </Card>
+      )}
+
       <Card className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between">
           <h2 className="text-xl font-extrabold">Il tuo percorso</h2>

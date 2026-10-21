@@ -401,6 +401,26 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"writing_submissions": {
+                  Row: {
+                    "ai_error": string | null,"ai_feedback": Json | null,"ai_model": string | null,"ai_status": string,"body": string,"created_at": string,"id": string,"prompt": NonNullable<Json>,"prompt_id": string,"review_comment": string | null,"review_score": number | null,"review_status": string,"reviewed_at": string | null,"reviewed_by": string | null,"stats": NonNullable<Json>,"subject_id": string,"time_ms": number,"user_id": string,"words": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "ai_error"?: string | null,"ai_feedback"?: Json | null,"ai_model"?: string | null,"ai_status"?: string,"body": string,"created_at"?: string,"id"?: string,"prompt": NonNullable<Json>,"prompt_id": string,"review_comment"?: string | null,"review_score"?: number | null,"review_status"?: string,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"stats"?: NonNullable<Json>,"subject_id": string,"time_ms": number,"user_id": string,"words": number
+                  }
+                  Update: {
+                    "ai_error"?: string | null,"ai_feedback"?: Json | null,"ai_model"?: string | null,"ai_status"?: string,"body"?: string,"created_at"?: string,"id"?: string,"prompt"?: NonNullable<Json>,"prompt_id"?: string,"review_comment"?: string | null,"review_score"?: number | null,"review_status"?: string,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"stats"?: NonNullable<Json>,"subject_id"?: string,"time_ms"?: number,"user_id"?: string,"words"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "writing_submissions_subject_id_fkey"
+      columns: ["subject_id"]
+isOneToOne: false
+      referencedRelation: "subjects"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
