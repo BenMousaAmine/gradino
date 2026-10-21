@@ -1,0 +1,198 @@
+{
+  "subjects": [
+    {
+      "id": "english",
+      "title": "Inglese"
+    }
+  ],
+  "areas": [
+    {
+      "id": "english.words",
+      "subjectId": "english",
+      "title": "Parole"
+    },
+    {
+      "id": "english.reading",
+      "subjectId": "english",
+      "title": "Lettura"
+    },
+    {
+      "id": "english.listening",
+      "subjectId": "english",
+      "title": "Ascolto"
+    },
+    {
+      "id": "english.writing",
+      "subjectId": "english",
+      "title": "Scrittura"
+    },
+    {
+      "id": "english.verbs",
+      "subjectId": "english",
+      "title": "Verbi"
+    },
+    {
+      "id": "english.tenses",
+      "subjectId": "english",
+      "title": "Tempi verbali"
+    }
+  ],
+  "skills": [
+    {
+      "id": "english.words.time-numbers",
+      "areaId": "english.words",
+      "title": "Giorni, mesi, numeri e ore",
+      "schoolYear": 1
+    },
+    {
+      "id": "english.words.everyday",
+      "areaId": "english.words",
+      "title": "Famiglia, casa, scuola e cibo",
+      "schoolYear": 1,
+      "prerequisites": [
+        "english.verbs.present-simple"
+      ]
+    },
+    {
+      "id": "english.words.cognates",
+      "areaId": "english.words",
+      "title": "Parole trasparenti",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.present-continuous"
+      ]
+    },
+    {
+      "id": "english.words.false-friends",
+      "areaId": "english.words",
+      "title": "Falsi amici",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.irregular-1"
+      ]
+    },
+    {
+      "id": "english.reading.a1",
+      "areaId": "english.reading",
+      "title": "Leggere come all'INVALSI: A1",
+      "schoolYear": 3,
+      "prerequisites": [
+        "english.words.everyday"
+      ]
+    },
+    {
+      "id": "english.reading.a2",
+      "areaId": "english.reading",
+      "title": "Leggere come all'INVALSI: A2",
+      "schoolYear": 3,
+      "prerequisites": [
+        "english.verbs.irregular-2"
+      ]
+    },
+    {
+      "id": "english.listening.a1",
+      "areaId": "english.listening",
+      "title": "Ascoltare come all'INVALSI: A1",
+      "schoolYear": 3,
+      "prerequisites": [
+        "english.verbs.present-continuous"
+      ]
+    },
+    {
+      "id": "english.listening.a2",
+      "areaId": "english.listening",
+      "title": "Ascoltare come all'INVALSI: A2",
+      "schoolYear": 3,
+      "prerequisites": [
+        "english.verbs.irregular-3"
+      ]
+    },
+    {
+      "id": "english.writing.dialogue",
+      "areaId": "english.writing",
+      "title": "Completare un dialogo",
+      "schoolYear": 3,
+      "prerequisites": [
+        "english.words.cognates"
+      ]
+    },
+    {
+      "id": "english.writing.email",
+      "areaId": "english.writing",
+      "title": "Scrivere un'email",
+      "schoolYear": 3,
+      "prerequisites": [
+        "english.tenses.signal-words"
+      ]
+    },
+    {
+      "id": "english.verbs.to-be",
+      "areaId": "english.verbs",
+      "title": "to be: am, is, are",
+      "schoolYear": 1
+    },
+    {
+      "id": "english.verbs.present-simple",
+      "areaId": "english.verbs",
+      "title": "Present simple: he, she, it + S",
+      "schoolYear": 1,
+      "prerequisites": [
+        "english.verbs.to-be"
+      ]
+    },
+    {
+      "id": "english.verbs.present-continuous",
+      "areaId": "english.verbs",
+      "title": "Present continuous: sta succedendo adesso",
+      "schoolYear": 1,
+      "prerequisites": [
+        "english.verbs.present-simple"
+      ]
+    },
+    {
+      "id": "english.verbs.past-simple-regular",
+      "areaId": "english.verbs",
+      "title": "Past simple: i verbi regolari",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.present-continuous"
+      ]
+    },
+    {
+      "id": "english.verbs.irregular-1",
+      "areaId": "english.verbs",
+      "title": "Verbi irregolari 1: le famiglie facili",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.past-simple-regular"
+      ]
+    },
+    {
+      "id": "english.verbs.irregular-2",
+      "areaId": "english.verbs",
+      "title": "Verbi irregolari 2: i-a-u e -ow-ew-own",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.irregular-1"
+      ]
+    },
+    {
+      "id": "english.verbs.irregular-3",
+      "areaId": "english.verbs",
+      "title": "Verbi irregolari 3: participio in -en e ribelli",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.irregular-2"
+      ]
+    },
+    {
+      "id": "english.tenses.signal-words",
+      "areaId": "english.tenses",
+      "title": "Che tempo uso? Le parole-spia",
+      "schoolYear": 2,
+      "prerequisites": [
+        "english.verbs.irregular-3"
+      ]
+    }
+  ]
+}

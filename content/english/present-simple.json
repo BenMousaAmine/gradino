@@ -1,0 +1,131 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.verbs.present-simple",
+      "title": "Present simple: he, she, it + S",
+      "understand": {
+        "paragraphs": [
+          "Il present simple serve per le cose che succedono sempre o spesso: abitudini, gusti, orari. Esempio: I play football every Saturday.",
+          "Il verbo è quasi sempre uguale per tutti: I play, you play, we play, they play.",
+          "C'è una sola eccezione da ricordare: con he, she, it (e con una persona o una cosa sola, come Tom o my sister) il verbo prende la -s. Il tormentone: \"He, she, it: la S ci sta!\" → she plays, Tom plays."
+        ]
+      },
+      "recipe": [
+        "Guarda il soggetto: è he, she, it o una persona sola (Tom, my sister, our teacher)?",
+        "Se sì, aggiungi la -s al verbo: play → plays, like → likes.",
+        "Verbi che finiscono in -ch, -sh, -ss, -x, -o: aggiungi -es (watch → watches, go → goes).",
+        "Consonante + y: la y diventa -ies (study → studies). Vocale + y: basta la -s (play → plays).",
+        "have è speciale: he has, she has."
+      ],
+      "example": {
+        "prompt": "My sister ___ (watch) TV every evening.",
+        "steps": [
+          "Il soggetto è my sister: una persona sola, come she.",
+          "Quindi la S ci sta.",
+          "watch finisce in -ch: si aggiunge -es → watches."
+        ],
+        "answer": "My sister watches TV every evening."
+      },
+      "complete": {
+        "prompt": "Completa le frasi con il verbo giusto.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Tom ___ (play) tennis.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "plays"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "play"
+                  ],
+                  "tag": "eng_third_person_s",
+                  "message": "He, she, it: la S ci sta! Tom è come he → plays."
+                }
+              ]
+            }
+          },
+          {
+            "label": "I ___ (like) pizza.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "like"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "likes"
+                  ],
+                  "tag": "eng_s_only_third",
+                  "message": "Con I niente -s: I like."
+                }
+              ]
+            }
+          },
+          {
+            "label": "She ___ (study) English.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "studies"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "studys"
+                  ],
+                  "tag": "eng_ies_rule",
+                  "message": "Consonante + y: la y diventa -ies → studies."
+                },
+                {
+                  "answers": [
+                    "study"
+                  ],
+                  "tag": "eng_third_person_s",
+                  "message": "He, she, it: la S ci sta! → studies."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Con I, you, we, they niente -s: I play, non I plays.",
+        "Nelle domande e nelle negazioni la -s la prende does: she doesn't play (non plays). Il verbo torna nudo!"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.present-simple.1",
+      "skillId": "english.verbs.present-simple",
+      "level": "base",
+      "generator": "en-present-simple",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.present-simple.2",
+      "skillId": "english.verbs.present-simple",
+      "level": "medium",
+      "generator": "en-present-simple",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.present-simple.3",
+      "skillId": "english.verbs.present-simple",
+      "level": "advanced",
+      "generator": "en-present-simple",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getUserId } from "@/lib/auth/session";
 import { itemResponseSchema } from "@/lib/items/schemas";
 import { answerStatsSchema } from "@/lib/tracking/schema";
+import { subjectIdSchema, subjectOfSkill, type SubjectId } from "@/lib/subjects";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { dayInRome, startOfDayInRome } from "./dates";
 import { gradeAndStore, gradeSecondAttempt, resolveExercise, saveNote, templateExercise } from "./exercises";
@@ -11,25 +12,25 @@ import { applyAnswer, loadProgressInput, loadStudyContext, markLessonDone } from
 import { advanceBlock, findSession, getOrCreateSession, sessionView, todayAnswers } from "./session";
 import { exerciseRefSchema, purposeSchema, type AnswerFeedback, type PublicExercise, type SessionView } from "./types";
 
-async function studyContext() {
+async function studyContext(subject: SubjectId) {
   const userId = await getUserId();
   const admin = createSupabaseAdminClient();
-  const context = await loadStudyContext(admin, userId);
+  const context = await loadStudyContext(admin, userId, subject);
   if (!context) throw new Error("Complete the diagnostic test first.");
   return { userId, admin, context };
 }
 
-async function sessionState() {
+async function sessionState(subject: SubjectId) {
   const userId = await getUserId();
   const admin = createSupabaseAdminClient();
   const today = dayInRome();
   const [context, found, answers] = await Promise.all([
-    loadStudyContext(admin, userId),
-    findSession(admin, userId, today),
+    loadStudyContext(admin, userId, subject),
+    findSession(admin, { userId, subject, day: today }),
     todayAnswers(admin, userId, startOfDayInRome(today)),
   ]);
   if (!context) throw new Error("Complete the diagnostic test first.");
-  const session = await getOrCreateSession(admin, userId, context.today, found);
+  const session = await getOrCreateSession(admin, { userId, subject, day: context.today }, found);
   return { userId, admin, context, session, answers };
 }
 
@@ -97,16 +98,17 @@ export async function submitNote(input: z.input<typeof noteSchema>): Promise<voi
   await saveNote({ admin: createSupabaseAdminClient(), userId, ...parsed });
 }
 
-export async function nextSessionStep(): Promise<SessionView> {
-  const { admin, context, session, answers } = await sessionState();
+export async function nextSessionStep(input: { subject: SubjectId }): Promise<SessionView> {
+  const { subject } = z.object({ subject: subjectIdSchema }).parse(input);
+  const { admin, context, session, answers } = await sessionState(subject);
   return sessionView(admin, context, session, answers);
 }
 
-export async function advanceSessionBlock(input: { sessionId: string }): Promise<SessionView> {
-  const { sessionId } = z.object({ sessionId: z.uuid() }).parse(input);
-  const { userId, admin, context, session, answers } = await sessionState();
+export async function advanceSessionBlock(input: { sessionId: string; subject: SubjectId }): Promise<SessionView> {
+  const { sessionId, subject } = z.object({ sessionId: z.uuid(), subject: subjectIdSchema }).parse(input);
+  const { userId, admin, context, session, answers } = await sessionState(subject);
   if (session.id !== sessionId) return sessionView(admin, context, session, answers);
-  return sessionView(admin, context, await advanceBlock(admin, userId, session), answers);
+  return sessionView(admin, context, await advanceBlock(admin, userId, subject, session), answers);
 }
 
 export async function finishLesson(input: { skillId: string }): Promise<void> {
@@ -117,7 +119,7 @@ export async function finishLesson(input: { skillId: string }): Promise<void> {
 
 export async function nextSkillExercise(input: { skillId: string }): Promise<PublicExercise> {
   const { skillId } = z.object({ skillId: z.string().min(1).max(80) }).parse(input);
-  const { admin, context } = await studyContext();
+  const { admin, context } = await studyContext(subjectOfSkill(skillId));
   const skill = context.skills.get(skillId);
   const progress = context.progress.get(skillId);
   if (!skill || !progress) throw new Error("Skill not available.");

@@ -7,8 +7,9 @@ import { LessonView } from "@/components/lesson-view";
 import { PauseTimer } from "@/components/pause-timer";
 import { Button, buttonClass, Card } from "@/components/ui";
 import { advanceSessionBlock, finishLesson, nextSessionStep } from "@/lib/study/actions";
-import { LEVEL_LABELS, SESSION_BLOCKS } from "@/lib/study/plan";
+import { LEVEL_LABELS } from "@/lib/study/plan";
 import type { PublicExercise, SessionView } from "@/lib/study/types";
+import { SUBJECTS } from "@/lib/subjects";
 import { track } from "@/lib/tracking/client";
 
 const ERROR_MESSAGE = "Qualcosa non ha funzionato. Controlla la connessione e riprova.";
@@ -54,8 +55,9 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
 
   const endsAt = Date.parse(view.block.startedAt) + view.block.minutes * 60_000;
   const timeUp = now >= endsAt;
-  const isLastBlock = view.block.index === SESSION_BLOCKS.length - 1;
-  const nextBlock = SESSION_BLOCKS[view.block.index + 1];
+  const blocks = SUBJECTS[view.subject].blocks;
+  const isLastBlock = view.block.index === blocks.length - 1;
+  const nextBlock = blocks[view.block.index + 1];
   const pauseStartedAt = useRef<number | null>(null);
   const timeUpTracked = useRef(new Set<number>());
 
@@ -106,7 +108,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
       });
       pauseStartedAt.current = null;
     }
-    setView(await advanceSessionBlock({ sessionId: view.sessionId }));
+    setView(await advanceSessionBlock({ sessionId: view.sessionId, subject: view.subject }));
     setPhase({ kind: "step" });
   };
 
@@ -118,7 +120,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
         startPause();
         return;
       }
-      setView(await nextSessionStep());
+      setView(await nextSessionStep({ subject: view.subject }));
       setPhase({ kind: "step" });
     });
 
@@ -129,7 +131,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
         startPause();
         return;
       }
-      setView(await nextSessionStep());
+      setView(await nextSessionStep({ subject: view.subject }));
       setPhase({ kind: "step" });
     });
 
@@ -160,7 +162,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
           </div>
         </div>
         {summary.skills.length > 0 && <p className="text-ink-soft">Oggi hai lavorato su: {summary.skills.join(", ")}.</p>}
-        <Link href="/" className={`${buttonClass()} w-full`}>
+        <Link href={view.subject === "math" ? "/" : `/?subject=${view.subject}`} className={`${buttonClass()} w-full`}>
           Torna alla home
         </Link>
       </Card>
@@ -170,7 +172,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
   const header = (
     <div className="flex flex-col gap-3">
       <div className="flex gap-1.5">
-        {SESSION_BLOCKS.map((block, index) => (
+        {blocks.map((block, index) => (
           <div
             key={block.id}
             title={block.title}
@@ -183,7 +185,7 @@ export function TodayRunner({ initial }: { initial: SessionView }) {
       <div className="flex items-baseline justify-between">
         <div>
           <p className="text-sm font-bold text-ink-soft">
-            Blocco {view.block.index + 1} di {SESSION_BLOCKS.length}
+            {SUBJECTS[view.subject].title} · Blocco {view.block.index + 1} di {blocks.length}
           </p>
           <h1 className="text-xl font-extrabold tracking-tight">{view.block.title}</h1>
         </div>

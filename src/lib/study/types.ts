@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { Diagnosis } from "@/lib/items/grade";
 import type { ItemContent, Level } from "@/lib/items/schemas";
 import type { Lesson } from "@/lib/lessons/schema";
+import type { SubjectId } from "@/lib/subjects";
 import type { ProgressEvent, SkillStatus } from "./mastery";
 
 export const exerciseRefSchema = z.discriminatedUnion("source", [
@@ -63,4 +64,4 @@ export type StudyStep =
   | { kind: "lesson"; skillId: string; skillTitle: string; lesson: Lesson }
   | { kind: "done"; summary: SessionSummary };
 
-export type SessionView = { sessionId: string; block: BlockState; step: StudyStep; serverTime: number };
+export type SessionView = { sessionId: string; subject: SubjectId; block: BlockState; step: StudyStep; serverTime: number };

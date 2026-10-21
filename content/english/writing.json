@@ -1,0 +1,202 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.writing.dialogue",
+      "title": "Completare un dialogo",
+      "understand": {
+        "paragraphs": [
+          "All'esame una traccia può chiederti di completare o scrivere un dialogo. Le situazioni sono sempre quelle: negozio, ristorante, indicazioni, inviti, telefono.",
+          "Per ogni situazione ci sono frasi pronte da imparare intere, come blocchi: I'd like…, Can I have…?, How much is it?, Would you like to…?, Yes, I'd love to!",
+          "Una battuta deve rispondere proprio a quella prima: a How much is it? si risponde con un prezzo, a Where…? con un posto."
+        ]
+      },
+      "recipe": [
+        "Capisci la situazione: dove sono? chi parla?",
+        "Guarda la battuta prima: è una domanda? che tipo (Where? How much? What time?)",
+        "Usa la frase pronta giusta per quella situazione.",
+        "Rileggi le due battute insieme: suonano come domanda e risposta?"
+      ],
+      "example": {
+        "prompt": "A: \"Would you like to come to my party?\" B: ?",
+        "steps": [
+          "È un invito.",
+          "Per accettare: Yes, I'd love to!",
+          "Per rifiutare con gentilezza: Sorry, I can't."
+        ],
+        "answer": "Yes, I'd love to!"
+      },
+      "complete": {
+        "prompt": "Completa con la parola che manca.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "___ much is it?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "How"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "I'd ___ a pizza, please.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "like"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "Would you like ___ come to my party?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "to"
+              ],
+              "knownErrors": []
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "I like = mi piace; I'd like = vorrei. Al negozio si dice I'd like.",
+        "Ripeti i dialoghi ad alta voce: le frasi pronte entrano in testa come le canzoni."
+      ]
+    },
+    {
+      "skillId": "english.writing.email",
+      "title": "Scrivere un'email",
+      "understand": {
+        "paragraphs": [
+          "All'esame una delle tracce è spesso una lettera o un'email a un amico. Lo schema è sempre lo stesso: se lo sai, sei già a metà.",
+          "Schema: saluto (Hi Tom,) → apertura (How are you? Thanks for your email.) → 2–3 paragrafi che rispondono alle domande della traccia → domanda e chiusura (What about you? Write soon!) → firma (Love, + il tuo nome).",
+          "I connettivi rendono il testo più bello: and (e), but (ma), so (quindi), because (perché), then (poi)."
+        ]
+      },
+      "recipe": [
+        "Scrivi il saluto con la virgola: Hi Anna,",
+        "Apertura pronta: How are you? Thanks for your email.",
+        "Rispondi a ogni domanda della traccia con un paragrafo; usa i verbi al tempo giusto (le parole-spia!).",
+        "Chiudi con What about you? Write soon! e firma con Love, + nome."
+      ],
+      "example": {
+        "prompt": "Traccia: racconta al tuo amico Tom cosa hai fatto lo scorso weekend.",
+        "steps": [
+          "Hi Tom, How are you? Thanks for your email.",
+          "Last weekend I went to the beach with my family. It was sunny, so we swam in the sea.",
+          "What about you? Write soon! Love, Karim"
+        ],
+        "answer": "Hi Tom, … Love, Karim"
+      },
+      "complete": {
+        "prompt": "Completa le parti dell'email.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Saluto: ___ Tom,",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "Hi",
+                "Dear",
+                "Hello"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "Connettivo: It was raining, ___ we stayed at home.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "so"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "because"
+                  ],
+                  "tag": "eng_email_phrase",
+                  "message": "because = perché (la causa); qui serve so = quindi (la conseguenza)."
+                }
+              ]
+            }
+          },
+          {
+            "label": "Chiusura: Write ___!",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "soon"
+              ],
+              "knownErrors": []
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Dopo il saluto va la virgola: Hi Tom, (non Hi Tom.)",
+        "Rispondi a TUTTE le domande della traccia: è la prima cosa che guarda chi corregge."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.dialogue.1",
+      "skillId": "english.writing.dialogue",
+      "level": "base",
+      "generator": "en-dialogue",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.dialogue.2",
+      "skillId": "english.writing.dialogue",
+      "level": "medium",
+      "generator": "en-dialogue",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.dialogue.3",
+      "skillId": "english.writing.dialogue",
+      "level": "advanced",
+      "generator": "en-dialogue",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.email.1",
+      "skillId": "english.writing.email",
+      "level": "base",
+      "generator": "en-email",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.email.2",
+      "skillId": "english.writing.email",
+      "level": "medium",
+      "generator": "en-email",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.email.3",
+      "skillId": "english.writing.email",
+      "level": "advanced",
+      "generator": "en-email",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

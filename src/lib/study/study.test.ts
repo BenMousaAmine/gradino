@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { addDays, dayInRome, startOfDayInRome } from "./dates";
 import { afterPractice, afterReview, isReviewDue, levelPassed, NEW_PROGRESS, stepsClimbed, type Progress } from "./mastery";
 import { currentSkill, initialProgress, needsWork, orderPath } from "./path";
+import { parseSubject, SUBJECT_IDS, SUBJECTS, subjectOfSkill } from "@/lib/subjects";
 
 const today = "2026-10-20";
 
@@ -136,5 +137,23 @@ describe("path", () => {
     ]);
     expect(currentSkill(["mul", "add"], progress)).toBe("add");
     expect(currentSkill(["mul"], progress)).toBeNull();
+  });
+});
+
+describe("subjects", () => {
+  it("maps skills and query values to subjects", () => {
+    expect(subjectOfSkill("english.verbs.present-simple")).toBe("english");
+    expect(subjectOfSkill("math.calc.decimals")).toBe("math");
+    expect(parseSubject("english")).toBe("english");
+    expect(parseSubject(undefined)).toBe("math");
+    expect(parseSubject("history")).toBe("math");
+  });
+
+  it("gives every subject a session that ends with the daily check", () => {
+    for (const id of SUBJECT_IDS) {
+      expect(SUBJECTS[id].blocks.at(-1)?.id).toBe("check");
+      expect(SUBJECTS[id].checkSize).toBeGreaterThan(0);
+    }
+    expect(SUBJECTS.english.blocks.reduce((sum, block) => sum + block.minutes, 0)).toBe(45);
   });
 });

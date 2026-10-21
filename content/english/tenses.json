@@ -1,0 +1,127 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.tenses.signal-words",
+      "title": "Che tempo uso? Le parole-spia",
+      "understand": {
+        "paragraphs": [
+          "Prima di coniugare un verbo, chiediti: quando succede? La risposta te la danno le parole-spia.",
+          "every day, usually, always, on Mondays → abitudine → present simple (she plays).",
+          "now, at the moment, Look! → sta succedendo adesso → present continuous (she is playing).",
+          "yesterday, last week, two days ago → è già successo → past simple (she played)."
+        ]
+      },
+      "recipe": [
+        "Cerca la parola-spia nella frase.",
+        "Scegli il tempo: abitudine, adesso o passato.",
+        "Applica la formula: -s con he/she/it · am/is/are + -ing · -ed o seconda forma.",
+        "Nelle negazioni: don't/doesn't, am/is/are not, didn't."
+      ],
+      "example": {
+        "prompt": "Look! My brother ___ (ride) a bike.",
+        "steps": [
+          "Parola-spia: Look! → sta succedendo adesso.",
+          "Present continuous: my brother = he → is + verbo in -ing.",
+          "ride finisce in -e: la e cade → riding."
+        ],
+        "answer": "Look! My brother is riding a bike."
+      },
+      "complete": {
+        "prompt": "Completa con il tempo giusto.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "She ___ (go) to school every day.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "goes"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "is going",
+                    "went"
+                  ],
+                  "tag": "eng_tense_signal",
+                  "message": "every day → abitudine → present simple: goes."
+                }
+              ]
+            }
+          },
+          {
+            "label": "Look! They ___ (play) football.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "are playing"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "play",
+                    "played"
+                  ],
+                  "tag": "eng_tense_signal",
+                  "message": "Look! → adesso → present continuous: are playing."
+                }
+              ]
+            }
+          },
+          {
+            "label": "We ___ (watch) a film yesterday.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "watched"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "watch",
+                    "are watching"
+                  ],
+                  "tag": "eng_tense_signal",
+                  "message": "yesterday → passato → past simple: watched."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Prima la parola-spia, poi il verbo: è il trucco che risolve quasi tutti gli esercizi sui tempi.",
+        "Se non c'è una parola-spia, guarda il senso: abitudine, adesso o passato?"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.tense-choice.1",
+      "skillId": "english.tenses.signal-words",
+      "level": "base",
+      "generator": "en-tense-choice",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.tense-choice.2",
+      "skillId": "english.tenses.signal-words",
+      "level": "medium",
+      "generator": "en-tense-choice",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.tense-choice.3",
+      "skillId": "english.tenses.signal-words",
+      "level": "advanced",
+      "generator": "en-tense-choice",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

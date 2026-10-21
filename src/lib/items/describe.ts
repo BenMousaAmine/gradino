@@ -15,6 +15,10 @@ export function describeAnswer(content: ItemContent, key: ItemKey): string[] {
       const prefix = labelPrefix(field.label);
       if (!fieldKey) return prefix;
       if (fieldKey.kind === "fraction") return `${prefix}$\\frac{${fieldKey.numerator}}{${fieldKey.denominator}}$`;
+      if (fieldKey.kind === "text") return `${prefix}${fieldKey.accept[0]}`;
+      if (fieldKey.kind === "select") {
+        return `${prefix}${field.kind === "select" ? (field.options.find((option) => option.id === fieldKey.correct)?.text ?? "") : ""}`;
+      }
       const unit = fieldKey.unit ?? (field.kind === "number" ? field.suffix : undefined);
       return `${prefix}${formatDecimal(fieldKey.value)}${unit ? ` ${unit}` : ""}`;
     });
@@ -41,6 +45,10 @@ export function describeResponse(content: ItemContent, response: ItemResponse): 
       if (given.kind === "fraction") {
         const ok = /^-?\d+$/.test(given.numerator.trim()) && /^-?\d+$/.test(given.denominator.trim());
         return ok ? `${prefix}$\\frac{${given.numerator.trim()}}{${given.denominator.trim()}}$` : `${prefix}${given.numerator || "?"} / ${given.denominator || "?"}`;
+      }
+      if (given.kind === "text") return `${prefix}${given.value.trim() || "—"}`;
+      if (given.kind === "select") {
+        return `${prefix}${field.kind === "select" ? (field.options.find((option) => option.id === given.option)?.text ?? "—") : "—"}`;
       }
       const unit = given.unit ?? (field.kind === "number" && !field.units ? field.suffix : undefined);
       return `${prefix}${given.value.trim() || "—"}${unit ? ` ${unit}` : field.kind === "number" && field.units ? " (senza unità)" : ""}`;

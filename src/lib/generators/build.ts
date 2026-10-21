@@ -1,6 +1,7 @@
 import type { Figure } from "@/lib/items/figure";
 import { formatDecimal, sameNumber } from "@/lib/items/numbers";
-import type { ItemContent, ItemKey, Option } from "@/lib/items/schemas";
+import type { Audio, ItemContent, ItemKey, Option } from "@/lib/items/schemas";
+import { sameText } from "@/lib/items/text";
 import { rational, type Rational } from "@/lib/math/rational";
 import type { Random } from "./random";
 
@@ -205,6 +206,122 @@ export function orderItem(input: { prompt: string; steps: Option[]; solution: st
   return {
     content: { type: "order", prompt: input.prompt, steps: input.steps },
     key: { type: "order", correct: input.steps.map((step) => step.id) },
+    solution: input.solution,
+  };
+}
+
+export type TextError = { answers: string[]; tag: string; message: string };
+
+export type TextField = { id: string; label: string; accept: string[]; errors?: TextError[]; placeholder?: string };
+
+function cleanTextErrors(accept: readonly string[], errors: readonly TextError[]): TextError[] {
+  const kept: TextError[] = [];
+  for (const error of errors) {
+    const answers = error.answers.filter(
+      (answer) =>
+        !accept.some((value) => sameText(value, answer)) &&
+        !kept.some((candidate) => candidate.answers.some((other) => sameText(other, answer))),
+    );
+    if (answers.length > 0) kept.push({ ...error, answers });
+  }
+  return kept;
+}
+
+export function textItem(input: { prompt: string; fields: TextField[]; solution: string[]; audio?: Audio }): GeneratedItem {
+  return {
+    content: {
+      type: "input",
+      prompt: input.prompt,
+      ...(input.audio ? { audio: input.audio } : {}),
+      fields: input.fields.map((field) => ({
+        kind: "text" as const,
+        id: field.id,
+        label: field.label,
+        ...(field.placeholder ? { placeholder: field.placeholder } : {}),
+      })),
+    },
+    key: {
+      type: "input",
+      fields: Object.fromEntries(
+        input.fields.map((field) => [
+          field.id,
+          { kind: "text" as const, accept: field.accept, knownErrors: cleanTextErrors(field.accept, field.errors ?? []) },
+        ]),
+      ),
+    },
+    solution: input.solution,
+  };
+}
+
+export type TaskQuestion =
+  | { kind: "select"; label: string; options: string[]; correct: string; hint: string }
+  | { kind: "text"; label: string; accept: string[]; errors?: TextError[]; placeholder?: string };
+
+const OPTION_IDS = ["a", "b", "c", "d", "e"];
+
+export function taskItem(input: {
+  prompt: string;
+  passage?: string;
+  audio?: Audio;
+  questions: TaskQuestion[];
+  solution: string[];
+  allowedMistakes?: number;
+}): GeneratedItem {
+  const ids = input.questions.map((_, index) => `q${index + 1}`);
+  const allowed = input.allowedMistakes ?? 0;
+  return {
+    content: {
+      type: "input",
+      prompt: input.prompt,
+      ...(input.passage ? { passage: input.passage } : {}),
+      ...(input.audio ? { audio: input.audio } : {}),
+      fields: input.questions.map((question, index) =>
+        question.kind === "select"
+          ? {
+              kind: "select" as const,
+              id: ids[index],
+              label: question.label,
+              options: question.options.map((text, position) => ({ id: OPTION_IDS[position], text })),
+            }
+          : {
+              kind: "text" as const,
+              id: ids[index],
+              label: question.label,
+              ...(question.placeholder ? { placeholder: question.placeholder } : {}),
+            },
+      ),
+    },
+    key: {
+      type: "input",
+      fields: Object.fromEntries(
+        input.questions.map((question, index) => {
+          if (question.kind === "text") {
+            return [ids[index], { kind: "text" as const, accept: question.accept, knownErrors: cleanTextErrors(question.accept, question.errors ?? []) }];
+          }
+          const correct = OPTION_IDS[question.options.indexOf(question.correct)];
+          return [
+            ids[index],
+            {
+              kind: "select" as const,
+              correct,
+              knownErrors: question.options
+                .map((_, position) => OPTION_IDS[position])
+                .filter((id) => id !== correct)
+                .map((option) => ({ option, tag: "eng_task_check", message: question.hint })),
+            },
+          ];
+        }),
+      ),
+      ...(allowed > 0
+        ? {
+            threshold: {
+              min: input.questions.length - allowed,
+              tag: "eng_task_threshold",
+              message: "Più di una risposta non va: rileggi le domande e cerca nel testo le loro parole (nomi, numeri, giorni).",
+            },
+          }
+        : {}),
+    },
     solution: input.solution,
   };
 }

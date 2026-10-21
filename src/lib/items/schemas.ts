@@ -24,22 +24,52 @@ const fractionFieldSchema = z.object({
   label: z.string(),
 });
 
-export const fieldSchema = z.discriminatedUnion("kind", [numberFieldSchema, fractionFieldSchema]);
+const textFieldSchema = z.object({
+  kind: z.literal("text"),
+  id: idSchema,
+  label: z.string(),
+  placeholder: z.string().optional(),
+});
+
+const selectFieldSchema = z.object({
+  kind: z.literal("select"),
+  id: idSchema,
+  label: z.string(),
+  options: z.array(optionSchema).min(2),
+});
+
+export const fieldSchema = z.discriminatedUnion("kind", [numberFieldSchema, fractionFieldSchema, textFieldSchema, selectFieldSchema]);
 export type Field = z.infer<typeof fieldSchema>;
 
 const figure = figureSchema.optional();
+
+export const audioSchema = z.object({
+  text: textSchema,
+  lang: z.enum(["en-GB", "en-US"]).default("en-GB"),
+  dialogue: z
+    .array(z.object({ voice: z.union([z.literal(0), z.literal(1)]), text: textSchema }))
+    .min(1)
+    .optional(),
+  maxPlays: z.number().int().positive().optional(),
+});
+export type Audio = z.infer<typeof audioSchema>;
+
+const audio = audioSchema.optional();
+const passage = z.string().min(1).optional();
 
 export const itemContentSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("input"),
     prompt: textSchema,
     figure,
+    audio,
+    passage,
     fields: z.array(fieldSchema).min(1),
     timeLimitSec: z.number().int().positive().optional(),
   }),
-  z.object({ type: z.literal("choice"), prompt: textSchema, figure, options: z.array(optionSchema).min(2) }),
-  z.object({ type: z.literal("multi_choice"), prompt: textSchema, figure, options: z.array(optionSchema).min(2) }),
-  z.object({ type: z.literal("order"), prompt: textSchema, figure, steps: z.array(optionSchema).min(2) }),
+  z.object({ type: z.literal("choice"), prompt: textSchema, figure, audio, passage, options: z.array(optionSchema).min(2) }),
+  z.object({ type: z.literal("multi_choice"), prompt: textSchema, figure, audio, passage, options: z.array(optionSchema).min(2) }),
+  z.object({ type: z.literal("order"), prompt: textSchema, figure, audio, passage, steps: z.array(optionSchema).min(2) }),
 ]);
 export type ItemContent = z.infer<typeof itemContentSchema>;
 export type ItemType = ItemContent["type"];
@@ -66,10 +96,31 @@ const fractionFieldKeySchema = z.object({
     .default([]),
 });
 
-export const fieldKeySchema = z.discriminatedUnion("kind", [numberFieldKeySchema, fractionFieldKeySchema]);
+const textFieldKeySchema = z.object({
+  kind: z.literal("text"),
+  accept: z.array(textSchema).min(1),
+  knownErrors: z.array(z.object({ answers: z.array(textSchema).min(1), ...diagnosisSchema })).default([]),
+});
+
+const selectFieldKeySchema = z.object({
+  kind: z.literal("select"),
+  correct: idSchema,
+  knownErrors: z.array(z.object({ option: idSchema, ...diagnosisSchema })).default([]),
+});
+
+export const fieldKeySchema = z.discriminatedUnion("kind", [
+  numberFieldKeySchema,
+  fractionFieldKeySchema,
+  textFieldKeySchema,
+  selectFieldKeySchema,
+]);
 export type FieldKey = z.infer<typeof fieldKeySchema>;
+
+export const blankKeySchema = z.discriminatedUnion("kind", [numberFieldKeySchema, fractionFieldKeySchema, textFieldKeySchema]);
 export type NumberFieldKey = z.infer<typeof numberFieldKeySchema>;
 export type FractionFieldKey = z.infer<typeof fractionFieldKeySchema>;
+export type TextFieldKey = z.infer<typeof textFieldKeySchema>;
+export type SelectFieldKey = z.infer<typeof selectFieldKeySchema>;
 
 export const itemKeySchema = z.discriminatedUnion("type", [
   z.object({
@@ -97,6 +148,8 @@ const shortText = z.string().max(32);
 export const fieldResponseSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("number"), value: shortText, unit: shortText.optional() }),
   z.object({ kind: z.literal("fraction"), numerator: shortText, denominator: shortText }),
+  z.object({ kind: z.literal("text"), value: z.string().max(200) }),
+  z.object({ kind: z.literal("select"), option: z.string().max(64) }),
 ]);
 export type FieldResponse = z.infer<typeof fieldResponseSchema>;
 

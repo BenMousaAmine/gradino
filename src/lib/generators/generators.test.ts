@@ -29,6 +29,7 @@ describe.each(Object.keys(GENERATORS))("generator %s", (generator) => {
       for (const value of numbersIn(item.key)) expect(Number.isFinite(value), where).toBe(true);
       if (item.key.type === "input") {
         for (const field of Object.values(item.key.fields)) {
+          if (field.kind === "text" || field.kind === "select") continue;
           const correct = field.kind === "number" ? field.value : field.denominator;
           expect(Math.abs(correct), where).toBeLessThan(1_000_000);
           expect(field.kind === "number" ? field.value : field.numerator, where).toBeGreaterThanOrEqual(0);

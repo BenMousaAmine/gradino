@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { DIAGNOSTIC_ID } from "@/lib/app";
 import { loadAssessment, loadLatestAttempt } from "@/lib/assessments/queries";
-import { toEngineSections } from "@/lib/assessments/view";
+import { toEngineSections, type AssessmentView, type AttemptState } from "@/lib/assessments/view";
 import { getCurrentUser } from "@/lib/auth/session";
 import { sectionResults, type AreaColor } from "@/lib/diagnostic/engine";
 import { generateItem } from "@/lib/generators/registry";
@@ -14,7 +14,7 @@ import type { Admin } from "@/lib/study/exercises";
 import { stepsClimbed, type SkillStatus } from "@/lib/study/mastery";
 import { chunks, computeSignals, dailySignals } from "@/lib/insights/engine";
 import { coachStats, parentReport } from "@/lib/insights/report";
-import { SESSION_BLOCKS } from "@/lib/study/plan";
+import { parseSubject, SUBJECT_IDS, SUBJECTS, subjectOfSkill, type SubjectId } from "@/lib/subjects";
 import {
   activeMs,
   dailySeries,
@@ -43,6 +43,7 @@ const statsSchema = z.object({
   idleMs: z.number().default(0),
   awayCount: z.number().default(0),
   awayMs: z.number().default(0),
+  audioPlays: z.number().default(0),
 });
 
 const diagnosisSchema = z.object({ tag: z.string(), message: z.string().nullable() }).nullable().optional();
@@ -202,7 +203,7 @@ export async function listStudents(admin: Admin, selfId: string): Promise<Studen
     admin.from("responses").select(`user_id, ${RESPONSE_COLUMNS}`).in("user_id", ids).gte("created_at", since),
     admin.from("activity_events").select("user_id, type, skill_id, session_id, payload, created_at").in("user_id", ids).gte("created_at", since).in("type", ["feedback_closed", "lesson_step"]),
     admin.from("study_sessions").select("user_id, status, day").in("user_id", ids).gte("day", addDays(today, -6)),
-    admin.from("attempts").select("user_id, status, completed_at, responses(count)").in("user_id", ids),
+    admin.from("attempts").select("user_id, status, completed_at, responses(count)").in("user_id", ids).eq("assessment_id", DIAGNOSTIC_ID),
     Promise.all(
       ids.map(async (id) => {
         const [practice, test] = await Promise.all([
@@ -257,7 +258,16 @@ async function studentProfile(admin: Admin, studentId: string) {
   return { id: data.id, name: data.display_name, email: mail.get(data.id) ?? "" };
 }
 
-export type ProgressRow = { skillId: string; title: string; area: string; status: SkillStatus | "not_started"; level: Level; steps: number; nextReviewOn: string | null };
+export type ProgressRow = {
+  skillId: string;
+  subject: SubjectId;
+  title: string;
+  area: string;
+  status: SkillStatus | "not_started";
+  level: Level;
+  steps: number;
+  nextReviewOn: string | null;
+};
 
 export type NoteRow = {
   id: string;
@@ -273,14 +283,60 @@ export type NoteRow = {
   outcome: "first" | "second" | "unsolved";
 };
 
-export type SessionRow = { id: string; day: string; status: string; block: number; blockTitle: string; answers: number; correct: number };
+export type SessionRow = {
+  id: string;
+  subject: SubjectId;
+  day: string;
+  status: string;
+  block: number;
+  blockTitle: string;
+  answers: number;
+  correct: number;
+};
+
+function diagnosticMap(view: AssessmentView, attempt: AttemptState) {
+  return {
+    completedAt: attempt.completedAt,
+    sections: sectionResults(
+      toEngineSections(view),
+      { scores: new Map(Object.entries(attempt.scores)), choices: attempt.choices, currentPart: Infinity },
+      view.config,
+    ).map((result) => ({
+      code: result.code,
+      title: view.sections.find((section) => section.id === result.sectionId)?.title ?? result.code,
+      color: result.color as AreaColor | null,
+      ratio: Math.round(result.ratio * 100),
+      closedEarly: result.closedEarly,
+    })),
+  };
+}
+
+async function otherDiagnostics(admin: Admin, studentId: string) {
+  const subjects = SUBJECT_IDS.filter((subject) => subject !== "math");
+  return Promise.all(
+    subjects.flatMap((subject) => {
+      const diagnosticId = SUBJECTS[subject].diagnosticId;
+      if (!diagnosticId) return [];
+      return [
+        Promise.all([loadAssessment(admin, diagnosticId), loadLatestAttempt(admin, studentId, diagnosticId)]).then(
+          ([view, attempt]) => ({
+            subject,
+            title: SUBJECTS[subject].title,
+            inProgress: attempt?.status === "in_progress" ? Object.keys(attempt.scores).length : null,
+            map: view && attempt?.status === "completed" ? diagnosticMap(view, attempt) : null,
+          }),
+        ),
+      ];
+    }),
+  );
+}
 
 export async function studentOverview(admin: Admin, studentId: string) {
   const today = dayInRome();
   const days = lastDays(today, 30);
   const since = startOfDayInRome(days[0]);
 
-  const [profile, view, attempt, openAttempt, responsesResult, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles] = await Promise.all([
+  const [profile, view, attempt, openAttempt, responsesResult, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult, titles, extraDiagnostics] = await Promise.all([
     studentProfile(admin, studentId),
     loadAssessment(admin, DIAGNOSTIC_ID),
     loadLatestAttempt(admin, studentId, DIAGNOSTIC_ID, "completed"),
@@ -296,7 +352,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
     admin.from("responses").select(RESPONSE_COLUMNS).eq("user_id", studentId).gte("created_at", since).limit(5000),
     admin.from("practice_answers").select(ANSWER_COLUMNS).eq("user_id", studentId).gte("created_at", since).order("created_at", { ascending: true }).limit(5000),
     admin.from("activity_events").select("type, skill_id, session_id, payload, created_at").eq("user_id", studentId).gte("created_at", since).limit(10000),
-    admin.from("study_sessions").select("id, day, status, block").eq("user_id", studentId).gte("day", days[0]).order("day", { ascending: false }),
+    admin.from("study_sessions").select("id, subject_id, day, status, block").eq("user_id", studentId).gte("day", days[0]).order("day", { ascending: false }),
     admin.from("skill_progress").select("skill_id, status, level, next_review_on").eq("user_id", studentId),
     admin.from("item_templates").select("skill_id").eq("status", "published"),
     admin
@@ -307,6 +363,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
       .order("created_at", { ascending: false })
       .limit(20),
     skillTitles(admin),
+    otherDiagnostics(admin, studentId),
   ]);
   for (const result of [openAttempt, responsesResult, answersResult, eventsResult, sessionsResult, progressResult, templatesResult, notesResult]) if (result.error) throw new Error(result.error.message);
 
@@ -327,6 +384,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
     const status = (row?.status as SkillStatus | undefined) ?? "not_started";
     return {
       skillId,
+      subject: subjectOfSkill(skillId),
       title: titleOf(skillId),
       area: titles.get(skillId)?.area ?? "",
       status,
@@ -338,12 +396,14 @@ export async function studentOverview(admin: Admin, studentId: string) {
 
   const sessions: SessionRow[] = (sessionsResult.data ?? []).map((session) => {
     const mine = answers.filter((answer) => answer.sessionId === session.id);
+    const subject = parseSubject(session.subject_id);
     return {
       id: session.id,
+      subject,
       day: session.day,
       status: session.status === "completed" ? "completed" : session.day < today ? "abandoned" : "active",
       block: session.block,
-      blockTitle: SESSION_BLOCKS[session.block]?.title ?? "",
+      blockTitle: SUBJECTS[subject].blocks[session.block]?.title ?? "",
       answers: mine.length,
       correct: mine.filter((answer) => answer.score === 1).length,
     };
@@ -370,23 +430,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
     ];
   });
 
-  const diagnostic =
-    view && attempt
-      ? {
-          completedAt: attempt.completedAt,
-          sections: sectionResults(
-            toEngineSections(view),
-            { scores: new Map(Object.entries(attempt.scores)), choices: attempt.choices, currentPart: Infinity },
-            view.config,
-          ).map((result) => ({
-            code: result.code,
-            title: view.sections.find((section) => section.id === result.sectionId)?.title ?? result.code,
-            color: result.color as AreaColor | null,
-            ratio: Math.round(result.ratio * 100),
-            closedEarly: result.closedEarly,
-          })),
-        }
-      : null;
+  const diagnostic = view && attempt ? diagnosticMap(view, attempt) : null;
 
   const recentFrom = startOfDayInRome(days[days.length - 14]);
   const signals = computeSignals(answers.filter((answer) => answer.createdAt >= recentFrom));
@@ -423,6 +467,7 @@ export async function studentOverview(admin: Admin, studentId: string) {
     progress,
     sessions,
     diagnostic,
+    extraDiagnostics,
     diagnosticProgress,
     report,
     trends,
@@ -449,6 +494,7 @@ export type TimelineEntry =
       corrections: number;
       idleSeconds: number;
       awaySeconds: number;
+      audioPlays: number;
       feedbackSeconds: number | null;
       solutionOpen: boolean | null;
       retry: AttemptView | null;
@@ -466,6 +512,7 @@ export type AttemptView = {
   corrections: number;
   idleSeconds: number;
   awaySeconds: number;
+  audioPlays: number;
 };
 
 const toSeconds = (ms: number) => Math.round(ms / 1000);
@@ -487,9 +534,9 @@ function eventLabel(event: EventRow, titleOf: (id: string) => string): string | 
   const seconds = (value: unknown) => Math.round((typeof value === "number" ? value : 0) / 1000);
   switch (event.type) {
     case "session_started":
-      return "Inizia la sessione di studio";
+      return `Inizia la sessione di ${SUBJECTS[parseSubject(event.payload.subject)].title.toLowerCase()}`;
     case "block_started":
-      return `Inizia il blocco: ${SESSION_BLOCKS[Number(event.payload.block)]?.title ?? ""}`;
+      return `Inizia il blocco: ${SUBJECTS[parseSubject(event.payload.subject)].blocks[Number(event.payload.block)]?.title ?? ""}`;
     case "session_completed":
       return "Sessione completata";
     case "time_up":
@@ -574,6 +621,7 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
       corrections: answer.stats?.corrections ?? 0,
       idleSeconds: toSeconds(answer.stats?.idleMs ?? 0),
       awaySeconds: toSeconds(answer.stats?.awayMs ?? 0),
+      audioPlays: answer.stats?.audioPlays ?? 0,
       feedbackSeconds: feedback && typeof feedback.ms === "number" ? Math.round(feedback.ms / 1000) : null,
       solutionOpen: feedback ? feedback.solutionOpen === true : null,
       retry:
@@ -588,6 +636,7 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
               corrections: retry.stats?.corrections ?? 0,
               idleSeconds: toSeconds(retry.stats?.idleMs ?? 0),
               awaySeconds: toSeconds(retry.stats?.awayMs ?? 0),
+              audioPlays: retry.stats?.audioPlays ?? 0,
             }
           : null,
       note: row.note ? { text: row.note, source: row.note_source, seconds: row.note_ms === null ? null : toSeconds(row.note_ms) } : null,
@@ -619,6 +668,7 @@ export async function studentDay(admin: Admin, studentId: string, day: string) {
       corrections: stats?.corrections ?? 0,
       idleSeconds: toSeconds(stats?.idleMs ?? 0),
       awaySeconds: toSeconds(stats?.awayMs ?? 0),
+      audioPlays: stats?.audioPlays ?? 0,
       feedbackSeconds: null,
       solutionOpen: null,
       retry: null,

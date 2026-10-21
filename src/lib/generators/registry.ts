@@ -2,6 +2,19 @@ import { z } from "zod";
 import type { Difficulty, GeneratedItem, GeneratorFn } from "./build";
 import { decimals, orderOfOperations, timesTable } from "./calc";
 import {
+  irregularVerbs1,
+  irregularVerbs2,
+  irregularVerbs3,
+  pastSimpleRegular,
+  presentContinuous,
+  presentSimple,
+  tenseChoice,
+  toBe,
+} from "./english";
+import { listeningA1, listeningA2, readingA1, readingA2 } from "./english-reading";
+import { cognates, falseFriends, vocabThings, vocabTime } from "./english-words";
+import { dialogue, email } from "./english-writing";
+import {
   fractionAddSub,
   fractionCompare,
   fractionDecimals,
@@ -69,6 +82,24 @@ export const GENERATORS: Record<string, GeneratorFn> = {
   "segment-problems": segmentProblems,
   "planning-problems": planningProblems,
   "missing-data-problems": missingDataProblems,
+  "en-present-simple": presentSimple,
+  "en-to-be": toBe,
+  "en-present-continuous": presentContinuous,
+  "en-past-regular": pastSimpleRegular,
+  "en-irregular-1": irregularVerbs1,
+  "en-irregular-2": irregularVerbs2,
+  "en-irregular-3": irregularVerbs3,
+  "en-tense-choice": tenseChoice,
+  "en-cognates": cognates,
+  "en-false-friends": falseFriends,
+  "en-vocab-time": vocabTime,
+  "en-vocab-things": vocabThings,
+  "en-reading-a1": readingA1,
+  "en-reading-a2": readingA2,
+  "en-listening-a1": listeningA1,
+  "en-listening-a2": listeningA2,
+  "en-dialogue": dialogue,
+  "en-email": email,
 };
 
 export const generatorParamsSchema = z.object({

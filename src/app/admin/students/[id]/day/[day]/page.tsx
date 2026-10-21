@@ -36,7 +36,7 @@ function Lines({ title, lines }: { title: string; lines: string[] }) {
   );
 }
 
-function timing(attempt: Pick<AttemptView, "seconds" | "firstInputSeconds" | "corrections" | "idleSeconds" | "awaySeconds">) {
+function timing(attempt: Pick<AttemptView, "seconds" | "firstInputSeconds" | "corrections" | "idleSeconds" | "awaySeconds" | "audioPlays">) {
   return [
     `${attempt.seconds} s per rispondere`,
     attempt.firstInputSeconds !== null ? `${attempt.firstInputSeconds} s a pensare prima di scrivere` : null,
@@ -44,6 +44,7 @@ function timing(attempt: Pick<AttemptView, "seconds" | "firstInputSeconds" | "co
     attempt.corrections > 0 ? `${attempt.corrections} correzioni` : null,
     attempt.idleSeconds > 0 ? `fermo ${attempt.idleSeconds} s a metà` : null,
     attempt.awaySeconds > 0 ? `${attempt.awaySeconds} s fuori dall’app` : null,
+    attempt.audioPlays > 0 ? `ascoltato ${attempt.audioPlays} ${attempt.audioPlays === 1 ? "volta" : "volte"}` : null,
   ]
     .filter(Boolean)
     .join(" · ");

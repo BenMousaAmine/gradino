@@ -4,8 +4,8 @@ import { lessonSchema } from "@/lib/lessons/schema";
 import type { Level } from "@/lib/items/schemas";
 import { logEvent } from "@/lib/tracking/server";
 import { itemExercise, templateExercise, type Admin } from "./exercises";
+import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 import { isReviewDue, LEVELS, REVIEW_LEVELS, REVIEW_SIZE } from "./mastery";
-import { CHECK_SIZE, SESSION_BLOCKS } from "./plan";
 import type { StudyContext } from "./progress";
 import type { BlockState, PublicExercise, SessionSummary, SessionView, StudyStep } from "./types";
 
@@ -27,39 +27,46 @@ type TodayAnswer = {
 };
 
 const SESSION_COLUMNS = "id, block, block_started_at, status, created_at";
+type SessionKey = { userId: string; subject: SubjectId; day: string };
 const TIMES_TABLES = "math.calc.times-tables";
 
-export async function findSession(admin: Admin, userId: string, day: string): Promise<SessionRow | null> {
-  const { data, error } = await admin.from("study_sessions").select(SESSION_COLUMNS).eq("user_id", userId).eq("day", day).maybeSingle();
+function sessionQuery(admin: Admin, { userId, subject, day }: SessionKey) {
+  return admin.from("study_sessions").select(SESSION_COLUMNS).eq("user_id", userId).eq("subject_id", subject).eq("day", day);
+}
+
+export async function findSession(admin: Admin, key: SessionKey): Promise<SessionRow | null> {
+  const { data, error } = await sessionQuery(admin, key).maybeSingle();
   if (error) throw new Error(error.message);
   return data;
 }
 
-export async function getOrCreateSession(
-  admin: Admin,
-  userId: string,
-  day: string,
-  found?: SessionRow | null,
-): Promise<SessionRow> {
-  const existing = found === undefined ? await findSession(admin, userId, day) : found;
+export async function getOrCreateSession(admin: Admin, key: SessionKey, found?: SessionRow | null): Promise<SessionRow> {
+  const existing = found === undefined ? await findSession(admin, key) : found;
   if (existing) return existing;
   const created = await admin
     .from("study_sessions")
-    .upsert({ user_id: userId, day }, { onConflict: "user_id,day", ignoreDuplicates: true })
+    .upsert(
+      { user_id: key.userId, subject_id: key.subject, day: key.day },
+      { onConflict: "user_id,subject_id,day", ignoreDuplicates: true },
+    )
     .select(SESSION_COLUMNS);
   if (created.error) throw new Error(created.error.message);
   if (created.data[0]) {
-    await logEvent(admin, userId, "session_started", { sessionId: created.data[0].id, payload: { block: 0 } });
+    await logEvent(admin, key.userId, "session_started", {
+      sessionId: created.data[0].id,
+      payload: { block: 0, subject: key.subject },
+    });
     return created.data[0];
   }
-  const again = await admin.from("study_sessions").select(SESSION_COLUMNS).eq("user_id", userId).eq("day", day).single();
+  const again = await sessionQuery(admin, key).single();
   if (again.error) throw new Error(again.error.message);
   return again.data;
 }
 
-export function blockState(session: SessionRow): BlockState {
-  const index = Math.min(session.block, SESSION_BLOCKS.length - 1);
-  const definition = SESSION_BLOCKS[index];
+export function blockState(session: SessionRow, subject: SubjectId): BlockState {
+  const blocks = SUBJECTS[subject].blocks;
+  const index = Math.min(session.block, blocks.length - 1);
+  const definition = blocks[index];
   return {
     index,
     id: definition.id,
@@ -215,9 +222,15 @@ export async function sessionView(
   session: SessionRow,
   preloaded?: TodayAnswer[],
 ): Promise<SessionView> {
-  const block = blockState(session);
+  const block = blockState(session, context.subject);
   const answers = preloaded ?? (await todayAnswers(admin, context.userId, context.startIso));
-  const view = (step: StudyStep): SessionView => ({ sessionId: session.id, block, step, serverTime: Date.now() });
+  const view = (step: StudyStep): SessionView => ({
+    sessionId: session.id,
+    subject: context.subject,
+    block,
+    step,
+    serverTime: Date.now(),
+  });
   const exerciseStep = (exercise: PublicExercise | null): StudyStep | null =>
     exercise ? { kind: "exercise", exercise } : null;
 
@@ -233,7 +246,7 @@ export async function sessionView(
     step = exerciseStep(await problemExercise(admin, context, answers));
   } else {
     const done = answers.filter((answer) => answer.purpose === "check" && answer.session_id === session.id).length;
-    if (done >= CHECK_SIZE) {
+    if (done >= SUBJECTS[context.subject].checkSize) {
       await completeSession(admin, context.userId, session.id);
       return view({ kind: "done", summary: summarize(context, session, answers) });
     }
@@ -244,16 +257,16 @@ export async function sessionView(
   return view(step);
 }
 
-export async function advanceBlock(admin: Admin, userId: string, session: SessionRow): Promise<SessionRow> {
+export async function advanceBlock(admin: Admin, userId: string, subject: SubjectId, session: SessionRow): Promise<SessionRow> {
   if (session.status === "completed") return session;
-  if (session.block >= SESSION_BLOCKS.length - 1) {
+  if (session.block >= SUBJECTS[subject].blocks.length - 1) {
     await completeSession(admin, userId, session.id);
     return { ...session, status: "completed" };
   }
   const next = { block: session.block + 1, block_started_at: new Date().toISOString() };
   const [{ error }] = await Promise.all([
     admin.from("study_sessions").update(next).eq("id", session.id),
-    logEvent(admin, userId, "block_started", { sessionId: session.id, payload: { block: next.block } }),
+    logEvent(admin, userId, "block_started", { sessionId: session.id, payload: { block: next.block, subject } }),
   ]);
   if (error) throw new Error(error.message);
   return { ...session, ...next };

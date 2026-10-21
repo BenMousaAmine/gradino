@@ -369,17 +369,23 @@ isOneToOne: false
                   ]
                 },"study_sessions": {
                   Row: {
-                    "block": number,"block_started_at": string,"completed_at": string | null,"created_at": string,"day": string,"id": string,"status": string,"user_id": string
+                    "block": number,"block_started_at": string,"completed_at": string | null,"created_at": string,"day": string,"id": string,"status": string,"subject_id": string,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "block"?: number,"block_started_at"?: string,"completed_at"?: string | null,"created_at"?: string,"day": string,"id"?: string,"status"?: string,"user_id": string
+                    "block"?: number,"block_started_at"?: string,"completed_at"?: string | null,"created_at"?: string,"day": string,"id"?: string,"status"?: string,"subject_id": string,"user_id": string
                   }
                   Update: {
-                    "block"?: number,"block_started_at"?: string,"completed_at"?: string | null,"created_at"?: string,"day"?: string,"id"?: string,"status"?: string,"user_id"?: string
+                    "block"?: number,"block_started_at"?: string,"completed_at"?: string | null,"created_at"?: string,"day"?: string,"id"?: string,"status"?: string,"subject_id"?: string,"user_id"?: string
                   }
                   Relationships: [
-                    
+                    {
+      foreignKeyName: "study_sessions_subject_id_fkey"
+      columns: ["subject_id"]
+isOneToOne: false
+      referencedRelation: "subjects"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"subjects": {
                   Row: {

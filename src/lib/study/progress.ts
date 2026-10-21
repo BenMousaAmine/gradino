@@ -1,6 +1,6 @@
 import "server-only";
-import { DIAGNOSTIC_ID } from "@/lib/app";
 import { levelSchema, type Level } from "@/lib/items/schemas";
+import { SUBJECTS, type SubjectId } from "@/lib/subjects";
 import { dayInRome, startOfDayInRome } from "./dates";
 import type { Admin } from "./exercises";
 import {
@@ -21,6 +21,7 @@ export type ProgressState = Progress & { lessonDoneAt: string | null };
 
 export type StudyContext = {
   userId: string;
+  subject: SubjectId;
   today: string;
   startIso: string;
   skills: Map<string, SkillInfo>;
@@ -47,13 +48,13 @@ function toProgress(row: {
   };
 }
 
-async function loadDiagnostic(admin: Admin, userId: string): Promise<DiagnosticItem[] | null> {
+async function loadDiagnostic(admin: Admin, userId: string, diagnosticId: string): Promise<DiagnosticItem[] | null> {
   const [attempt, items] = await Promise.all([
     admin
       .from("attempts")
       .select("id, responses(item_id, score)")
       .eq("user_id", userId)
-      .eq("assessment_id", DIAGNOSTIC_ID)
+      .eq("assessment_id", diagnosticId)
       .eq("status", "completed")
       .order("completed_at", { ascending: false })
       .limit(1)
@@ -61,7 +62,7 @@ async function loadDiagnostic(admin: Admin, userId: string): Promise<DiagnosticI
     admin
       .from("assessment_items")
       .select("item_id, items(skill_id), assessment_sections!inner(assessment_id)")
-      .eq("assessment_sections.assessment_id", DIAGNOSTIC_ID),
+      .eq("assessment_sections.assessment_id", diagnosticId),
   ]);
   if (attempt.error) throw new Error(attempt.error.message);
   if (items.error) throw new Error(items.error.message);
@@ -71,12 +72,14 @@ async function loadDiagnostic(admin: Admin, userId: string): Promise<DiagnosticI
   return items.data.map((row) => ({ skillId: row.items.skill_id, score: scores.get(row.item_id) ?? null }));
 }
 
-export async function loadStudyContext(admin: Admin, userId: string): Promise<StudyContext | null> {
+export async function loadStudyContext(admin: Admin, userId: string, subject: SubjectId): Promise<StudyContext | null> {
   const today = dayInRome();
+  const { diagnosticId } = SUBJECTS[subject];
   const [skillsResult, prerequisitesResult, progressResult] = await Promise.all([
     admin
       .from("skills")
-      .select("id, title, position, areas(title, position), item_templates!inner(id)")
+      .select("id, title, position, areas!inner(title, position, subject_id), item_templates!inner(id)")
+      .eq("areas.subject_id", subject)
       .eq("item_templates.status", "published"),
     admin.from("skill_prerequisites").select("skill_id, prerequisite_id"),
     admin
@@ -99,7 +102,7 @@ export async function loadStudyContext(admin: Admin, userId: string): Promise<St
 
   const missing = skillIds.filter((id) => !progress.has(id));
   if (missing.length > 0) {
-    const diagnostic = await loadDiagnostic(admin, userId);
+    const diagnostic = diagnosticId ? await loadDiagnostic(admin, userId, diagnosticId) : [];
     if (!diagnostic) return null;
     const rows = missing.map((skillId) => {
       const initial = initialProgress(needsWork(skillId, diagnostic), today);
@@ -125,7 +128,16 @@ export async function loadStudyContext(admin: Admin, userId: string): Promise<St
     })),
   );
 
-  return { userId, today, startIso: startOfDayInRome(today), skills, path, progress, current: currentSkill(path, progress) };
+  return {
+    userId,
+    subject,
+    today,
+    startIso: startOfDayInRome(today),
+    skills,
+    path,
+    progress,
+    current: currentSkill(path, progress),
+  };
 }
 
 export function pathEntries(context: StudyContext): PathEntry[] {

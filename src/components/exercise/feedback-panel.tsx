@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { MathText } from "@/components/math-text";
+import { TrickCard } from "@/components/trick-card";
 import { Button } from "@/components/ui";
+import type { Trick } from "@/lib/insights/tricks";
 import { LEVEL_LABELS } from "@/lib/study/plan";
 import type { AnswerFeedback } from "@/lib/study/types";
 import { track } from "@/lib/tracking/client";
@@ -29,11 +31,15 @@ export function FeedbackPanel({
   onNext,
   pending,
   sessionId = null,
+  trick = null,
+  item = "",
 }: {
   feedback: AnswerFeedback;
   onNext: () => void;
   pending: boolean;
   sessionId?: string | null;
+  trick?: Trick | null;
+  item?: string;
 }) {
   const shownAt = useRef<number | null>(null);
   const solution = useRef<HTMLDetailsElement>(null);
@@ -69,6 +75,8 @@ export function FeedbackPanel({
         <p className="font-display text-2xl font-extrabold">{headline}</p>
         {feedback.diagnosis?.message && <MathText text={feedback.diagnosis.message} className="text-base" />}
       </div>
+
+      {trick && <TrickCard trick={trick} where="feedback" item={item} />}
 
       {feedback.event && <EventBanner event={feedback.event} />}
 

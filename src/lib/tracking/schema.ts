@@ -11,6 +11,7 @@ export const answerStatsSchema = z.object({
   idleMs: z.number().int().min(0).max(3_600_000).default(0),
   awayCount: z.number().int().min(0).max(1_000).default(0),
   awayMs: z.number().int().min(0).max(3_600_000).default(0),
+  audioPlays: z.number().int().min(0).max(1000).default(0),
 });
 export type AnswerStats = z.infer<typeof answerStatsSchema>;
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AudioButton } from "@/components/audio-button";
 import { useCoach } from "@/components/coach";
 import { FigureView } from "@/components/figure";
 import { MathText } from "@/components/math-text";
@@ -51,6 +52,7 @@ export function QuestionCard({
     idleMs: 0,
     awayCount: 0,
     awayMs: 0,
+    audioPlays: 0,
   });
 
   useEffect(() => {
@@ -126,6 +128,19 @@ export function QuestionCard({
     <div className="flex flex-col gap-6" data-item-id={item.id}>
       <MathText text={content.prompt} className="text-xl leading-relaxed font-medium text-ink" />
       {content.figure && <FigureView figure={content.figure} />}
+      {content.passage && (
+        <div lang="en" className="rounded-2xl border-2 border-line bg-canvas px-4 py-4 text-lg leading-relaxed whitespace-pre-line text-ink">
+          {content.passage}
+        </div>
+      )}
+      {content.audio && (
+        <AudioButton
+          audio={content.audio}
+          onPlay={() => {
+            stats.current.audioPlays += 1;
+          }}
+        />
+      )}
 
       {content.type === "input" && (
         <InputQuestion content={content} pending={pending} onSubmit={submit} onInteract={interact} initial={initialFields} />

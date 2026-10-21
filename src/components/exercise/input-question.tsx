@@ -15,30 +15,38 @@ function slotsFor(fields: Field[]): Slot[] {
   return fields.flatMap((field): Slot[] =>
     field.kind === "number"
       ? [{ fieldId: field.id, part: "value" }]
-      : [
-          { fieldId: field.id, part: "numerator" },
-          { fieldId: field.id, part: "denominator" },
-        ],
+      : field.kind === "fraction"
+        ? [
+            { fieldId: field.id, part: "numerator" },
+            { fieldId: field.id, part: "denominator" },
+          ]
+        : [],
   );
+}
+
+function emptyValue(field: Field): FieldResponse {
+  if (field.kind === "number") return { kind: "number", value: "" };
+  if (field.kind === "fraction") return { kind: "fraction", numerator: "", denominator: "" };
+  if (field.kind === "select") return { kind: "select", option: "" };
+  return { kind: "text", value: "" };
 }
 
 function initialValues(fields: Field[]): Record<string, FieldResponse> {
-  return Object.fromEntries(
-    fields.map((field): [string, FieldResponse] => [
-      field.id,
-      field.kind === "number" ? { kind: "number", value: "" } : { kind: "fraction", numerator: "", denominator: "" },
-    ]),
-  );
+  return Object.fromEntries(fields.map((field): [string, FieldResponse] => [field.id, emptyValue(field)]));
 }
 
 function readSlot(value: FieldResponse, part: SlotPart): string {
-  if (value.kind === "number") return value.value;
-  return part === "denominator" ? value.denominator : value.numerator;
+  if (value.kind === "fraction") return part === "denominator" ? value.denominator : value.numerator;
+  return value.kind === "select" ? "" : value.value;
 }
 
 function writeSlot(value: FieldResponse, part: SlotPart, text: string): FieldResponse {
-  if (value.kind === "number") return { ...value, value: text };
-  return part === "denominator" ? { ...value, denominator: text } : { ...value, numerator: text };
+  if (value.kind === "fraction") return part === "denominator" ? { ...value, denominator: text } : { ...value, numerator: text };
+  return value.kind === "select" ? value : { ...value, value: text };
+}
+
+function isTyping(target: EventTarget | null) {
+  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
 }
 
 function SlotBox({ text, active, onSelect, label }: { text: string; active: boolean; onSelect: () => void; label: string }) {
@@ -104,6 +112,7 @@ export function InputQuestion({
 
   const press = useCallback(
     (key: KeypadKey) => {
+      if (slots.length === 0) return;
       if (key === "next") {
         if (activeIndex < slots.length - 1) setActiveIndex(activeIndex + 1);
         else submitRef.current();
@@ -122,6 +131,7 @@ export function InputQuestion({
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (isTyping(event.target)) return;
       const key = keyFromKeyboard(event);
       if (!key) return;
       event.preventDefault();
@@ -140,11 +150,35 @@ export function InputQuestion({
     });
   };
 
-  const activeSlot = slots[activeIndex];
-  const activeField = content.fields.find((field) => field.id === activeSlot.fieldId);
-  const isDrill = content.fields.length > 4;
+  const typeText = (fieldId: string, text: string) => {
+    const current = values[fieldId];
+    if (current?.kind !== "text") return;
+    onInteract?.(text.length < current.value.length ? "correction" : "input");
+    setValues((previous) => ({ ...previous, [fieldId]: { kind: "text", value: text } }));
+  };
+
+  const choose = (fieldId: string, option: string) => {
+    const current = values[fieldId];
+    if (current?.kind !== "select") return;
+    onInteract?.(current.option !== "" && current.option !== option ? "correction" : "input");
+    setValues((previous) => ({ ...previous, [fieldId]: { kind: "select", option } }));
+  };
+
+  const textFieldIds = content.fields.filter((field) => field.kind === "text").map((field) => field.id);
+  const nextText = (fieldId: string, input: HTMLInputElement) => {
+    const index = textFieldIds.indexOf(fieldId);
+    if (index < textFieldIds.length - 1) {
+      input.form?.querySelector<HTMLInputElement>(`[data-text-field="${textFieldIds[index + 1]}"]`)?.focus();
+      return;
+    }
+    if (slots.length === 0) submitRef.current();
+  };
+
+  const activeSlot = slots[activeIndex] as Slot | undefined;
+  const activeField = content.fields.find((field) => field.id === activeSlot?.fieldId);
+  const isDrill = content.fields.length > 4 && content.fields.every((field) => field.kind === "number");
   const isActive = (fieldId: string, part: SlotPart) =>
-    activeSlot.fieldId === fieldId && activeSlot.part === part;
+    activeSlot?.fieldId === fieldId && activeSlot.part === part;
   const select = (fieldId: string, part: SlotPart) =>
     setActiveIndex(slots.findIndex((slot) => slot.fieldId === fieldId && slot.part === part));
 
@@ -160,14 +194,61 @@ export function InputQuestion({
         </div>
       )}
 
-      <div className={isDrill ? "grid grid-cols-2 gap-3" : "flex flex-col gap-4"}>
+      <form
+        onSubmit={(event) => event.preventDefault()}
+        className={isDrill ? "grid grid-cols-2 gap-3" : "flex flex-col gap-4"}
+      >
         {content.fields.map((field) => {
           const value = values[field.id];
           return (
             <div key={field.id} className="flex flex-col gap-2" data-field-id={field.id}>
               <div className={`flex flex-wrap items-center gap-3 ${isDrill ? "justify-between" : ""}`}>
                 {field.label && <MathText text={field.label} className="text-lg font-medium" />}
-                {value.kind === "number" ? (
+                {value.kind === "text" ? (
+                  <input
+                    data-text-field={field.id}
+                    value={value.value}
+                    onChange={(event) => typeText(field.id, event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key !== "Enter") return;
+                      event.preventDefault();
+                      nextText(field.id, event.currentTarget);
+                    }}
+                    lang="en"
+                    autoFocus={field.id === textFieldIds[0]}
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    autoComplete="off"
+                    spellCheck={false}
+                    enterKeyHint={field.id === textFieldIds.at(-1) && slots.length === 0 ? "done" : "next"}
+                    maxLength={200}
+                    placeholder={(field.kind === "text" ? field.placeholder : undefined) ?? "scrivi qui"}
+                    aria-label={field.label || "risposta"}
+                    className="h-14 min-w-0 flex-1 rounded-2xl border-2 border-line bg-surface px-4 text-xl font-semibold text-ink outline-none placeholder:font-normal placeholder:text-ink-soft/50 focus:border-brand focus:ring-4 focus:ring-brand/18"
+                  />
+                ) : value.kind === "select" ? (
+                  <div className="flex w-full flex-col gap-2" role="radiogroup" aria-label={field.label} data-select-field={field.id}>
+                    {field.kind === "select" &&
+                      field.options.map((option) => {
+                        const active = value.option === option.id;
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            role="radio"
+                            aria-checked={active}
+                            data-option-id={option.id}
+                            onClick={() => choose(field.id, option.id)}
+                            className={`min-h-12 rounded-2xl border-2 px-4 py-2 text-left text-base font-semibold transition ${
+                              active ? "border-brand bg-brand-soft text-ink" : "border-line bg-surface text-ink hover:border-brand/40"
+                            }`}
+                          >
+                            {option.text}
+                          </button>
+                        );
+                      })}
+                  </div>
+                ) : value.kind === "number" ? (
                   <SlotBox
                     text={value.value}
                     active={isActive(field.id, "value")}
@@ -214,14 +295,16 @@ export function InputQuestion({
             </div>
           );
         })}
-      </div>
+      </form>
 
-      <Keypad
-        onKey={press}
-        allowDecimal={activeField?.kind === "number"}
-        showNext={slots.length > 1}
-        disabled={pending}
-      />
+      {slots.length > 0 && (
+        <Keypad
+          onKey={press}
+          allowDecimal={activeField?.kind === "number"}
+          showNext={slots.length > 1}
+          disabled={pending}
+        />
+      )}
 
       <Button onClick={submit} loading={pending} className="w-full">
         Conferma

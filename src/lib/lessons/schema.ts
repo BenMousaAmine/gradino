@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { figureSchema } from "@/lib/items/figure";
-import { fieldKeySchema, type ItemContent, type ItemKey } from "@/lib/items/schemas";
+import { blankKeySchema, type ItemContent, type ItemKey } from "@/lib/items/schemas";
 
 const text = z.string().min(1);
 
@@ -35,7 +35,7 @@ export const lessonSchema = z.object({
   complete: z.object({
     prompt: text,
     given: z.array(text).default([]),
-    blanks: z.array(z.object({ label: text, key: fieldKeySchema })).min(1).max(4),
+    blanks: z.array(z.object({ label: text, key: blankKeySchema })).min(1).max(4),
   }),
   watchOut: z.array(text).default([]),
 });

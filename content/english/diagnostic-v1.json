@@ -1,0 +1,2492 @@
+{
+  "items": [
+    {
+      "id": "english.diag1.A1",
+      "skillId": "english.words.time-numbers",
+      "level": "base",
+      "content": {
+        "type": "choice",
+        "prompt": "Cosa vuol dire \"Thursday\"?",
+        "options": [
+          {
+            "id": "a",
+            "text": "martedì"
+          },
+          {
+            "id": "b",
+            "text": "giovedì"
+          },
+          {
+            "id": "c",
+            "text": "domenica"
+          },
+          {
+            "id": "d",
+            "text": "venerdì"
+          }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "b",
+        "knownErrors": [
+          {
+            "option": "a",
+            "tag": "eng_tue_thu",
+            "message": "Attento: Tuesday è martedì, Thursday (con la h) è giovedì."
+          }
+        ]
+      },
+      "solution": [
+        "Thursday = giovedì (Tuesday = martedì)."
+      ]
+    },
+    {
+      "id": "english.diag1.A2",
+      "skillId": "english.words.everyday",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Come si dice in inglese \"cucina\"?",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "la parola in inglese"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "kitchen"
+            ],
+            "knownErrors": []
+          }
+        }
+      },
+      "solution": [
+        "cucina = kitchen."
+      ]
+    },
+    {
+      "id": "english.diag1.A3",
+      "skillId": "english.words.time-numbers",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Scrivi in lettere, in inglese: 15",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "in lettere"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "fifteen"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "fiveteen"
+                ],
+                "tag": "eng_fifteen",
+                "message": "15 non è fiveteen: si dice fifteen."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "15 = fifteen."
+      ]
+    },
+    {
+      "id": "english.diag1.A4",
+      "skillId": "english.words.everyday",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Come si dice in inglese \"fratello\"?",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "la parola in inglese"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "brother"
+            ],
+            "knownErrors": []
+          }
+        }
+      },
+      "solution": [
+        "fratello = brother."
+      ]
+    },
+    {
+      "id": "english.diag1.A5",
+      "skillId": "english.words.time-numbers",
+      "level": "medium",
+      "content": {
+        "type": "choice",
+        "prompt": "Quale mese viene dopo March?",
+        "options": [
+          {
+            "id": "a",
+            "text": "May"
+          },
+          {
+            "id": "b",
+            "text": "April"
+          },
+          {
+            "id": "c",
+            "text": "February"
+          },
+          {
+            "id": "d",
+            "text": "June"
+          }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "b",
+        "knownErrors": []
+      },
+      "solution": [
+        "January, February, March, April…: dopo March viene April."
+      ]
+    },
+    {
+      "id": "english.diag1.A6",
+      "skillId": "english.words.time-numbers",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Scrivi in lettere, in inglese: 40",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "in lettere"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "forty"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "fourty"
+                ],
+                "tag": "eng_forty",
+                "message": "forty si scrive senza la u (four → forty)."
+              },
+              {
+                "answers": [
+                  "fourteen"
+                ],
+                "tag": "eng_teen_ty",
+                "message": "fourteen è 14: le decine finiscono in -ty → forty."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "40 = forty (senza u)."
+      ]
+    },
+    {
+      "id": "english.diag1.B1",
+      "skillId": "english.verbs.to-be",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con am, is o are: I ___ twelve years old.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "am, is o are"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "am"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "is",
+                  "are"
+                ],
+                "tag": "eng_be_form",
+                "message": "Con I si usa sempre am: I am."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "I → am.",
+        "I am twelve years old."
+      ]
+    },
+    {
+      "id": "english.diag1.B2",
+      "skillId": "english.verbs.to-be",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con am, is o are: They ___ at school.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "am, is o are"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "are"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "is",
+                  "am"
+                ],
+                "tag": "eng_be_form",
+                "message": "Con they si usa are."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "They → are.",
+        "They are at school."
+      ]
+    },
+    {
+      "id": "english.diag1.B3",
+      "skillId": "english.verbs.to-be",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con la forma negativa: She ___ (not) hungry.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "ausiliare + not"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "is not"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "doesn't",
+                  "don't",
+                  "not"
+                ],
+                "tag": "eng_be_no_do",
+                "message": "Con to be non serve do: she isn't hungry."
+              },
+              {
+                "answers": [
+                  "are not",
+                  "am not"
+                ],
+                "tag": "eng_be_form",
+                "message": "Con she si usa is: she isn't."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Con to be basta aggiungere not: is not (isn't).",
+        "She isn't hungry."
+      ]
+    },
+    {
+      "id": "english.diag1.B4",
+      "skillId": "english.verbs.to-be",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa la domanda: ___ your brother at home?",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "Am, Is o Are?"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "Is"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "Does",
+                  "Do"
+                ],
+                "tag": "eng_be_no_do",
+                "message": "Con to be la domanda si fa scambiando di posto: Is your brother…?"
+              },
+              {
+                "answers": [
+                  "Are",
+                  "Am"
+                ],
+                "tag": "eng_be_form",
+                "message": "your brother = he → is."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "your brother = he → is.",
+        "Is your brother at home?"
+      ]
+    },
+    {
+      "id": "english.diag1.C1",
+      "skillId": "english.verbs.present-simple",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il verbo giusto: He ___ (play) football every Saturday.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "plays"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "play"
+                ],
+                "tag": "eng_third_person_s",
+                "message": "He, she, it: la S ci sta → plays."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "He → la S ci sta.",
+        "He plays football every Saturday."
+      ]
+    },
+    {
+      "id": "english.diag1.C2",
+      "skillId": "english.verbs.present-simple",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il verbo giusto: I ___ (like) pizza.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "like"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "likes"
+                ],
+                "tag": "eng_s_only_third",
+                "message": "La -s va solo con he, she, it: I like."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Con I niente -s.",
+        "I like pizza."
+      ]
+    },
+    {
+      "id": "english.diag1.C3",
+      "skillId": "english.verbs.present-simple",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il verbo giusto: She ___ (watch) TV every evening.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "watches"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "watchs"
+                ],
+                "tag": "eng_es_rule",
+                "message": "Dopo -ch si aggiunge -es: watches."
+              },
+              {
+                "answers": [
+                  "watch"
+                ],
+                "tag": "eng_third_person_s",
+                "message": "He, she, it: la S ci sta → watches."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "She → serve la -s; watch finisce in -ch → -es.",
+        "She watches TV every evening."
+      ]
+    },
+    {
+      "id": "english.diag1.C4",
+      "skillId": "english.verbs.present-simple",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con la forma negativa: Tom ___ (not / like) fish.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "ausiliare + not + verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "doesn't like"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "doesn't likes"
+                ],
+                "tag": "eng_bare_after_aux",
+                "message": "Do e does si prendono la fatica: il verbo torna nudo → doesn't like."
+              },
+              {
+                "answers": [
+                  "don't like"
+                ],
+                "tag": "eng_doesnt_third",
+                "message": "Tom = he → doesn't."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Tom = he → doesn't.",
+        "Dopo doesn't il verbo torna nudo.",
+        "Tom doesn't like fish."
+      ]
+    },
+    {
+      "id": "english.diag1.C5",
+      "skillId": "english.verbs.present-simple",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa la domanda: ___ your sister ___ (speak) English?",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "aux",
+            "label": "1ª parola",
+            "placeholder": "Do o Does?"
+          },
+          {
+            "kind": "text",
+            "id": "verb",
+            "label": "2ª parola",
+            "placeholder": "il verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "aux": {
+            "kind": "text",
+            "accept": [
+              "Does"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "Do"
+                ],
+                "tag": "eng_does_question",
+                "message": "your sister = she → Does."
+              }
+            ]
+          },
+          "verb": {
+            "kind": "text",
+            "accept": [
+              "speak"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "speaks"
+                ],
+                "tag": "eng_bare_after_aux",
+                "message": "Dopo Does il verbo torna nudo: speak."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "your sister = she → Does.",
+        "Does your sister speak English?"
+      ]
+    },
+    {
+      "id": "english.diag1.D1",
+      "skillId": "english.verbs.present-continuous",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il present continuous: I ___ (read) a book now.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "am/is/are + -ing"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "am reading"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "reading"
+                ],
+                "tag": "eng_cont_missing_be",
+                "message": "Serve anche am: I am reading."
+              },
+              {
+                "answers": [
+                  "read"
+                ],
+                "tag": "eng_cont_not_simple",
+                "message": "Now → present continuous: am reading."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Now → present continuous.",
+        "I am reading a book now."
+      ]
+    },
+    {
+      "id": "english.diag1.D2",
+      "skillId": "english.verbs.present-continuous",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il present continuous: They ___ (play) football at the moment.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "am/is/are + -ing"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "are playing"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "playing"
+                ],
+                "tag": "eng_cont_missing_be",
+                "message": "Serve anche are: they are playing."
+              },
+              {
+                "answers": [
+                  "play"
+                ],
+                "tag": "eng_cont_not_simple",
+                "message": "At the moment → present continuous: are playing."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "At the moment → present continuous.",
+        "They are playing football at the moment."
+      ]
+    },
+    {
+      "id": "english.diag1.D3",
+      "skillId": "english.verbs.present-continuous",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il present continuous: She ___ (write) an email now.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "am/is/are + -ing"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "is writing"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "is writeing"
+                ],
+                "tag": "eng_ing_drop_e",
+                "message": "write finisce in -e: la e cade → writing."
+              },
+              {
+                "answers": [
+                  "writing"
+                ],
+                "tag": "eng_cont_missing_be",
+                "message": "Serve anche is: she is writing."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "write → la e cade → writing.",
+        "She is writing an email now."
+      ]
+    },
+    {
+      "id": "english.diag1.D4",
+      "skillId": "english.verbs.present-continuous",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa la domanda: Look! ___ the dog ___ (run) in the garden?",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "aux",
+            "label": "1ª parola",
+            "placeholder": "Am, Is o Are?"
+          },
+          {
+            "kind": "text",
+            "id": "verb",
+            "label": "2ª parola",
+            "placeholder": "verbo in -ing"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "aux": {
+            "kind": "text",
+            "accept": [
+              "Is"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "Does",
+                  "Do"
+                ],
+                "tag": "eng_cont_no_do",
+                "message": "Al present continuous la domanda inizia con am/is/are: Is."
+              }
+            ]
+          },
+          "verb": {
+            "kind": "text",
+            "accept": [
+              "running"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "runing"
+                ],
+                "tag": "eng_ing_double",
+                "message": "run è corto: raddoppia la n → running."
+              },
+              {
+                "answers": [
+                  "run",
+                  "runs"
+                ],
+                "tag": "eng_cont_ing",
+                "message": "Serve il verbo in -ing: running."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "the dog = it → Is.",
+        "run → running.",
+        "Is the dog running in the garden?"
+      ]
+    },
+    {
+      "id": "english.diag1.E1",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: Yesterday I ___ (watch) a film.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "watched"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "watch"
+                ],
+                "tag": "eng_past_missing_ed",
+                "message": "Yesterday → passato: watched."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Yesterday → passato: -ed.",
+        "Yesterday I watched a film."
+      ]
+    },
+    {
+      "id": "english.diag1.E2",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: Last week we ___ (visit) the museum.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "visited"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "visit"
+                ],
+                "tag": "eng_past_missing_ed",
+                "message": "Last week → passato: visited."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Last week → passato: -ed.",
+        "Last week we visited the museum."
+      ]
+    },
+    {
+      "id": "english.diag1.E3",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: She ___ (study) for the test last night.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "studied"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "studyed"
+                ],
+                "tag": "eng_ed_ied",
+                "message": "Consonante + y: la y diventa -ied → studied."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "study → studied.",
+        "She studied for the test last night."
+      ]
+    },
+    {
+      "id": "english.diag1.E4",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con la forma negativa: They ___ (not / play) tennis yesterday.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "ausiliare + not + verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "didn't play"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "didn't played"
+                ],
+                "tag": "eng_bare_after_did",
+                "message": "Dopo didn't il verbo torna nudo: didn't play."
+              },
+              {
+                "answers": [
+                  "don't play",
+                  "doesn't play"
+                ],
+                "tag": "eng_past_did",
+                "message": "Yesterday → passato: didn't."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Yesterday → passato: didn't.",
+        "They didn't play tennis yesterday."
+      ]
+    },
+    {
+      "id": "english.diag1.F1",
+      "skillId": "english.verbs.irregular-1",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: Yesterday I ___ (buy) a new phone.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "bought"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "buyed"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "buy è irregolare: buy – bought – bought."
+              },
+              {
+                "answers": [
+                  "buy"
+                ],
+                "tag": "eng_past_missing",
+                "message": "Yesterday → passato: bought."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "buy – bought – bought.",
+        "Yesterday I bought a new phone."
+      ]
+    },
+    {
+      "id": "english.diag1.F2",
+      "skillId": "english.verbs.irregular-3",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: Last night we ___ (go) to the cinema.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "went"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "goed"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "go è irregolare: go – went – gone."
+              },
+              {
+                "answers": [
+                  "gone"
+                ],
+                "tag": "eng_participle_for_past",
+                "message": "gone è il participio: al passato serve went."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "go – went – gone.",
+        "Last night we went to the cinema."
+      ]
+    },
+    {
+      "id": "english.diag1.F3",
+      "skillId": "english.verbs.irregular-2",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: She ___ (sing) a song at the party.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "sang"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "singed"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "sing è irregolare: sing – sang – sung."
+              },
+              {
+                "answers": [
+                  "sung"
+                ],
+                "tag": "eng_participle_for_past",
+                "message": "sung è il participio: al passato serve sang."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "sing – sang – sung.",
+        "She sang a song at the party."
+      ]
+    },
+    {
+      "id": "english.diag1.F4",
+      "skillId": "english.verbs.irregular-1",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: We ___ (meet) Anna at the park yesterday.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "met"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "meeted"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "meet è irregolare: meet – met – met."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "meet – met – met.",
+        "We met Anna at the park yesterday."
+      ]
+    },
+    {
+      "id": "english.diag1.F5",
+      "skillId": "english.verbs.irregular-3",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa le tre forme del verbo: eat – ___ – ___",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "past",
+            "label": "2ª forma (passato)",
+            "placeholder": "passato"
+          },
+          {
+            "kind": "text",
+            "id": "participle",
+            "label": "3ª forma (participio)",
+            "placeholder": "participio"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "past": {
+            "kind": "text",
+            "accept": [
+              "ate"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "eated"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "eat è irregolare: eat – ate – eaten."
+              },
+              {
+                "answers": [
+                  "eaten"
+                ],
+                "tag": "eng_forms_swapped",
+                "message": "eaten è la terza forma: la seconda è ate."
+              }
+            ]
+          },
+          "participle": {
+            "kind": "text",
+            "accept": [
+              "eaten"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "eated"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "eat è irregolare: eat – ate – eaten."
+              },
+              {
+                "answers": [
+                  "ate"
+                ],
+                "tag": "eng_forms_swapped",
+                "message": "ate è la seconda forma: la terza è eaten."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "eat – ate – eaten."
+      ]
+    },
+    {
+      "id": "english.diag1.F6",
+      "skillId": "english.verbs.irregular-2",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa al passato: He ___ (know) the answer.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo al passato"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "knew"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "knowed"
+                ],
+                "tag": "eng_irregular_regularized",
+                "message": "know è irregolare: know – knew – known."
+              },
+              {
+                "answers": [
+                  "known"
+                ],
+                "tag": "eng_participle_for_past",
+                "message": "known è il participio: al passato serve knew."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "know – knew – known.",
+        "He knew the answer."
+      ]
+    },
+    {
+      "id": "english.diag1.F7",
+      "skillId": "english.verbs.irregular-3",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con la forma negativa: I ___ (not / see) the film.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "ausiliare + not + verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "didn't see"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "didn't saw",
+                  "didn't seen"
+                ],
+                "tag": "eng_bare_after_did",
+                "message": "Dopo didn't il verbo torna nudo: didn't see."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Dopo didn't la forma base: see.",
+        "I didn't see the film."
+      ]
+    },
+    {
+      "id": "english.diag1.G1",
+      "skillId": "english.words.cognates",
+      "level": "base",
+      "content": {
+        "type": "choice",
+        "prompt": "Cosa vuol dire \"information\"?",
+        "options": [
+          {
+            "id": "a",
+            "text": "informazione"
+          },
+          {
+            "id": "b",
+            "text": "formazione"
+          },
+          {
+            "id": "c",
+            "text": "invito"
+          },
+          {
+            "id": "d",
+            "text": "indirizzo"
+          }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "a",
+        "knownErrors": []
+      },
+      "solution": [
+        "-zione → -tion: informazione = information."
+      ]
+    },
+    {
+      "id": "english.diag1.G2",
+      "skillId": "english.words.false-friends",
+      "level": "base",
+      "content": {
+        "type": "choice",
+        "prompt": "Cosa vuol dire \"library\"?",
+        "options": [
+          {
+            "id": "a",
+            "text": "libreria"
+          },
+          {
+            "id": "b",
+            "text": "biblioteca"
+          },
+          {
+            "id": "c",
+            "text": "libro"
+          },
+          {
+            "id": "d",
+            "text": "lavagna"
+          }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "b",
+        "knownErrors": [
+          {
+            "option": "a",
+            "tag": "eng_false_friend",
+            "message": "Trappola! library = biblioteca. Libreria si dice bookshop."
+          }
+        ]
+      },
+      "solution": [
+        "library è un falso amico: vuol dire biblioteca."
+      ]
+    },
+    {
+      "id": "english.diag1.G3",
+      "skillId": "english.words.cognates",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Come si dice in inglese \"stazione\"?",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "la parola in inglese"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "station"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "stazione"
+                ],
+                "tag": "eng_cognate_italian",
+                "message": "Applica la regola -zione → -tion: station."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "-zione → -tion: station."
+      ]
+    },
+    {
+      "id": "english.diag1.G4",
+      "skillId": "english.words.false-friends",
+      "level": "medium",
+      "content": {
+        "type": "choice",
+        "prompt": "Cosa vuol dire questa frase? \"Actually, I don't like pizza.\"",
+        "options": [
+          {
+            "id": "a",
+            "text": "Attualmente non mi piace la pizza."
+          },
+          {
+            "id": "b",
+            "text": "In realtà non mi piace la pizza."
+          },
+          {
+            "id": "c",
+            "text": "Non mi piace più la pizza."
+          }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "b",
+        "knownErrors": [
+          {
+            "option": "a",
+            "tag": "eng_false_friend",
+            "message": "Trappola! actually = in realtà, non attualmente."
+          }
+        ]
+      },
+      "solution": [
+        "actually è un falso amico: vuol dire in realtà."
+      ]
+    },
+    {
+      "id": "english.diag1.H1",
+      "skillId": "english.tenses.signal-words",
+      "level": "base",
+      "content": {
+        "type": "choice",
+        "prompt": "Scegli il verbo giusto: She ___ to school every day.",
+        "options": [
+          {
+            "id": "a",
+            "text": "goes"
+          },
+          {
+            "id": "b",
+            "text": "is going"
+          },
+          {
+            "id": "c",
+            "text": "went"
+          }
+        ]
+      },
+      "key": {
+        "type": "choice",
+        "correct": "a",
+        "knownErrors": [
+          {
+            "option": "b",
+            "tag": "eng_tense_signal",
+            "message": "every day → abitudine → present simple: goes."
+          },
+          {
+            "option": "c",
+            "tag": "eng_tense_signal",
+            "message": "every day → abitudine → present simple: goes."
+          }
+        ]
+      },
+      "solution": [
+        "every day → abitudine → present simple: goes."
+      ]
+    },
+    {
+      "id": "english.diag1.H2",
+      "skillId": "english.tenses.signal-words",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con il tempo giusto: Look! It ___ (rain).",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "il verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "is raining"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "rains",
+                  "rained"
+                ],
+                "tag": "eng_tense_signal",
+                "message": "Look! → adesso → present continuous: is raining."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Look! → adesso → present continuous.",
+        "Look! It is raining."
+      ]
+    },
+    {
+      "id": "english.diag1.H3",
+      "skillId": "english.tenses.signal-words",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Completa con la forma negativa del tempo giusto: We ___ (not / watch) TV yesterday.",
+        "fields": [
+          {
+            "kind": "text",
+            "id": "answer",
+            "label": "",
+            "placeholder": "ausiliare + not + verbo"
+          }
+        ]
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "answer": {
+            "kind": "text",
+            "accept": [
+              "didn't watch"
+            ],
+            "knownErrors": [
+              {
+                "answers": [
+                  "don't watch",
+                  "aren't watching"
+                ],
+                "tag": "eng_tense_signal",
+                "message": "yesterday → passato → didn't watch."
+              },
+              {
+                "answers": [
+                  "didn't watched"
+                ],
+                "tag": "eng_bare_after_did",
+                "message": "Dopo didn't il verbo torna nudo: didn't watch."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "yesterday → passato → didn't.",
+        "We didn't watch TV yesterday."
+      ]
+    },
+    {
+      "id": "english.diag1.I1",
+      "skillId": "english.reading.a1",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Leggi il messaggio e rispondi.",
+        "fields": [
+          {
+            "kind": "select",
+            "id": "q1",
+            "label": "1. Where is Emma?",
+            "options": [
+              {
+                "id": "a",
+                "text": "At the park."
+              },
+              {
+                "id": "b",
+                "text": "At school."
+              },
+              {
+                "id": "c",
+                "text": "At home."
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q2",
+            "label": "2. What time must Ben come?",
+            "options": [
+              {
+                "id": "a",
+                "text": "At four o'clock."
+              },
+              {
+                "id": "b",
+                "text": "At two o'clock."
+              },
+              {
+                "id": "c",
+                "text": "At six o'clock."
+              }
+            ]
+          }
+        ],
+        "passage": "Hi Ben!\n\nI'm at the park with my cousin. Can you come here at four o'clock? Bring your football!\n\nSee you soon,\nEmma"
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "q1": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"I'm at\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"I'm at\"."
+              }
+            ]
+          },
+          "q2": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"come here at\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"come here at\"."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Leggi prima le domande, poi cerca le parole nel testo."
+      ]
+    },
+    {
+      "id": "english.diag1.I2",
+      "skillId": "english.reading.a1",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Leggi l'avviso e rispondi.",
+        "fields": [
+          {
+            "kind": "select",
+            "id": "q1",
+            "label": "1. Students must bring a raincoat.",
+            "options": [
+              {
+                "id": "a",
+                "text": "True"
+              },
+              {
+                "id": "b",
+                "text": "False"
+              },
+              {
+                "id": "c",
+                "text": "Not given"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q2",
+            "label": "2. The trip is on Friday.",
+            "options": [
+              {
+                "id": "a",
+                "text": "True"
+              },
+              {
+                "id": "b",
+                "text": "False"
+              },
+              {
+                "id": "c",
+                "text": "Not given"
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q3",
+            "label": "3. The trip is by bus.",
+            "options": [
+              {
+                "id": "a",
+                "text": "True"
+              },
+              {
+                "id": "b",
+                "text": "False"
+              },
+              {
+                "id": "c",
+                "text": "Not given"
+              }
+            ]
+          }
+        ],
+        "passage": "SCHOOL TRIP TO THE ZOO\n\nDay: Wednesday 12 May\nMeet: at the school gate at 8.30\nBring: a packed lunch and a raincoat\nPrice: 10 euros"
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "q1": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"Bring\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"Bring\"."
+              }
+            ]
+          },
+          "q2": {
+            "kind": "select",
+            "correct": "b",
+            "knownErrors": [
+              {
+                "option": "a",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"Day\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Cerca nel testo \"Day\"."
+              }
+            ]
+          },
+          "q3": {
+            "kind": "select",
+            "correct": "c",
+            "knownErrors": [
+              {
+                "option": "a",
+                "tag": "eng_task_check",
+                "message": "L'avviso ne parla? Se non lo trovi, è Not given."
+              },
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "L'avviso ne parla? Se non lo trovi, è Not given."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "True = il testo lo dice · False = dice il contrario · Not given = non ne parla."
+      ]
+    },
+    {
+      "id": "english.diag1.I3",
+      "skillId": "english.reading.a2",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Leggi l'email e rispondi.",
+        "fields": [
+          {
+            "kind": "select",
+            "id": "q1",
+            "label": "1. Why did they go to the cinema?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Because it started to rain."
+              },
+              {
+                "id": "b",
+                "text": "Because they were tired."
+              },
+              {
+                "id": "c",
+                "text": "Because it was cheap."
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q2",
+            "label": "2. Mia went out on Sunday.",
+            "options": [
+              {
+                "id": "a",
+                "text": "True"
+              },
+              {
+                "id": "b",
+                "text": "False"
+              },
+              {
+                "id": "c",
+                "text": "Not given"
+              }
+            ]
+          },
+          {
+            "kind": "text",
+            "id": "q3",
+            "label": "3. What did Mia eat?",
+            "placeholder": "max 4 parole"
+          }
+        ],
+        "passage": "Hi Lucy,\n\nI had a great weekend! On Saturday I went to the beach with my aunt and I ate fish and chips. In the afternoon it started to rain, so we went to the cinema.\n\nOn Sunday I didn't go out because I was tired.\n\nWrite soon,\nMia"
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "q1": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Cerca la frase con \"cinema\": cosa c'è prima di \"so\"?"
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Cerca la frase con \"cinema\": cosa c'è prima di \"so\"?"
+              }
+            ]
+          },
+          "q2": {
+            "kind": "select",
+            "correct": "b",
+            "knownErrors": [
+              {
+                "option": "a",
+                "tag": "eng_task_check",
+                "message": "Rileggi la parte su Sunday: \"didn't go out\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Rileggi la parte su Sunday: \"didn't go out\"."
+              }
+            ]
+          },
+          "q3": {
+            "kind": "text",
+            "accept": [
+              "fish and chips"
+            ],
+            "knownErrors": []
+          }
+        }
+      },
+      "solution": [
+        "Attento a didn't e so: cambiano il senso della frase."
+      ]
+    },
+    {
+      "id": "english.diag1.J1",
+      "skillId": "english.listening.a1",
+      "level": "base",
+      "content": {
+        "type": "input",
+        "prompt": "Ascolta il messaggio e rispondi. Prima leggi le domande.",
+        "fields": [
+          {
+            "kind": "select",
+            "id": "q1",
+            "label": "1. When is the party?",
+            "options": [
+              {
+                "id": "a",
+                "text": "On Saturday."
+              },
+              {
+                "id": "b",
+                "text": "On Sunday."
+              },
+              {
+                "id": "c",
+                "text": "On Friday."
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q2",
+            "label": "2. What must Tom bring?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Some crisps."
+              },
+              {
+                "id": "b",
+                "text": "A cake."
+              },
+              {
+                "id": "c",
+                "text": "Some lemonade."
+              }
+            ]
+          }
+        ],
+        "audio": {
+          "text": "Hi Tom, it's Lucy. My party is on Saturday at five o'clock. Please bring some crisps. See you!",
+          "lang": "en-GB"
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "q1": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Ascolta \"My party is on…\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Ascolta \"My party is on…\"."
+              }
+            ]
+          },
+          "q2": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Ascolta \"Please bring…\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Ascolta \"Please bring…\"."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Trascrizione: Hi Tom, it's Lucy. My party is on Saturday at five o'clock. Please bring some crisps. See you!"
+      ]
+    },
+    {
+      "id": "english.diag1.J2",
+      "skillId": "english.listening.a1",
+      "level": "medium",
+      "content": {
+        "type": "input",
+        "prompt": "Ascolta il dialogo e rispondi. Puoi ascoltare due volte.",
+        "fields": [
+          {
+            "kind": "select",
+            "id": "q1",
+            "label": "1. When do they meet?",
+            "options": [
+              {
+                "id": "a",
+                "text": "On Monday."
+              },
+              {
+                "id": "b",
+                "text": "On Wednesday."
+              },
+              {
+                "id": "c",
+                "text": "On Friday."
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q2",
+            "label": "2. What time do they meet?",
+            "options": [
+              {
+                "id": "a",
+                "text": "At two o'clock."
+              },
+              {
+                "id": "b",
+                "text": "At three o'clock."
+              },
+              {
+                "id": "c",
+                "text": "At four o'clock."
+              }
+            ]
+          }
+        ],
+        "audio": {
+          "text": "Hi Sam! Do you want to go to the cinema on Monday? Sorry, I can't on Monday. I've got football practice. What about Wednesday? Wednesday is fine. Let's meet at three o'clock. Great! See you then.",
+          "lang": "en-GB",
+          "dialogue": [
+            {
+              "voice": 0,
+              "text": "Hi Sam! Do you want to go to the cinema on Monday?"
+            },
+            {
+              "voice": 1,
+              "text": "Sorry, I can't on Monday. I've got football practice. What about Wednesday?"
+            },
+            {
+              "voice": 0,
+              "text": "Wednesday is fine. Let's meet at three o'clock."
+            },
+            {
+              "voice": 1,
+              "text": "Great! See you then."
+            }
+          ],
+          "maxPlays": 2
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "q1": {
+            "kind": "select",
+            "correct": "b",
+            "knownErrors": [
+              {
+                "option": "a",
+                "tag": "eng_task_check",
+                "message": "Trappola: lunedì Sam non può (\"Sorry, I can't\")."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Trappola: lunedì Sam non può (\"Sorry, I can't\")."
+              }
+            ]
+          },
+          "q2": {
+            "kind": "select",
+            "correct": "b",
+            "knownErrors": [
+              {
+                "option": "a",
+                "tag": "eng_task_check",
+                "message": "Ascolta \"Let's meet at…\"."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Ascolta \"Let's meet at…\"."
+              }
+            ]
+          }
+        }
+      },
+      "solution": [
+        "Trascrizione: Hi Sam! Do you want to go to the cinema on Monday? Sorry, I can't on Monday. I've got football practice. What about Wednesday? Wednesday is fine. Let's meet at three o'clock. Great! See you then."
+      ]
+    },
+    {
+      "id": "english.diag1.J3",
+      "skillId": "english.listening.a2",
+      "level": "advanced",
+      "content": {
+        "type": "input",
+        "prompt": "Ascolta il dialogo e rispondi. Puoi ascoltare due volte.",
+        "fields": [
+          {
+            "kind": "select",
+            "id": "q1",
+            "label": "1. Which train does the passenger take?",
+            "options": [
+              {
+                "id": "a",
+                "text": "The 10.15 train."
+              },
+              {
+                "id": "b",
+                "text": "The 10.45 train."
+              },
+              {
+                "id": "c",
+                "text": "The 11.15 train."
+              }
+            ]
+          },
+          {
+            "kind": "select",
+            "id": "q2",
+            "label": "2. How much is the ticket?",
+            "options": [
+              {
+                "id": "a",
+                "text": "15 pounds"
+              },
+              {
+                "id": "b",
+                "text": "50 pounds"
+              },
+              {
+                "id": "c",
+                "text": "13 pounds"
+              }
+            ]
+          },
+          {
+            "kind": "text",
+            "id": "q3",
+            "label": "3. Which platform? (number)",
+            "placeholder": "max 4 parole"
+          }
+        ],
+        "audio": {
+          "text": "Good morning. A return ticket to York, please. The next train is at 10.15, but it's very busy. There's another one at 10.45. I'll take the 10.45 train, please. How much is it? It's fifteen pounds. It leaves from platform three.",
+          "lang": "en-GB",
+          "dialogue": [
+            {
+              "voice": 1,
+              "text": "Good morning. A return ticket to York, please."
+            },
+            {
+              "voice": 0,
+              "text": "The next train is at 10.15, but it's very busy. There's another one at 10.45."
+            },
+            {
+              "voice": 1,
+              "text": "I'll take the 10.45 train, please. How much is it?"
+            },
+            {
+              "voice": 0,
+              "text": "It's fifteen pounds. It leaves from platform three."
+            }
+          ],
+          "maxPlays": 2
+        }
+      },
+      "key": {
+        "type": "input",
+        "fields": {
+          "q1": {
+            "kind": "select",
+            "correct": "b",
+            "knownErrors": [
+              {
+                "option": "a",
+                "tag": "eng_task_check",
+                "message": "Trappola: il treno delle 10.15 è troppo pieno."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Trappola: il treno delle 10.15 è troppo pieno."
+              }
+            ]
+          },
+          "q2": {
+            "kind": "select",
+            "correct": "a",
+            "knownErrors": [
+              {
+                "option": "b",
+                "tag": "eng_task_check",
+                "message": "Ascolta la risposta a \"How much is it?\": fifteen."
+              },
+              {
+                "option": "c",
+                "tag": "eng_task_check",
+                "message": "Ascolta la risposta a \"How much is it?\": fifteen."
+              }
+            ]
+          },
+          "q3": {
+            "kind": "text",
+            "accept": [
+              "3",
+              "three",
+              "platform three",
+              "platform 3"
+            ],
+            "knownErrors": []
+          }
+        }
+      },
+      "solution": [
+        "Trascrizione: Good morning. A return ticket to York, please. The next train is at 10.15, but it's very busy. There's another one at 10.45. I'll take the 10.45 train, please. How much is it? It's fifteen pounds. It leaves from platform three."
+      ]
+    }
+  ],
+  "assessments": [
+    {
+      "id": "english.diagnostic.v1",
+      "subjectId": "english",
+      "kind": "diagnostic",
+      "title": "Test iniziale di inglese",
+      "description": "Una mappa di partenza per capire da dove cominciare. Non è una verifica e non c'è nessun voto.",
+      "config": {
+        "stopAfterBaseErrors": 2,
+        "pauseMinutes": 5,
+        "recoveryOrder": [
+          "B",
+          "C",
+          "A",
+          "D",
+          "I",
+          "J",
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      "sections": [
+        {
+          "id": "english.diagnostic.v1.A",
+          "code": "A",
+          "areaId": "english.words",
+          "title": "Parole di base",
+          "part": 1,
+          "itemIds": [
+            "english.diag1.A1",
+            "english.diag1.A2",
+            "english.diag1.A3",
+            "english.diag1.A4",
+            "english.diag1.A5",
+            "english.diag1.A6"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.B",
+          "code": "B",
+          "areaId": "english.verbs",
+          "title": "to be",
+          "part": 1,
+          "itemIds": [
+            "english.diag1.B1",
+            "english.diag1.B2",
+            "english.diag1.B3",
+            "english.diag1.B4"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.C",
+          "code": "C",
+          "areaId": "english.verbs",
+          "title": "Present simple",
+          "part": 1,
+          "itemIds": [
+            "english.diag1.C1",
+            "english.diag1.C2",
+            "english.diag1.C3",
+            "english.diag1.C4",
+            "english.diag1.C5"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.D",
+          "code": "D",
+          "areaId": "english.verbs",
+          "title": "Present continuous",
+          "part": 1,
+          "itemIds": [
+            "english.diag1.D1",
+            "english.diag1.D2",
+            "english.diag1.D3",
+            "english.diag1.D4"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.E",
+          "code": "E",
+          "areaId": "english.verbs",
+          "title": "Past simple",
+          "part": 2,
+          "itemIds": [
+            "english.diag1.E1",
+            "english.diag1.E2",
+            "english.diag1.E3",
+            "english.diag1.E4"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.F",
+          "code": "F",
+          "areaId": "english.verbs",
+          "title": "Verbi irregolari",
+          "part": 2,
+          "itemIds": [
+            "english.diag1.F1",
+            "english.diag1.F2",
+            "english.diag1.F3",
+            "english.diag1.F4",
+            "english.diag1.F5",
+            "english.diag1.F6",
+            "english.diag1.F7"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.G",
+          "code": "G",
+          "areaId": "english.words",
+          "title": "Parole trasparenti e falsi amici",
+          "part": 2,
+          "itemIds": [
+            "english.diag1.G1",
+            "english.diag1.G2",
+            "english.diag1.G3",
+            "english.diag1.G4"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.H",
+          "code": "H",
+          "areaId": "english.tenses",
+          "title": "Che tempo uso?",
+          "part": 2,
+          "itemIds": [
+            "english.diag1.H1",
+            "english.diag1.H2",
+            "english.diag1.H3"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.I",
+          "code": "I",
+          "areaId": "english.reading",
+          "title": "Lettura",
+          "part": 2,
+          "itemIds": [
+            "english.diag1.I1",
+            "english.diag1.I2",
+            "english.diag1.I3"
+          ]
+        },
+        {
+          "id": "english.diagnostic.v1.J",
+          "code": "J",
+          "areaId": "english.listening",
+          "title": "Ascolto",
+          "part": 2,
+          "itemIds": [
+            "english.diag1.J1",
+            "english.diag1.J2",
+            "english.diag1.J3"
+          ]
+        }
+      ]
+    }
+  ]
+}

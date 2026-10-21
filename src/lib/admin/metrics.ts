@@ -10,6 +10,7 @@ export type AnswerStatsRow = {
   idleMs: number;
   awayCount: number;
   awayMs: number;
+  audioPlays?: number;
 };
 
 export type AnswerRow = {

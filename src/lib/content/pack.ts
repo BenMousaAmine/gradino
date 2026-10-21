@@ -116,7 +116,11 @@ export function correctResponse(content: ItemContent, key: ItemKey): ItemRespons
         fields[fieldId] =
           fieldKey.kind === "number"
             ? { kind: "number", value: formatDecimal(fieldKey.value), unit: fieldKey.unit }
-            : { kind: "fraction", numerator: String(fieldKey.numerator), denominator: String(fieldKey.denominator) };
+            : fieldKey.kind === "fraction"
+              ? { kind: "fraction", numerator: String(fieldKey.numerator), denominator: String(fieldKey.denominator) }
+              : fieldKey.kind === "select"
+                ? { kind: "select", option: fieldKey.correct }
+                : { kind: "text", value: fieldKey.accept[0] };
       }
       return { type: "input", fields };
     }
@@ -145,6 +149,15 @@ export function checkItemConsistency(where: string, content: ItemContent, key: I
         continue;
       }
       if (fieldKey.kind !== field.kind) errors.push(`${where}: field ${field.id} kind mismatch`);
+      if (field.kind === "select" && fieldKey.kind === "select") {
+        const optionIds = field.options.map((option) => option.id);
+        for (const id of duplicates(optionIds)) errors.push(`${where}: field ${field.id} duplicate option ${id}`);
+        if (!optionIds.includes(fieldKey.correct)) errors.push(`${where}: field ${field.id} correct option missing`);
+        for (const error of fieldKey.knownErrors) {
+          if (!optionIds.includes(error.option)) errors.push(`${where}: field ${field.id} known error option ${error.option} missing`);
+          if (error.option === fieldKey.correct) errors.push(`${where}: field ${field.id} known error is the correct option`);
+        }
+      }
       if (field.kind === "number" && fieldKey.kind === "number") {
         if (field.units && !fieldKey.unit) errors.push(`${where}: field ${field.id} offers units but key has none`);
         if (fieldKey.unit && !field.units?.includes(fieldKey.unit)) {
@@ -189,7 +202,11 @@ export function checkItemConsistency(where: string, content: ItemContent, key: I
             ? { kind: "number", value: formatDecimal(error.value), unit: fieldKey.unit }
             : "numerator" in error
               ? { kind: "fraction", numerator: String(error.numerator), denominator: String(error.denominator) }
-              : response.fields[fieldId];
+              : "answers" in error
+                ? { kind: "text", value: error.answers[0] }
+                : "option" in error
+                  ? { kind: "select", option: error.option }
+                  : response.fields[fieldId];
         const fieldGrade = gradeItem(key, response).fields.find((field) => field.fieldId === fieldId);
         if (fieldGrade?.diagnosis?.tag !== error.tag) {
           errors.push(`${where}: known error ${error.tag} on field ${fieldId} is not detected`);

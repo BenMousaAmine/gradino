@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { z } from "zod";
 import { AppHeader } from "@/components/app-header";
 import { MathText } from "@/components/math-text";
-import { Card } from "@/components/ui";
-import { APP_NAME, DIAGNOSTIC_ID } from "@/lib/app";
+import { buttonClass, Card } from "@/components/ui";
+import { APP_NAME } from "@/lib/app";
 import { loadAssessment, loadLatestAttempt } from "@/lib/assessments/queries";
 import { toEngineSections } from "@/lib/assessments/view";
 import { getCurrentUser, getUserId } from "@/lib/auth/session";
 import { recoveryPlan, sectionResults, type AreaColor } from "@/lib/diagnostic/engine";
+import { parseSubject, SUBJECTS } from "@/lib/subjects";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: `La tua mappa · ${APP_NAME}` };
@@ -31,15 +33,19 @@ function formatSeconds(ms: number) {
   return `${Math.round(ms / 1000)} s`;
 }
 
-async function Results() {
+async function Results({ searchParams }: { searchParams: PageProps<"/diagnostic/results">["searchParams"] }) {
+  const subject = parseSubject((await searchParams).subject);
+  const diagnosticId = SUBJECTS[subject].diagnosticId;
+  if (!diagnosticId) redirect("/");
+  const home = subject === "math" ? "/" : `/?subject=${subject}`;
   const userId = await getUserId();
   const supabase = await createSupabaseServerClient();
   const [user, view, attempt] = await Promise.all([
     getCurrentUser(),
-    loadAssessment(supabase, DIAGNOSTIC_ID),
-    loadLatestAttempt(supabase, userId, DIAGNOSTIC_ID, "completed"),
+    loadAssessment(supabase, diagnosticId),
+    loadLatestAttempt(supabase, userId, diagnosticId, "completed"),
   ]);
-  if (!view || !attempt) redirect("/diagnostic");
+  if (!view || !attempt) redirect(subject === "math" ? "/diagnostic" : `/diagnostic?subject=${subject}`);
 
   const engineSections = toEngineSections(view);
   const state = { scores: new Map(Object.entries(attempt.scores)), choices: attempt.choices, currentPart: Infinity };
@@ -170,12 +176,16 @@ async function Results() {
             })}
           </div>
         </details>
+
+        <Link href={home} className={`${buttonClass()} w-full`}>
+          Inizia a studiare
+        </Link>
       </main>
     </>
   );
 }
 
-export default function ResultsPage() {
+export default function ResultsPage({ searchParams }: PageProps<"/diagnostic/results">) {
   return (
     <Suspense
       fallback={
@@ -184,7 +194,7 @@ export default function ResultsPage() {
         </main>
       }
     >
-      <Results />
+      <Results searchParams={searchParams} />
     </Suspense>
   );
 }

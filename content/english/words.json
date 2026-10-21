@@ -1,0 +1,458 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.words.time-numbers",
+      "title": "Giorni, mesi, numeri e ore",
+      "understand": {
+        "paragraphs": [
+          "Giorni e mesi in inglese si scrivono sempre con la maiuscola: Monday, January.",
+          "I giorni: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Trappola: Tuesday è martedì, Thursday (con la h) è giovedì.",
+          "I numeri da 13 a 19 finiscono in -teen (thirteen, fourteen), le decine in -ty (thirty, forty). forty si scrive senza u!",
+          "Le ore: seven o'clock (le 7 in punto), half past seven (le 7 e mezza), quarter past seven (le 7 e un quarto), quarter to eight (le 8 meno un quarto)."
+        ]
+      },
+      "recipe": [
+        "Giorni e mesi: sempre la maiuscola.",
+        "13–19 → -teen; 20, 30, 40… → -ty; da 21 a 99 → decina e unità con il trattino (forty-five).",
+        "Ore: past = dopo l'ora, to = prima dell'ora dopo.",
+        "Ripassa un po' ogni giorno: sono parole che userai sempre."
+      ],
+      "example": {
+        "prompt": "Scrivi in lettere: 45",
+        "steps": [
+          "40 = forty (senza u).",
+          "5 = five.",
+          "Unisco con il trattino: forty-five."
+        ],
+        "answer": "forty-five"
+      },
+      "complete": {
+        "prompt": "Scrivi in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "martedì →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "Tuesday"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "Thursday"
+                  ],
+                  "tag": "eng_tue_thu",
+                  "message": "Attento: Tuesday è martedì, Thursday (con la h) è giovedì."
+                }
+              ]
+            }
+          },
+          {
+            "label": "14 →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "fourteen"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "forteen"
+                  ],
+                  "tag": "eng_fourteen",
+                  "message": "fourteen è four + teen."
+                }
+              ]
+            }
+          },
+          {
+            "label": "40 →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "forty"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "fourty"
+                  ],
+                  "tag": "eng_forty",
+                  "message": "forty si scrive senza la u."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "thirteen (13) e thirty (30) si somigliano: -teen è più lungo.",
+        "half past seven sono le 7:30, non le 6:30."
+      ]
+    },
+    {
+      "skillId": "english.words.everyday",
+      "title": "Famiglia, casa, scuola e cibo",
+      "understand": {
+        "paragraphs": [
+          "Queste sono le parole di tutti i giorni: con poche centinaia di parole si capisce gran parte di un testo semplice.",
+          "Si imparano a gruppi (famiglia, casa, scuola, cibo), non in liste lunghe.",
+          "Trucco: di' la parola ad alta voce mentre guardi l'oggetto vero: kitchen in cucina, chair toccando la sedia."
+        ]
+      },
+      "recipe": [
+        "Impara 5 parole alla volta, di un solo gruppo.",
+        "Usale in una frase detta ad alta voce: My mother is in the kitchen.",
+        "Il giorno dopo ripassale prima di impararne altre.",
+        "Attento alle trappole: camera da letto = bedroom (camera vuol dire macchina fotografica)."
+      ],
+      "example": {
+        "prompt": "Come si dice \"cucina\"?",
+        "steps": [
+          "Gruppo: la casa.",
+          "cucina = kitchen."
+        ],
+        "answer": "kitchen"
+      },
+      "complete": {
+        "prompt": "Scrivi in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "fratello →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "brother"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "cucina →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "kitchen"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "camera da letto →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "bedroom"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "camera"
+                  ],
+                  "tag": "eng_false_friend",
+                  "message": "Trappola! camera vuol dire macchina fotografica: la camera da letto è bedroom."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "camera da letto = bedroom, non camera.",
+        "La gomma per cancellare è rubber (o eraser); gum è la gomma da masticare."
+      ]
+    },
+    {
+      "skillId": "english.words.cognates",
+      "title": "Parole trasparenti: l'inglese che sai già",
+      "understand": {
+        "paragraphs": [
+          "Tante parole inglesi lunghe vengono dal latino, come l'italiano: per questo si somigliano.",
+          "Basta conoscere le regole delle finali: -zione → -tion (stazione → station), -tà → -ty (città → city), -oso → -ous (famoso → famous), -mente → -ly (finalmente → finally).",
+          "Regola d'oro: parola lunga che somiglia all'italiano → quasi sempre vuol dire la stessa cosa. Parola corta di tutti i giorni (go, get, buy) → va imparata."
+        ]
+      },
+      "recipe": [
+        "Guarda la fine della parola italiana.",
+        "Applica la regola: -zione → -tion · -tà → -ty · -oso → -ous · -mente → -ly · -ico → -ic · -ale → -al.",
+        "Altre regole: -ente/-ante → -ent/-ant · -enza/-anza → -ence/-ance · -ista → -ist · -ivo → -ive · -ario → -ary · -ore → -or · -ura → -ure.",
+        "Quando leggi in inglese, usa il trucco al contrario per capire le parole lunghe."
+      ],
+      "example": {
+        "prompt": "Come si dice in inglese \"curiosità\"?",
+        "steps": [
+          "Finisce in -tà.",
+          "Regola: -tà → -ty.",
+          "curiosità → curiosity."
+        ],
+        "answer": "curiosity"
+      },
+      "complete": {
+        "prompt": "Scrivi la parola in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "informazione →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "information"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "informazione"
+                  ],
+                  "tag": "eng_cognate_italian",
+                  "message": "Applica la regola -zione → -tion: information."
+                }
+              ]
+            }
+          },
+          {
+            "label": "famoso →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "famous"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "famoso"
+                  ],
+                  "tag": "eng_cognate_italian",
+                  "message": "Applica la regola -oso → -ous: famous."
+                }
+              ]
+            }
+          },
+          {
+            "label": "naturale →",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "natural"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "naturale"
+                  ],
+                  "tag": "eng_cognate_italian",
+                  "message": "Applica la regola -ale → -al: natural."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Attento ai falsi amici: alcune parole si somigliano ma vogliono dire altro (library = biblioteca).",
+        "Il trucco funziona benissimo per capire quando leggi; quando scrivi, controlla l'ortografia."
+      ]
+    },
+    {
+      "skillId": "english.words.false-friends",
+      "title": "Falsi amici: le trappole",
+      "understand": {
+        "paragraphs": [
+          "Alcune parole inglesi sembrano italiane ma vogliono dire tutt'altro: sono i falsi amici.",
+          "Sono poche, ma cadono spesso nelle verifiche e all'INVALSI: conviene conoscerle come trappole.",
+          "Le più importanti: library = biblioteca · actually = in realtà · parents = genitori · camera = macchina fotografica · factory = fabbrica · magazine = rivista · argument = litigio · sensible = sensato · novel = romanzo · large = grande."
+        ]
+      },
+      "recipe": [
+        "Quando una parola sembra troppo facile, chiediti: è un falso amico?",
+        "Ripeti la coppia-trappola: library ≠ libreria, library = biblioteca.",
+        "Per dire la parola italiana usa quella giusta: libreria = bookshop, parenti = relatives.",
+        "Leggi la frase intera: spesso il senso ti dice subito se è una trappola."
+      ],
+      "example": {
+        "prompt": "Cosa vuol dire \"My parents are at work\"?",
+        "steps": [
+          "parents sembra parenti… trappola!",
+          "parents = genitori.",
+          "I miei genitori sono al lavoro."
+        ],
+        "answer": "I miei genitori sono al lavoro."
+      },
+      "complete": {
+        "prompt": "Scrivi cosa vogliono dire in italiano.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "library =",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "biblioteca"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "libreria"
+                  ],
+                  "tag": "eng_false_friend",
+                  "message": "Trappola! library = biblioteca. Libreria si dice bookshop."
+                }
+              ]
+            }
+          },
+          {
+            "label": "parents =",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "genitori"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "parenti"
+                  ],
+                  "tag": "eng_false_friend",
+                  "message": "Trappola! parents = genitori. Parenti si dice relatives."
+                }
+              ]
+            }
+          },
+          {
+            "label": "factory =",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "fabbrica"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "fattoria"
+                  ],
+                  "tag": "eng_false_friend",
+                  "message": "Trappola! factory = fabbrica. Fattoria si dice farm."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "actually non vuol dire attualmente: vuol dire in realtà.",
+        "camera in inglese è la macchina fotografica; la camera da letto è bedroom."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.vocab-time.1",
+      "skillId": "english.words.time-numbers",
+      "level": "base",
+      "generator": "en-vocab-time",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.vocab-time.2",
+      "skillId": "english.words.time-numbers",
+      "level": "medium",
+      "generator": "en-vocab-time",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.vocab-time.3",
+      "skillId": "english.words.time-numbers",
+      "level": "advanced",
+      "generator": "en-vocab-time",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.vocab-things.1",
+      "skillId": "english.words.everyday",
+      "level": "base",
+      "generator": "en-vocab-things",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.vocab-things.2",
+      "skillId": "english.words.everyday",
+      "level": "medium",
+      "generator": "en-vocab-things",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.vocab-things.3",
+      "skillId": "english.words.everyday",
+      "level": "advanced",
+      "generator": "en-vocab-things",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.cognates.1",
+      "skillId": "english.words.cognates",
+      "level": "base",
+      "generator": "en-cognates",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.cognates.2",
+      "skillId": "english.words.cognates",
+      "level": "medium",
+      "generator": "en-cognates",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.cognates.3",
+      "skillId": "english.words.cognates",
+      "level": "advanced",
+      "generator": "en-cognates",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.false-friends.1",
+      "skillId": "english.words.false-friends",
+      "level": "base",
+      "generator": "en-false-friends",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.false-friends.2",
+      "skillId": "english.words.false-friends",
+      "level": "medium",
+      "generator": "en-false-friends",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.false-friends.3",
+      "skillId": "english.words.false-friends",
+      "level": "advanced",
+      "generator": "en-false-friends",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

@@ -5,11 +5,12 @@ import { AppHeader } from "@/components/app-header";
 import { CoachProvider } from "@/components/coach";
 import { APP_NAME } from "@/lib/app";
 import { getCurrentUser, getUserId } from "@/lib/auth/session";
-import { loadSignals } from "@/lib/insights/load";
+import { loadCoach } from "@/lib/insights/load";
 import { coachFlags } from "@/lib/insights/tips";
 import { lessonSchema } from "@/lib/lessons/schema";
 import { templateExercise } from "@/lib/study/exercises";
 import { loadStudyContext, pathEntries } from "@/lib/study/progress";
+import { subjectOfSkill } from "@/lib/subjects";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { SkillView } from "./skill-view";
 
@@ -19,11 +20,11 @@ async function Skill({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const userId = await getUserId();
   const admin = createSupabaseAdminClient();
-  const [user, context, lessonRow, signals] = await Promise.all([
+  const [user, context, lessonRow, coach] = await Promise.all([
     getCurrentUser(),
-    loadStudyContext(admin, userId),
+    loadStudyContext(admin, userId, subjectOfSkill(id)),
     admin.from("lessons").select("content").eq("skill_id", id).maybeSingle(),
-    loadSignals(admin, userId),
+    loadCoach(admin, userId, subjectOfSkill(id)),
   ]);
   if (!context) redirect("/diagnostic");
 
@@ -39,7 +40,7 @@ async function Skill({ params }: { params: Promise<{ id: string }> }) {
     <>
       <AppHeader name={user.displayName} />
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 py-6">
-        <CoachProvider flags={coachFlags(signals)}>
+        <CoachProvider flags={coachFlags(coach.signals)} tricks={coach.tricks}>
           <SkillView
             entry={entry}
             lesson={lesson}

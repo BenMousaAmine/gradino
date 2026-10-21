@@ -9,9 +9,12 @@ import { Gradini } from "@/components/gradini";
 import { MathText } from "@/components/math-text";
 import { formatDateTime, formatDay, shortDay } from "@/lib/admin/format";
 import { requireAdmin, studentOverview } from "@/lib/admin/queries";
+import { loadTrickProgress } from "@/lib/insights/load";
+import type { TrickProgress } from "@/lib/insights/tricks";
 import { APP_NAME } from "@/lib/app";
 import { buttonClass } from "@/components/ui";
 import { LEVEL_LABELS } from "@/lib/study/plan";
+import { SUBJECT_IDS, SUBJECTS } from "@/lib/subjects";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = { title: `Scheda studente · ${APP_NAME}` };
@@ -49,6 +52,19 @@ const OUTCOMES = {
   unsolved: { text: "Non risolta", style: "bg-bad-soft text-bad" },
 } as const;
 
+const TRICK_VERDICTS: Record<TrickProgress["verdict"], string> = {
+  migliora: "bg-good-soft text-good",
+  superato: "bg-good-soft text-good",
+  stabile: "bg-warn-soft text-warn",
+  peggiora: "bg-bad-soft text-bad",
+  "pochi dati": "bg-line text-ink-soft",
+  "non ancora mostrato": "bg-brand-soft text-brand-dark",
+};
+
+function periodText(period: TrickProgress["before"]) {
+  return period.accuracy === null ? "nessuna risposta" : `${period.accuracy}% (su ${period.answers})`;
+}
+
 function delta(current: number | null, previous: number | null) {
   return current === null || previous === null ? null : current - previous;
 }
@@ -56,7 +72,8 @@ function delta(current: number | null, previous: number | null) {
 async function Overview({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const user = await requireAdmin();
-  const data = await studentOverview(createSupabaseAdminClient(), id);
+  const admin = createSupabaseAdminClient();
+  const [data, tricks] = await Promise.all([studentOverview(admin, id), loadTrickProgress(admin, id)]);
   const { week, previousWeek, habits } = data;
   const activeDays = data.series.filter((point) => point.minutes > 0 || point.answers > 0).reverse();
   const peakHour = habits.hours.indexOf(Math.max(...habits.hours));
@@ -87,6 +104,41 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
 
         <Section title="Cosa gli serve adesso" subtitle="Ultimi 14 giorni, test iniziale compreso: cosa notiamo e cosa fare">
           <InsightList insights={data.report} empty="Ancora pochi dati per dire qualcosa di utile: servono almeno una decina di risposte." />
+        </Section>
+
+        <Section
+          title="Trucchi: stanno funzionando?"
+          subtitle="I trucchi che gli mostriamo dove sbaglia, e come vanno le risposte su quel tema prima e dopo averli visti"
+        >
+          {tricks.length === 0 ? (
+            <p className="text-ink-soft">Nessun trucco attivo: per ora non ci sono errori ripetuti su un tema.</p>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {tricks.map((trick) => (
+                <li key={trick.id} className="flex flex-col gap-2 rounded-2xl bg-canvas p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="font-semibold">{trick.title}</p>
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${TRICK_VERDICTS[trick.verdict]}`}>{trick.verdict}</span>
+                  </div>
+                  <p className="text-sm text-ink-soft">
+                    {trick.shown > 0 && trick.firstShown
+                      ? `Mostrato ${trick.shown} ${trick.shown === 1 ? "volta" : "volte"}, la prima ${formatDateTime(trick.firstShown)}`
+                      : "Attivo: gli verrà mostrato al prossimo esercizio su questo tema"}
+                  </p>
+                  <p className="text-sm text-ink">
+                    Giuste su questo tema: {periodText(trick.before)}
+                    {trick.shown > 0 && ` → ${periodText(trick.after)}`}
+                  </p>
+                  {trick.before.errorRate !== null && (
+                    <p className="text-sm text-ink">
+                      Errore tipico: {trick.before.errorRate}% delle risposte
+                      {trick.shown > 0 && trick.after.errorRate !== null && ` → ${trick.after.errorRate}%`}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </Section>
 
         <Section title="Andamento" subtitle="Ultimi 30 giorni">
@@ -230,7 +282,7 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
             </dl>
           </Section>
 
-          <Section title="Test iniziale">
+          <Section title={data.extraDiagnostics.length > 0 ? "Test iniziale · Matematica" : "Test iniziale"}>
             {data.diagnostic ? (
               <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {data.diagnostic.sections.map((section) => (
@@ -281,6 +333,28 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
               <p className="text-ink-soft">Non ancora iniziato.</p>
             )}
           </Section>
+
+          {data.extraDiagnostics.map((extra) => (
+            <Section key={extra.subject} title={`Test iniziale · ${extra.title}`}>
+              {extra.map ? (
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {extra.map.sections.map((section) => (
+                    <li key={section.code} className="flex items-center gap-2 text-sm">
+                      <span className={`h-3 w-3 shrink-0 rounded-full ${section.color ? COLOR_LABELS[section.color].dot : "bg-line"}`} />
+                      <span className="font-medium">{section.title}</span>
+                      <span className="text-ink-soft">
+                        {section.color ? `${section.ratio}%${section.closedEarly ? " · chiusa in anticipo" : ""}` : "non svolta"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-ink-soft">
+                  {extra.inProgress !== null ? `In corso · ${extra.inProgress} risposte finora.` : "Non ancora iniziato."}
+                </p>
+              )}
+            </Section>
+          ))}
         </div>
 
         <Section title="Ragionamenti" subtitle="Come ha pensato i problemi e gli esercizi avanzati sbagliati, con le sue parole">
@@ -315,20 +389,29 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
         </Section>
 
         <Section title="Percorso" subtitle="Gradini di ogni abilità">
-          <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
-            {data.progress.map((skill) => (
-              <li key={skill.skillId} className="flex items-center gap-3 rounded-2xl border-2 border-line px-3 py-2">
-                <Gradini steps={skill.steps} mastered={skill.status === "mastered"} />
-                <span className="flex flex-1 flex-col">
-                  <span className="text-sm font-semibold">{skill.title}</span>
-                  <span className="text-xs text-ink-soft">
-                    {skill.area} · {skill.status === "learning" ? LEVEL_LABELS[skill.level] : STATUS_TEXT[skill.status]}
-                    {skill.nextReviewOn && skill.status !== "learning" ? ` · ripasso ${shortDay(skill.nextReviewOn)}` : ""}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ul>
+          {SUBJECT_IDS.map((subject) => {
+            const skills = data.progress.filter((skill) => skill.subject === subject);
+            if (skills.length === 0) return null;
+            return (
+              <div key={subject} className="flex flex-col gap-2">
+                <h3 className="font-semibold">{SUBJECTS[subject].title}</h3>
+                <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                  {skills.map((skill) => (
+                    <li key={skill.skillId} className="flex items-center gap-3 rounded-2xl border-2 border-line px-3 py-2">
+                      <Gradini steps={skill.steps} mastered={skill.status === "mastered"} />
+                      <span className="flex flex-1 flex-col">
+                        <span className="text-sm font-semibold">{skill.title}</span>
+                        <span className="text-xs text-ink-soft">
+                          {skill.area} · {skill.status === "learning" ? LEVEL_LABELS[skill.level] : STATUS_TEXT[skill.status]}
+                          {skill.nextReviewOn && skill.status !== "learning" ? ` · ripasso ${shortDay(skill.nextReviewOn)}` : ""}
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </Section>
 
         <Section title="Lezioni" subtitle="Secondi medi su ogni passo e risultati del “Prova tu”">
@@ -390,7 +473,7 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
           ) : (
             <ul className="flex flex-col gap-2">
               {activeDays.map((point) => {
-                const session = data.sessions.find((candidate) => candidate.day === point.day);
+                const sessions = data.sessions.filter((candidate) => candidate.day === point.day);
                 return (
                   <li key={point.day}>
                     <Link
@@ -401,9 +484,12 @@ async function Overview({ params }: { params: Promise<{ id: string }> }) {
                       <span className="text-sm text-ink-soft">
                         {point.minutes} min · {point.answers} esercizi
                         {point.accuracy !== null ? ` · ${point.accuracy}% giuste` : ""}
-                        {session
-                          ? ` · sessione ${session.status === "completed" ? "completata" : session.status === "abandoned" ? `lasciata al blocco “${session.blockTitle}”` : "in corso"}`
-                          : ""}
+                        {sessions
+                          .map(
+                            (session) =>
+                              ` · ${SUBJECTS[session.subject].title}: ${session.status === "completed" ? "completata" : session.status === "abandoned" ? `lasciata al blocco “${session.blockTitle}”` : "in corso"}`,
+                          )
+                          .join("")}
                       </span>
                     </Link>
                   </li>

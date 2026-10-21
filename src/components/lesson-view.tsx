@@ -14,6 +14,8 @@ import { track } from "@/lib/tracking/client";
 const STEPS = ["Capire", "Ricetta", "Esempio", "Prova tu"];
 
 function keyText(key: FieldKey): string {
+  if (key.kind === "text") return key.accept[0];
+  if (key.kind === "select") return key.correct;
   return key.kind === "number" ? formatDecimal(key.value) : `$\\frac{${key.numerator}}{${key.denominator}}$`;
 }
 
@@ -183,12 +185,14 @@ export function LessonView({
             <div className="flex flex-col gap-3">
               {lesson.complete.blanks.map((blank, index) => {
                 const ok = grade.fields[index]?.score === 1;
+                const message = grade.fields[index]?.diagnosis?.message;
                 return (
                   <div key={blank.label} className={`rounded-2xl px-4 py-3 ${ok ? "bg-good-soft" : "bg-bad-soft"}`}>
                     <MathText text={blank.label} />{" "}
                     <span className={`font-bold ${ok ? "text-good" : "text-bad"}`}>
                       {ok ? "✓" : <>✗ era <MathText text={keyText(blank.key)} /></>}
                     </span>
+                    {!ok && message && <MathText text={message} className="mt-1 block text-sm text-ink" />}
                   </div>
                 );
               })}

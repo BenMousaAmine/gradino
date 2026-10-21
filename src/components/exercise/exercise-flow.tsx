@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTricks } from "@/components/coach";
 import { MathText } from "@/components/math-text";
+import { TrickCard } from "@/components/trick-card";
 import { Button } from "@/components/ui";
+import { trickForSkill, trickForTag, type Trick } from "@/lib/insights/tricks";
 import type { ItemResponse } from "@/lib/items/schemas";
 import { submitNote, submitSecondAttempt, submitStudyAnswer } from "@/lib/study/actions";
 import type { AnswerFeedback, PublicExercise } from "@/lib/study/types";
@@ -37,6 +40,8 @@ export function ExerciseFlow({
 }) {
   const [stage, setStage] = useState<Stage>({ kind: "question" });
   const itemId = exercise.ref.source === "template" ? `${exercise.ref.id}:${exercise.ref.seed}` : exercise.ref.id;
+  const skillTrick = trickForSkill(useTricks(), exercise.skillId);
+  const trickFor = (feedback: AnswerFeedback) => trickForTag(feedback.diagnosis?.tag) ?? skillTrick;
 
   const conclude = (feedback: AnswerFeedback) =>
     setStage(feedback.needsNote ? { kind: "note", feedback } : { kind: "feedback", feedback });
@@ -70,7 +75,9 @@ export function ExerciseFlow({
 
   if (stage.kind === "question" || stage.kind === "retry") {
     return (
-      <QuestionCard
+      <>
+        {stage.kind === "question" && skillTrick && <TrickCard trick={skillTrick} where="exercise" item={itemId} />}
+        <QuestionCard
         key={stage.kind}
         item={{ id: itemId, content: exercise.content }}
         pending={pending}
@@ -79,7 +86,8 @@ export function ExerciseFlow({
         onSubmit={(response, timeMs, stats) =>
           stage.kind === "retry" ? retry(stage.first, stage.hintMs, response, timeMs, stats) : answer(response, timeMs, stats)
         }
-      />
+        />
+      </>
     );
   }
 
@@ -91,6 +99,8 @@ export function ExerciseFlow({
       {stage.kind === "hint" && (
         <HintPanel
           feedback={stage.first}
+          trick={trickFor(stage.first)}
+          item={itemId}
           onRetry={(hintMs) => setStage({ kind: "retry", first: stage.first, response: stage.response, hintMs })}
         />
       )}
@@ -102,13 +112,30 @@ export function ExerciseFlow({
         />
       )}
       {stage.kind === "feedback" && (
-        <FeedbackPanel feedback={stage.feedback} onNext={onNext} pending={pending} sessionId={sessionId} />
+        <FeedbackPanel
+          feedback={stage.feedback}
+          onNext={onNext}
+          pending={pending}
+          sessionId={sessionId}
+          trick={stage.feedback.score < 1 ? trickFor(stage.feedback) : null}
+          item={itemId}
+        />
       )}
     </>
   );
 }
 
-function HintPanel({ feedback, onRetry }: { feedback: AnswerFeedback; onRetry: (hintMs: number) => void }) {
+function HintPanel({
+  feedback,
+  trick,
+  item,
+  onRetry,
+}: {
+  feedback: AnswerFeedback;
+  trick: Trick | null;
+  item: string;
+  onRetry: (hintMs: number) => void;
+}) {
   const shownAt = useRef<number | null>(null);
 
   useEffect(() => {
@@ -123,6 +150,7 @@ function HintPanel({ feedback, onRetry }: { feedback: AnswerFeedback; onRetry: (
         <p className="font-display text-2xl font-extrabold">{partial ? "Quasi!" : "Non ancora."}</p>
         {feedback.diagnosis?.message && <MathText text={feedback.diagnosis.message} className="text-base" />}
       </div>
+      {trick && <TrickCard trick={trick} where="hint" item={item} />}
       <p className="text-ink-soft">Hai un altro tentativo: la tua risposta resta lì, correggi quello che non va.</p>
       <Button
         onClick={() => onRetry(shownAt.current === null ? 0 : Math.round(performance.now() - shownAt.current))}

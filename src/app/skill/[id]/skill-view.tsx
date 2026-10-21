@@ -12,6 +12,7 @@ import { finishLesson, nextSkillExercise } from "@/lib/study/actions";
 import { LEVELS, type SkillStatus } from "@/lib/study/mastery";
 import { LEVEL_LABELS } from "@/lib/study/plan";
 import type { AnswerFeedback, PathEntry, PublicExercise } from "@/lib/study/types";
+import { subjectOfSkill } from "@/lib/subjects";
 
 const ERROR_MESSAGE = "Qualcosa non ha funzionato. Controlla la connessione e riprova.";
 
@@ -68,7 +69,10 @@ export function SkillView({
 
   return (
     <div className="flex flex-col gap-5">
-      <Link href="/" className="text-sm font-semibold text-ink-soft hover:text-ink">
+      <Link
+        href={subjectOfSkill(entry.id) === "math" ? "/" : `/?subject=${subjectOfSkill(entry.id)}`}
+        className="text-sm font-semibold text-ink-soft hover:text-ink"
+      >
         ← Torna alla home
       </Link>
       <div className="flex flex-col gap-2">

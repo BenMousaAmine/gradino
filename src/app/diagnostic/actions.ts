@@ -1,7 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import { DIAGNOSTIC_ID } from "@/lib/app";
 import { loadAssessment, loadScores } from "@/lib/assessments/queries";
 import { toEngineSections } from "@/lib/assessments/view";
 import { getUserId } from "@/lib/auth/session";
@@ -14,6 +13,7 @@ import {
 } from "@/lib/diagnostic/engine";
 import { gradeItem } from "@/lib/items/grade";
 import { itemKeySchema, itemResponseSchema } from "@/lib/items/schemas";
+import { subjectIdSchema, SUBJECTS, type SubjectId } from "@/lib/subjects";
 import { answerStatsSchema } from "@/lib/tracking/schema";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
@@ -42,7 +42,10 @@ async function ownedAttempt(attemptId: string) {
   return { userId, admin, attempt: ensureOwned(await attemptQuery(admin, attemptId), userId) };
 }
 
-export async function startDiagnostic(): Promise<{ attemptId: string }> {
+export async function startDiagnostic(input: { subject: SubjectId }): Promise<{ attemptId: string }> {
+  const { subject } = z.object({ subject: subjectIdSchema }).parse(input);
+  const diagnosticId = SUBJECTS[subject].diagnosticId;
+  if (!diagnosticId) throw new Error("This subject has no diagnostic test.");
   const userId = await getUserId();
   const admin = createSupabaseAdminClient();
 
@@ -50,7 +53,7 @@ export async function startDiagnostic(): Promise<{ attemptId: string }> {
     .from("attempts")
     .select("id")
     .eq("user_id", userId)
-    .eq("assessment_id", DIAGNOSTIC_ID)
+    .eq("assessment_id", diagnosticId)
     .eq("status", "in_progress")
     .maybeSingle();
   if (existing.error) throw new Error(existing.error.message);
@@ -58,7 +61,7 @@ export async function startDiagnostic(): Promise<{ attemptId: string }> {
 
   const { data, error } = await admin
     .from("attempts")
-    .insert({ user_id: userId, assessment_id: DIAGNOSTIC_ID })
+    .insert({ user_id: userId, assessment_id: diagnosticId })
     .select("id")
     .single();
   if (error) throw new Error(error.message);

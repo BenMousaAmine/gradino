@@ -1,0 +1,366 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.verbs.to-be",
+      "title": "to be: am, is, are",
+      "understand": {
+        "paragraphs": [
+          "To be vuol dire essere (e a volte stare): I am happy = sono felice, she is at home = è a casa.",
+          "Ha solo tre forme: am, is, are. Ogni persona ha la sua.",
+          "Il trucco: I am (am solo con I) · he, she, it is (una persona o una cosa sola) · you, we, they are (anche you per \"voi\")."
+        ]
+      },
+      "recipe": [
+        "Guarda il soggetto.",
+        "I → am · he, she, it, Tom, my sister → is · you, we, they, Tom and Anna → are.",
+        "Negazione: aggiungi not dopo: I am not, she is not (isn't), they are not (aren't).",
+        "Domanda: scambia di posto: Is she happy? Are you ready?"
+      ],
+      "example": {
+        "prompt": "My parents ___ at work.",
+        "steps": [
+          "My parents = loro, cioè they.",
+          "Con they si usa are."
+        ],
+        "answer": "My parents are at work."
+      },
+      "complete": {
+        "prompt": "Completa con am, is o are.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "I ___ twelve years old.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "am"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "is",
+                    "are"
+                  ],
+                  "tag": "eng_be_form",
+                  "message": "Con I si usa sempre am: I am."
+                }
+              ]
+            }
+          },
+          {
+            "label": "Tom ___ my friend.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "is"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "are",
+                    "am"
+                  ],
+                  "tag": "eng_be_form",
+                  "message": "Tom è una persona sola, come he: Tom is."
+                }
+              ]
+            }
+          },
+          {
+            "label": "We ___ in the garden.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "are"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "is",
+                    "am"
+                  ],
+                  "tag": "eng_be_form",
+                  "message": "Con we si usa are: we are."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Con to be non si usa do: she isn't happy (non she doesn't happy).",
+        "you vale sia per \"tu\" che per \"voi\": sempre are."
+      ]
+    },
+    {
+      "skillId": "english.verbs.present-continuous",
+      "title": "Present continuous: sta succedendo adesso",
+      "understand": {
+        "paragraphs": [
+          "Il present continuous dice quello che sta succedendo proprio adesso: I am eating = sto mangiando.",
+          "Si forma con am/is/are + verbo in -ing. È come il nostro sto/stai/sta + mangiando.",
+          "Parole-spia: now, at the moment, right now, Look!"
+        ]
+      },
+      "recipe": [
+        "Trova la parola-spia: now, at the moment, Look! → present continuous.",
+        "Scegli am/is/are come con to be.",
+        "Aggiungi -ing al verbo: play → playing.",
+        "Verbo che finisce in -e: la e cade (make → making). Verbo corto consonante-vocale-consonante: raddoppia (run → running)."
+      ],
+      "example": {
+        "prompt": "Look! The children ___ (swim) in the sea.",
+        "steps": [
+          "Look! → sta succedendo adesso: present continuous.",
+          "The children = loro, cioè they → are.",
+          "swim è corto (s-w-i-m: finisce con consonante, vocale, consonante): raddoppio la m → swimming."
+        ],
+        "answer": "Look! The children are swimming in the sea."
+      },
+      "complete": {
+        "prompt": "Completa con il present continuous.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "She ___ (read) a book now.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "is reading"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "reading"
+                  ],
+                  "tag": "eng_cont_missing_be",
+                  "message": "Serve anche is: she is reading."
+                },
+                {
+                  "answers": [
+                    "reads"
+                  ],
+                  "tag": "eng_cont_not_simple",
+                  "message": "Now vuol dire adesso: present continuous → is reading."
+                }
+              ]
+            }
+          },
+          {
+            "label": "I ___ (make) a cake now.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "am making"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "am makeing"
+                  ],
+                  "tag": "eng_ing_drop_e",
+                  "message": "make finisce in -e: la e cade → making."
+                }
+              ]
+            }
+          },
+          {
+            "label": "They ___ (run) in the park now.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "are running"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "are runing"
+                  ],
+                  "tag": "eng_ing_double",
+                  "message": "run è corto: raddoppia la n → running."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Non dimenticare am/is/are: \"I playing\" è sbagliato, si dice I am playing.",
+        "Negazione e domanda senza do: she isn't sleeping, Is she sleeping?"
+      ]
+    },
+    {
+      "skillId": "english.verbs.past-simple-regular",
+      "title": "Past simple: i verbi regolari",
+      "understand": {
+        "paragraphs": [
+          "Il past simple racconta cose finite nel passato: I watched a film yesterday = ho guardato un film ieri.",
+          "Per i verbi regolari basta aggiungere -ed, ed è uguale per tutti: I played, she played, they played. Niente -s!",
+          "Parole-spia: yesterday, last week, last summer, two days ago, in 2020."
+        ]
+      },
+      "recipe": [
+        "Trova la parola-spia del passato: yesterday, last…, …ago.",
+        "Aggiungi -ed: watch → watched.",
+        "Finisce in -e: solo -d (like → liked). Consonante + y: -ied (study → studied). Vocale + y: -ed (play → played). Corto consonante-vocale-consonante: raddoppia (stop → stopped).",
+        "Negazione e domanda con did: I didn't play, Did you play? E il verbo torna nudo!"
+      ],
+      "example": {
+        "prompt": "Last night she ___ (study) for the test.",
+        "steps": [
+          "Last night → passato.",
+          "study: consonante (d) + y → la y diventa -ied.",
+          "Al passato niente -s: è uguale per tutti."
+        ],
+        "answer": "Last night she studied for the test."
+      },
+      "complete": {
+        "prompt": "Completa al passato.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Yesterday I ___ (watch) TV.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "watched"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "watch"
+                  ],
+                  "tag": "eng_past_missing_ed",
+                  "message": "Yesterday → passato: watched."
+                }
+              ]
+            }
+          },
+          {
+            "label": "We ___ (stop) at the shop.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "stopped"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "stoped"
+                  ],
+                  "tag": "eng_ed_double",
+                  "message": "stop è corto: raddoppia la p → stopped."
+                }
+              ]
+            }
+          },
+          {
+            "label": "They ___ (not / play) tennis.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "didn't play"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "didn't played"
+                  ],
+                  "tag": "eng_bare_after_did",
+                  "message": "Dopo didn't il verbo torna nudo: didn't play."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Did si prende la fatica: dopo did e didn't il verbo torna nudo (didn't play, non didn't played).",
+        "Al passato niente -s, nemmeno con he, she, it: she played."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.to-be.1",
+      "skillId": "english.verbs.to-be",
+      "level": "base",
+      "generator": "en-to-be",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.to-be.2",
+      "skillId": "english.verbs.to-be",
+      "level": "medium",
+      "generator": "en-to-be",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.to-be.3",
+      "skillId": "english.verbs.to-be",
+      "level": "advanced",
+      "generator": "en-to-be",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.present-continuous.1",
+      "skillId": "english.verbs.present-continuous",
+      "level": "base",
+      "generator": "en-present-continuous",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.present-continuous.2",
+      "skillId": "english.verbs.present-continuous",
+      "level": "medium",
+      "generator": "en-present-continuous",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.present-continuous.3",
+      "skillId": "english.verbs.present-continuous",
+      "level": "advanced",
+      "generator": "en-present-continuous",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.past-regular.1",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "base",
+      "generator": "en-past-regular",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.past-regular.2",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "medium",
+      "generator": "en-past-regular",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.past-regular.3",
+      "skillId": "english.verbs.past-simple-regular",
+      "level": "advanced",
+      "generator": "en-past-regular",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

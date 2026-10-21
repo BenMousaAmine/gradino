@@ -5,15 +5,15 @@ import { AppHeader } from "@/components/app-header";
 import { CoachCard } from "@/components/coach-card";
 import { Gradini } from "@/components/gradini";
 import { buttonClass, Card } from "@/components/ui";
-import { DIAGNOSTIC_ID } from "@/lib/app";
 import { loadLatestAttempt } from "@/lib/assessments/queries";
 import { getCurrentUser, getUserId } from "@/lib/auth/session";
 import { loadSignals } from "@/lib/insights/load";
 import { cheer, coachTips, tipOfDay } from "@/lib/insights/tips";
 import { dayInRome } from "@/lib/study/dates";
-import { LEVEL_LABELS, SESSION_BLOCKS } from "@/lib/study/plan";
+import { LEVEL_LABELS } from "@/lib/study/plan";
 import { loadStudyContext, pathEntries } from "@/lib/study/progress";
 import type { PathEntry } from "@/lib/study/types";
+import { parseSubject, SUBJECT_IDS, SUBJECTS, type SubjectId } from "@/lib/subjects";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -64,13 +64,49 @@ function Stairs({ stairs }: { stairs: Stair[] }) {
   );
 }
 
-function HomeLayout({ name, intro, stairs, children }: { name: string; intro: string; stairs: Stair[]; children: ReactNode }) {
+function subjectHref(subject: SubjectId, path: "/" | "/today") {
+  return subject === "math" ? path : (`${path}?subject=${subject}` as const);
+}
+
+function SubjectTabs({ active }: { active: SubjectId }) {
+  return (
+    <nav aria-label="Materia" className="flex gap-2">
+      {SUBJECT_IDS.map((subject) => (
+        <Link
+          key={subject}
+          href={subjectHref(subject, "/")}
+          aria-current={subject === active ? "page" : undefined}
+          className={`rounded-full px-4 py-1.5 font-display text-base font-extrabold transition ${
+            subject === active ? "bg-white text-brand-deep" : "bg-white/10 text-white hover:bg-white/20"
+          }`}
+        >
+          {SUBJECTS[subject].title}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+function HomeLayout({
+  name,
+  subject,
+  intro,
+  stairs,
+  children,
+}: {
+  name: string;
+  subject: SubjectId;
+  intro: string;
+  stairs: Stair[];
+  children: ReactNode;
+}) {
   return (
     <>
       <AppHeader name={name} />
       <div className="flex flex-1 flex-col bg-brand-deep">
         <section className="mx-auto flex w-full max-w-xl flex-col gap-2 px-4 pt-4 text-white">
           <h1 className="text-4xl font-extrabold tracking-tight">Ciao {name}! 👋</h1>
+          <SubjectTabs active={subject} />
           <p className="text-brand-soft">{intro}</p>
           <div className="mt-2">
             <Stairs stairs={stairs} />
@@ -90,11 +126,11 @@ function statusText(entry: PathEntry) {
   return LEVEL_LABELS[entry.level];
 }
 
-function DiagnosticCard({ status, answered }: { status: "none" | "in_progress"; answered: number }) {
+function DiagnosticCard({ subject, status, answered }: { subject: SubjectId; status: "none" | "in_progress"; answered: number }) {
   return (
     <Card className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <p className={eyebrow}>Matematica</p>
+        <p className={eyebrow}>{SUBJECTS[subject].title}</p>
         <h2 className="text-xl font-extrabold">Test iniziale</h2>
         <p className="text-ink-soft">
           {status === "in_progress"
@@ -102,35 +138,45 @@ function DiagnosticCard({ status, answered }: { status: "none" | "in_progress"; 
             : "Una mappa di partenza per capire da dove cominciare. Non è una verifica e non c’è voto."}
         </p>
       </div>
-      <Link href="/diagnostic" className={linkButton}>
+      <Link href={subject === "math" ? "/diagnostic" : `/diagnostic?subject=${subject}`} className={linkButton}>
         {status === "in_progress" ? "Riprendi il test" : "Inizia il test"}
       </Link>
     </Card>
   );
 }
 
-async function Home() {
+async function Home({ searchParams }: { searchParams: PageProps<"/">["searchParams"] }) {
+  const subject = parseSubject((await searchParams).subject);
+  const config = SUBJECTS[subject];
   const userId = await getUserId();
   const supabase = await createSupabaseServerClient();
   const admin = createSupabaseAdminClient();
   const [user, attempt, studyContext, session, signals] = await Promise.all([
     getCurrentUser(),
-    loadLatestAttempt(supabase, userId, DIAGNOSTIC_ID),
-    loadStudyContext(admin, userId),
-    admin.from("study_sessions").select("block, status").eq("user_id", userId).eq("day", dayInRome()).maybeSingle(),
-    loadSignals(admin, userId),
+    config.diagnosticId ? loadLatestAttempt(supabase, userId, config.diagnosticId) : null,
+    loadStudyContext(admin, userId, subject),
+    admin
+      .from("study_sessions")
+      .select("block, status")
+      .eq("user_id", userId)
+      .eq("subject_id", subject)
+      .eq("day", dayInRome())
+      .maybeSingle(),
+    loadSignals(admin, userId, subject),
   ]);
   if (user.mode === "admin") redirect("/admin");
-  const context = attempt?.status === "completed" ? studyContext : null;
+  const context = !config.diagnosticId || attempt?.status === "completed" ? studyContext : null;
 
   if (!context) {
     return (
       <HomeLayout
         name={user.displayName}
+        subject={subject}
         intro="Si parte dal test iniziale: così capiamo da quale gradino cominciare."
         stairs={Array.from({ length: 6 }, (_, index) => ({ done: false, current: index === 0 }))}
       >
         <DiagnosticCard
+          subject={subject}
           status={attempt ? "in_progress" : "none"}
           answered={attempt ? Object.keys(attempt.scores).length : 0}
         />
@@ -140,6 +186,16 @@ async function Home() {
 
   if (session.error) throw new Error(session.error.message);
   const path = pathEntries(context);
+  if (path.length === 0) {
+    return (
+      <HomeLayout name={user.displayName} subject={subject} intro="Questa materia è in preparazione." stairs={[]}>
+        <Card className="flex flex-col gap-2">
+          <h2 className="text-xl font-extrabold">{config.title}: in arrivo</h2>
+          <p className="text-ink-soft">Stiamo preparando le lezioni e gli esercizi. Intanto continua con le altre materie.</p>
+        </Card>
+      </HomeLayout>
+    );
+  }
   const mastered = path.filter((entry) => entry.status !== "learning").length;
   const tip = tipOfDay(
     coachTips(signals, (skillId) => context.skills.has(skillId)),
@@ -150,9 +206,10 @@ async function Home() {
   return (
     <HomeLayout
       name={user.displayName}
+      subject={subject}
       intro={
         mastered === 0
-          ? `Il tuo percorso ha ${path.length} gradini: si parte dal primo!`
+          ? `Il tuo percorso ha ${path.length} ${path.length === 1 ? "gradino" : "gradini"}: si parte dal primo!`
           : `Hai già salito ${mastered} ${mastered === 1 ? "gradino" : "gradini"} su ${path.length}. Avanti così!`
       }
       stairs={path.map((entry) => ({ done: entry.status !== "learning", current: entry.current }))}
@@ -165,8 +222,8 @@ async function Home() {
             {session.data?.status === "completed"
               ? "Fatta! Ottimo lavoro. Domani ti aspetta la prossima."
               : session.data
-                ? `Riprendi dal blocco ${session.data.block + 1} di ${SESSION_BLOCKS.length}: ${SESSION_BLOCKS[session.data.block]?.title}.`
-                : "Circa 2 ore in 5 blocchi, con le pause: ripasso, argomento nuovo, pratica, problemi e verifica."}
+                ? `Riprendi dal blocco ${session.data.block + 1} di ${config.blocks.length}: ${config.blocks[session.data.block]?.title}.`
+                : config.sessionSummary}
           </p>
         </div>
         {session.data?.status === "completed" ? (
@@ -176,7 +233,7 @@ async function Home() {
             </Link>
           )
         ) : (
-          <Link href="/today" className={linkButton}>
+          <Link href={subjectHref(subject, "/today")} className={linkButton}>
             {session.data ? "Riprendi la sessione" : "Inizia la sessione"}
           </Link>
         )}
@@ -216,14 +273,19 @@ async function Home() {
         </ul>
       </Card>
 
-      <Link href="/diagnostic/results" className="text-center text-sm font-semibold text-ink-soft hover:text-ink">
-        Rivedi la tua mappa di partenza
-      </Link>
+      {config.diagnosticId && (
+        <Link
+          href={subject === "math" ? "/diagnostic/results" : `/diagnostic/results?subject=${subject}`}
+          className="text-center text-sm font-semibold text-ink-soft hover:text-ink"
+        >
+          Rivedi la tua mappa di partenza
+        </Link>
+      )}
     </HomeLayout>
   );
 }
 
-export default function HomePage() {
+export default function HomePage({ searchParams }: PageProps<"/">) {
   return (
     <Suspense
       fallback={
@@ -232,7 +294,7 @@ export default function HomePage() {
         </main>
       }
     >
-      <Home />
+      <Home searchParams={searchParams} />
     </Suspense>
   );
 }

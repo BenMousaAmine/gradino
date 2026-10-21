@@ -7,11 +7,17 @@ import { Button, Card } from "@/components/ui";
 import { toEngineSections, type AssessmentView, type AttemptState } from "@/lib/assessments/view";
 import { nextStep, progress, type SectionChoices } from "@/lib/diagnostic/engine";
 import type { ItemResponse } from "@/lib/items/schemas";
+import type { SubjectId } from "@/lib/subjects";
 import type { AnswerStats } from "@/lib/tracking/schema";
 import { chooseSection, finishDiagnostic, startDiagnostic, startPart, submitAnswer } from "./actions";
 import { QuestionCard } from "@/components/exercise/question-card";
 
 const ERROR_MESSAGE = "Qualcosa non ha funzionato. Controlla la connessione e riprova.";
+
+const SUBJECT_TIPS: Record<SubjectId, string[]> = {
+  math: ["📝 Tieni vicino un foglio e una penna per i calcoli.", "🚫 Niente calcolatrice."],
+  english: ["🚫 Niente traduttore e niente dizionario: conta quello che sai già.", "🔊 Tieni il volume acceso: in qualche domanda c’è da ascoltare."],
+};
 
 function ProgressBar({ done, total }: { done: number; total: number }) {
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
@@ -22,7 +28,15 @@ function ProgressBar({ done, total }: { done: number; total: number }) {
   );
 }
 
-export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; attempt: AttemptState | null }) {
+export function DiagnosticRunner({
+  subject,
+  view,
+  attempt,
+}: {
+  subject: SubjectId;
+  view: AssessmentView;
+  attempt: AttemptState | null;
+}) {
   const router = useRouter();
   const sections = useMemo(() => toEngineSections(view), [view]);
   const itemsById = useMemo(
@@ -57,7 +71,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
 
   const begin = () =>
     run(async () => {
-      const result = await startDiagnostic();
+      const result = await startDiagnostic({ subject });
       setAttemptId(result.attemptId);
     });
 
@@ -86,7 +100,7 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
     run(async () => {
       if (!attemptId) return;
       await finishDiagnostic({ attemptId });
-      router.push("/diagnostic/results");
+      router.push(subject === "math" ? "/diagnostic/results" : `/diagnostic/results?subject=${subject}`);
     });
 
   const errorBanner = error && (
@@ -103,8 +117,9 @@ export function DiagnosticRunner({ view, attempt }: { view: AssessmentView; atte
           <p className="text-ink-soft">{view.description}</p>
         </div>
         <ul className="flex flex-col gap-2 text-base">
-          <li>📝 Tieni vicino un foglio e una penna per i calcoli.</li>
-          <li>🚫 Niente calcolatrice.</li>
+          {SUBJECT_TIPS[subject].map((tip) => (
+            <li key={tip}>{tip}</li>
+          ))}
           <li>⏸️ Il test ha due parti, con una pausa di {view.config.pauseMinutes} minuti in mezzo.</li>
           <li>🤷 Se non sai una risposta, premi “Non lo so”: va benissimo così.</li>
           <li>💾 Puoi interrompere quando vuoi: riprendi da dove eri rimasto.</li>

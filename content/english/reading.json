@@ -1,0 +1,204 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.reading.a1",
+      "title": "Leggere come all'INVALSI: A1",
+      "understand": {
+        "paragraphs": [
+          "All'INVALSI di inglese ci sono testi brevi (avvisi, messaggi, presentazioni) con 3–8 domande. Non serve capire ogni parola: serve trovare le informazioni.",
+          "Le domande sono di tre tipi: scelta multipla, risposta breve (massimo 4 parole) e True / False / Not given.",
+          "True = il testo lo dice. False = il testo dice il contrario. Not given = il testo non ne parla proprio."
+        ]
+      },
+      "recipe": [
+        "Leggi il titolo: ti dice di cosa parla il testo.",
+        "Leggi PRIMA le domande e sottolinea le parole importanti (nomi, numeri, giorni, orari).",
+        "Cerca quelle parole nel testo e leggi bene solo la frase intorno.",
+        "Rispondi con le parole del testo; per Not given chiediti: lo dice da qualche parte?"
+      ],
+      "example": {
+        "prompt": "Testo: \"I'm Tom. I'm 12 and I live in York.\" Domanda: Where does Tom live?",
+        "steps": [
+          "Parola della domanda: live.",
+          "Nel testo: \"I live in York\".",
+          "Risposta: York."
+        ],
+        "answer": "York"
+      },
+      "complete": {
+        "prompt": "Leggi: \"Hi! I'm Anna. I'm 13 years old. I've got a cat called Luna.\" Rispondi in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "How old is Anna?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "13",
+                "thirteen",
+                "13 years old",
+                "thirteen years old"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "What pet has Anna got?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "a cat",
+                "cat"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "What is the cat's name?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "Luna"
+              ],
+              "knownErrors": []
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Not given non vuol dire falso: vuol dire che il testo non ne parla.",
+        "Usa le parole trasparenti: museum, aquarium, science… le capisci già."
+      ]
+    },
+    {
+      "skillId": "english.reading.a2",
+      "title": "Leggere come all'INVALSI: A2",
+      "understand": {
+        "paragraphs": [
+          "I testi A2 sono più lunghi (fino a 220 parole) e spesso raccontano cose passate: email, racconti, diari.",
+          "Il metodo è lo stesso dell'A1: prima le domande, poi la caccia alle parole nel testo.",
+          "Attento alle trappole: una parola come didn't, never o but può cambiare tutto (I didn't go out = non sono uscito)."
+        ]
+      },
+      "recipe": [
+        "Leggi le domande e decidi cosa cerchi: chi? dove? quando? perché?",
+        "Trova nel testo il paragrafo giusto (Saturday, Sunday, in the evening…).",
+        "Leggi bene la frase: c'è un not, un didn't, un but?",
+        "Per le domande \"Why?\" cerca because oppure so."
+      ],
+      "example": {
+        "prompt": "Testo: \"It started to rain, so we went to the cinema.\" Why did they go to the cinema?",
+        "steps": [
+          "Domanda: Why → cerco la causa.",
+          "Nel testo: \"it started to rain, so…\".",
+          "Risposta: because it started to rain."
+        ],
+        "answer": "Because it started to rain."
+      },
+      "complete": {
+        "prompt": "Leggi: \"On Sunday I didn't go out because I was tired. I played chess with my brother.\" Rispondi in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Did the writer go out on Sunday? (yes / no)",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "no"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "yes"
+                  ],
+                  "tag": "eng_task_check",
+                  "message": "Trappola: \"I didn't go out\" vuol dire che non è uscito."
+                }
+              ]
+            }
+          },
+          {
+            "label": "Why? Because he was…",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "tired"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "What did he play?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "chess"
+              ],
+              "knownErrors": []
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "didn't, never e not ribaltano il senso della frase: leggili sempre.",
+        "Se la domanda è al passato (did), cerca nel testo i verbi al passato."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.reading-a1.1",
+      "skillId": "english.reading.a1",
+      "level": "base",
+      "generator": "en-reading-a1",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.reading-a1.2",
+      "skillId": "english.reading.a1",
+      "level": "medium",
+      "generator": "en-reading-a1",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.reading-a1.3",
+      "skillId": "english.reading.a1",
+      "level": "advanced",
+      "generator": "en-reading-a1",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.reading-a2.1",
+      "skillId": "english.reading.a2",
+      "level": "base",
+      "generator": "en-reading-a2",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.reading-a2.2",
+      "skillId": "english.reading.a2",
+      "level": "medium",
+      "generator": "en-reading-a2",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.reading-a2.3",
+      "skillId": "english.reading.a2",
+      "level": "advanced",
+      "generator": "en-reading-a2",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

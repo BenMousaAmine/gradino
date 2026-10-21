@@ -1,0 +1,394 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.verbs.irregular-1",
+      "title": "Verbi irregolari 1: le famiglie facili",
+      "understand": {
+        "paragraphs": [
+          "Molti verbi non vogliono -ed al passato: sono irregolari. Hanno tre forme: base – passato – participio (buy – bought – bought).",
+          "Non si imparano in ordine alfabetico: si imparano a famiglie che suonano uguali, come una filastrocca.",
+          "Tutti e tre uguali: cut – cut – cut, put, hit, shut, set. Famiglia -ought/-aught: buy – bought, bring – brought, think – thought, catch – caught, teach – taught.",
+          "Famiglia ee → e: keep – kept, sleep – slept, feel – felt, meet – met. Famiglia -d → -t: send – sent, spend – spent, build – built, lend – lent."
+        ]
+      },
+      "recipe": [
+        "Riconosci la famiglia del verbo.",
+        "Dilla a voce con il ritmo: buy – bought – bought.",
+        "Al past simple usa la seconda forma: Yesterday I bought a phone.",
+        "Con did e didn't torna la forma base: I didn't buy."
+      ],
+      "example": {
+        "prompt": "Last week we ___ (meet) Anna at the park.",
+        "steps": [
+          "Last week → passato.",
+          "meet è della famiglia ee → e: meet – met – met.",
+          "Seconda forma: met."
+        ],
+        "answer": "Last week we met Anna at the park."
+      },
+      "complete": {
+        "prompt": "Completa al passato.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "Yesterday I ___ (buy) a new phone.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "bought"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "buyed"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "buy è irregolare, famiglia -ought: buy – bought – bought."
+                }
+              ]
+            }
+          },
+          {
+            "label": "She ___ (keep) the secret.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "kept"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "keeped"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "keep è irregolare, famiglia ee → e: keep – kept – kept."
+                }
+              ]
+            }
+          },
+          {
+            "label": "He ___ (send) a message last night.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "sent"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "sended"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "send è irregolare, famiglia -d → -t: send – sent – sent."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Niente -ed sugli irregolari: buyed, keeped, sended sono sbagliati.",
+        "Dopo didn't torna la forma base: I didn't buy (non didn't bought)."
+      ]
+    },
+    {
+      "skillId": "english.verbs.irregular-2",
+      "title": "Verbi irregolari 2: i-a-u e -ow-ew-own",
+      "understand": {
+        "paragraphs": [
+          "Altre tre famiglie, ognuna con il suo suono.",
+          "i → a → u: sing – sang – sung, drink – drank – drunk, swim – swam – swum, begin – began – begun, ring – rang – rung.",
+          "-ow → -ew → -own: know – knew – known, grow – grew – grown, throw – threw – thrown, fly – flew – flown, draw – drew – drawn.",
+          "Seconda = terza: have – had – had, make – made, say – said, tell – told, find – found, sit – sat, lose – lost, hear – heard, win – won."
+        ]
+      },
+      "recipe": [
+        "Riconosci la famiglia dal suono.",
+        "i → a → u: la vocale sale come una scala: sing, sang, sung.",
+        "Famiglia -ow: knew, grew, threw al passato; known, grown, thrown al participio.",
+        "Seconda e terza uguali: impari una parola e vale due volte."
+      ],
+      "example": {
+        "prompt": "At the party she ___ (sing) a song.",
+        "steps": [
+          "Racconto di una festa già finita → passato.",
+          "sing è della famiglia i → a → u: sing – sang – sung.",
+          "Al passato serve la seconda forma: sang (non sung!)."
+        ],
+        "answer": "At the party she sang a song."
+      },
+      "complete": {
+        "prompt": "Completa al passato.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "He ___ (know) the answer.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "knew"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "knowed"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "know è irregolare: know – knew – known."
+                },
+                {
+                  "answers": [
+                    "known"
+                  ],
+                  "tag": "eng_participle_for_past",
+                  "message": "known è il participio: al passato serve knew."
+                }
+              ]
+            }
+          },
+          {
+            "label": "We ___ (drink) a glass of milk.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "drank"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "drinked"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "drink è irregolare: drink – drank – drunk."
+                },
+                {
+                  "answers": [
+                    "drunk"
+                  ],
+                  "tag": "eng_participle_for_past",
+                  "message": "drunk è il participio: al passato serve drank."
+                }
+              ]
+            }
+          },
+          {
+            "label": "I ___ (lose) the keys yesterday.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "lost"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "losed"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "lose è irregolare: lose – lost – lost."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "sang è il passato, sung il participio: She sang a song.",
+        "Niente -ed: knowed, singed, drinked sono sbagliati."
+      ]
+    },
+    {
+      "skillId": "english.verbs.irregular-3",
+      "title": "Verbi irregolari 3: participio in -en e ribelli",
+      "understand": {
+        "paragraphs": [
+          "Famiglia del participio in -en: eat – ate – eaten, write – wrote – written, speak – spoke – spoken, take – took – taken, give – gave – given, forget – forgot – forgotten, break – broke – broken, drive – drove – driven.",
+          "I ribelli non somigliano a niente e vanno saputi a memoria: be – was/were – been, go – went – gone, do – did – done, see – saw – seen, come – came – come.",
+          "Sono tra i verbi più usati in assoluto: li incontrerai ogni giorno."
+        ]
+      },
+      "recipe": [
+        "Participio in -en: la terza forma finisce in -en (eaten, written, taken).",
+        "Ribelli: ripetili ogni giorno come una filastrocca: go – went – gone.",
+        "Al past simple usa la seconda forma: went, saw, did.",
+        "Con did e didn't torna la base: I didn't go."
+      ],
+      "example": {
+        "prompt": "Last night we ___ (go) to the cinema.",
+        "steps": [
+          "Last night → passato.",
+          "go è un ribelle: go – went – gone.",
+          "Seconda forma: went (non goed!)."
+        ],
+        "answer": "Last night we went to the cinema."
+      },
+      "complete": {
+        "prompt": "Completa al passato.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "She ___ (write) a letter.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "wrote"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "writed"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "write è irregolare: write – wrote – written."
+                },
+                {
+                  "answers": [
+                    "written"
+                  ],
+                  "tag": "eng_participle_for_past",
+                  "message": "written è il participio: al passato serve wrote."
+                }
+              ]
+            }
+          },
+          {
+            "label": "They ___ (see) a film last night.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "saw"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "seed"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "see è un ribelle: see – saw – seen."
+                },
+                {
+                  "answers": [
+                    "seen"
+                  ],
+                  "tag": "eng_participle_for_past",
+                  "message": "seen è il participio: al passato serve saw."
+                }
+              ]
+            }
+          },
+          {
+            "label": "I ___ (eat) a sandwich.",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "ate"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "eated"
+                  ],
+                  "tag": "eng_irregular_regularized",
+                  "message": "eat è irregolare: eat – ate – eaten."
+                },
+                {
+                  "answers": [
+                    "eaten"
+                  ],
+                  "tag": "eng_participle_for_past",
+                  "message": "eaten è il participio: al passato serve ate."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "goed, eated, seed non esistono: sono verbi irregolari!",
+        "Il participio da solo non fa il passato: Yesterday I saw (non I seen)."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.irregular-1.1",
+      "skillId": "english.verbs.irregular-1",
+      "level": "base",
+      "generator": "en-irregular-1",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.irregular-1.2",
+      "skillId": "english.verbs.irregular-1",
+      "level": "medium",
+      "generator": "en-irregular-1",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.irregular-1.3",
+      "skillId": "english.verbs.irregular-1",
+      "level": "advanced",
+      "generator": "en-irregular-1",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.irregular-2.1",
+      "skillId": "english.verbs.irregular-2",
+      "level": "base",
+      "generator": "en-irregular-2",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.irregular-2.2",
+      "skillId": "english.verbs.irregular-2",
+      "level": "medium",
+      "generator": "en-irregular-2",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.irregular-2.3",
+      "skillId": "english.verbs.irregular-2",
+      "level": "advanced",
+      "generator": "en-irregular-2",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.irregular-3.1",
+      "skillId": "english.verbs.irregular-3",
+      "level": "base",
+      "generator": "en-irregular-3",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.irregular-3.2",
+      "skillId": "english.verbs.irregular-3",
+      "level": "medium",
+      "generator": "en-irregular-3",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.irregular-3.3",
+      "skillId": "english.verbs.irregular-3",
+      "level": "advanced",
+      "generator": "en-irregular-3",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}

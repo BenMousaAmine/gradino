@@ -13,7 +13,10 @@ import type {
   ItemKey,
   ItemResponse,
   NumberFieldKey,
+  SelectFieldKey,
+  TextFieldKey,
 } from "./schemas";
+import { sameText } from "./text";
 
 export type Diagnosis = { tag: string; message: string | null };
 
@@ -88,8 +91,31 @@ function gradeFractionField(key: FractionFieldKey, response: FieldResponse | und
   return { score: 0, diagnosis: generic(GENERIC_TAGS.wrong) };
 }
 
+function gradeTextField(key: TextFieldKey, response: FieldResponse | undefined): Omit<FieldGrade, "fieldId"> {
+  if (!response || response.kind !== "text" || response.value.trim() === "") {
+    return { score: 0, diagnosis: generic(GENERIC_TAGS.empty) };
+  }
+  if (key.accept.some((answer) => sameText(response.value, answer))) return { score: 1, diagnosis: null };
+  const known = key.knownErrors.find((error) => error.answers.some((answer) => sameText(response.value, answer)));
+  if (known) return { score: 0, diagnosis: { tag: known.tag, message: known.message } };
+  return { score: 0, diagnosis: generic(GENERIC_TAGS.wrong) };
+}
+
+function gradeSelectField(key: SelectFieldKey, response: FieldResponse | undefined): Omit<FieldGrade, "fieldId"> {
+  if (!response || response.kind !== "select" || response.option === "") {
+    return { score: 0, diagnosis: generic(GENERIC_TAGS.empty) };
+  }
+  if (response.option === key.correct) return { score: 1, diagnosis: null };
+  const known = key.knownErrors.find((error) => error.option === response.option);
+  if (known) return { score: 0, diagnosis: { tag: known.tag, message: known.message } };
+  return { score: 0, diagnosis: generic(GENERIC_TAGS.wrong) };
+}
+
 function gradeField(key: FieldKey, response: FieldResponse | undefined) {
-  return key.kind === "number" ? gradeNumberField(key, response) : gradeFractionField(key, response);
+  if (key.kind === "number") return gradeNumberField(key, response);
+  if (key.kind === "fraction") return gradeFractionField(key, response);
+  if (key.kind === "select") return gradeSelectField(key, response);
+  return gradeTextField(key, response);
 }
 
 function pickDiagnosis(fields: FieldGrade[]): Diagnosis | null {
@@ -122,7 +148,7 @@ export function gradeItem(key: ItemKey, response: ItemResponse): Grade {
         const passed = correct >= key.threshold.min;
         return {
           score: passed ? 1 : 0,
-          diagnosis: passed ? null : { tag: key.threshold.tag, message: key.threshold.message },
+          diagnosis: passed ? pickDiagnosis(fields) : { tag: key.threshold.tag, message: key.threshold.message },
           fields,
         };
       }

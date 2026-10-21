@@ -1,0 +1,206 @@
+{
+  "lessons": [
+    {
+      "skillId": "english.listening.a1",
+      "title": "Ascoltare come all'INVALSI: A1",
+      "understand": {
+        "paragraphs": [
+          "All'INVALSI ascolti messaggi e dialoghi brevi, sempre due volte. Non devi capire tutto: devi trovare le risposte.",
+          "Le cose che chiedono più spesso: giorni, orari, prezzi, luoghi, cose da portare.",
+          "Il trucco: leggi prima le domande e prova a indovinare le risposte. Così sai cosa ascoltare."
+        ]
+      },
+      "recipe": [
+        "Leggi le domande prima di premere Ascolta.",
+        "Primo ascolto: chi parla, dove sono, cosa succede.",
+        "Secondo ascolto: concentrati sui dettagli delle domande (numeri, giorni, orari).",
+        "Se non sei sicuro, scegli la risposta che hai sentito meglio: non lasciare vuoto."
+      ],
+      "example": {
+        "prompt": "Senti: \"The party is on Friday at seven.\" Domanda: When is the party?",
+        "steps": [
+          "La domanda chiede quando.",
+          "Nel messaggio: on Friday at seven.",
+          "Risposta: on Friday."
+        ],
+        "answer": "On Friday."
+      },
+      "complete": {
+        "prompt": "Leggi cosa dice Anna al telefono: \"Hi, it's Anna. The party is on Saturday at five. Please bring a cake!\" Rispondi in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "What day is the party?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "Saturday",
+                "on Saturday"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "What time is the party?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "five",
+                "at five",
+                "5",
+                "at 5",
+                "five o'clock",
+                "at five o'clock"
+              ],
+              "knownErrors": []
+            }
+          },
+          {
+            "label": "What must you bring?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "a cake",
+                "cake"
+              ],
+              "knownErrors": []
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Numeri che si somigliano: thirteen (13) e thirty (30). Ascolta la fine della parola.",
+        "Non andare in panico se non capisci una frase: le risposte sono quasi sempre in poche parole chiave."
+      ]
+    },
+    {
+      "skillId": "english.listening.a2",
+      "title": "Ascoltare come all'INVALSI: A2",
+      "understand": {
+        "paragraphs": [
+          "Nei dialoghi A2 le persone cambiano idea: propongono una cosa e poi ne scelgono un'altra. È la trappola preferita dell'INVALSI.",
+          "Esempio: \"There's a train at 9.15, but it's very busy. I'll take the 9.45.\" La risposta giusta è 9.45, non 9.15.",
+          "Ascolti al massimo due volte, come all'INVALSI: per questo è importante leggere prima le domande."
+        ]
+      },
+      "recipe": [
+        "Leggi le domande e segna quelle con numeri, orari o giorni.",
+        "Primo ascolto: segui la storia e nota quando qualcuno dice but, sorry o I can't.",
+        "Secondo ascolto: controlla le risposte, soprattutto dopo un cambio di idea.",
+        "La risposta giusta è quasi sempre quella decisa alla fine."
+      ],
+      "example": {
+        "prompt": "Senti: \"Sorry, I can't on Monday. What about Tuesday?\" \"Tuesday is fine.\" When do they meet?",
+        "steps": [
+          "Monday viene proposto ma rifiutato: \"Sorry, I can't\".",
+          "Alla fine scelgono Tuesday.",
+          "Risposta: on Tuesday."
+        ],
+        "answer": "On Tuesday."
+      },
+      "complete": {
+        "prompt": "Leggi il dialogo: A: \"Is there a bus at ten?\" B: \"Yes, but it's full. The next one is at half past ten.\" A: \"OK, I'll take that one. Which stop?\" B: \"Stop number four.\" Rispondi in inglese.",
+        "given": [],
+        "blanks": [
+          {
+            "label": "What time does A take the bus?",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "half past ten",
+                "at half past ten",
+                "10.30",
+                "10:30",
+                "ten thirty"
+              ],
+              "knownErrors": [
+                {
+                  "answers": [
+                    "ten",
+                    "at ten",
+                    "ten o'clock"
+                  ],
+                  "tag": "eng_task_check",
+                  "message": "Trappola: il bus delle dieci è pieno (\"but it's full\")."
+                }
+              ]
+            }
+          },
+          {
+            "label": "Which stop? (number)",
+            "key": {
+              "kind": "text",
+              "accept": [
+                "four",
+                "4",
+                "number four",
+                "stop number four"
+              ],
+              "knownErrors": []
+            }
+          }
+        ]
+      },
+      "watchOut": [
+        "Dopo but, sorry o I can't arriva quasi sempre la risposta vera.",
+        "today e tomorrow si confondono facilmente: ascoltali bene."
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "english.gen.listening-a1.1",
+      "skillId": "english.listening.a1",
+      "level": "base",
+      "generator": "en-listening-a1",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.listening-a1.2",
+      "skillId": "english.listening.a1",
+      "level": "medium",
+      "generator": "en-listening-a1",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.listening-a1.3",
+      "skillId": "english.listening.a1",
+      "level": "advanced",
+      "generator": "en-listening-a1",
+      "params": {
+        "difficulty": 3
+      }
+    },
+    {
+      "id": "english.gen.listening-a2.1",
+      "skillId": "english.listening.a2",
+      "level": "base",
+      "generator": "en-listening-a2",
+      "params": {
+        "difficulty": 1
+      }
+    },
+    {
+      "id": "english.gen.listening-a2.2",
+      "skillId": "english.listening.a2",
+      "level": "medium",
+      "generator": "en-listening-a2",
+      "params": {
+        "difficulty": 2
+      }
+    },
+    {
+      "id": "english.gen.listening-a2.3",
+      "skillId": "english.listening.a2",
+      "level": "advanced",
+      "generator": "en-listening-a2",
+      "params": {
+        "difficulty": 3
+      }
+    }
+  ]
+}
